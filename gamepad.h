@@ -43,6 +43,10 @@ private slots:
 
     void on_scriptRun_clicked();
 
+    void on_choosePath_clicked();
+
+    void on_openPath_clicked();
+
 private:
     Ui::Gamepad *ui;
     SerialPort serialPort;

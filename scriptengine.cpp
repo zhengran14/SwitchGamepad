@@ -2,8 +2,27 @@
 #include <QDir>
 #include <QTextStream>
 
+
+#include <QStandardPaths>
+#include <QSettings>
+#include <QCoreApplication>
+#include <QDesktopServices>
+#include <QUrl>
+#include <QDebug>
+
 ScriptEngine::ScriptEngine(QObject *parent) : QObject(parent)
 {
+    QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    settings.setValue("Name", "Qt Creator");
+    QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+    qDebug() << QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    qDebug() << QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+    qDebug() << QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
+    // /home/user/.config
+    QDesktopServices::openUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
+
     scriptEngineEvaluation.moveToThread(&scriptEngineEvaluationThread);
 //    connect(&scriptEngineEvaluationThread, &QThread::finished, &scriptEngineEvaluation, &QObject::deleteLater);
     connect(this, &ScriptEngine::evaluate, &scriptEngineEvaluation, &ScriptEngineEvaluation::evaluate);

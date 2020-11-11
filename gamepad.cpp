@@ -352,3 +352,13 @@ void Gamepad::on_scriptRun_clicked()
     ui->scriptRun->setProperty("isStop", !ui->scriptRun->property("isStop").toBool());
     ui->scriptEdit->setReadOnly(ui->scriptRun->property("isStop").toBool());
 }
+
+void Gamepad::on_choosePath_clicked()
+{
+
+}
+
+void Gamepad::on_openPath_clicked()
+{
+
+}
