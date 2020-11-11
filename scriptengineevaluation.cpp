@@ -25,7 +25,7 @@ void ScriptEngineEvaluation::evaluate(QString script)
     QScriptValue result = scriptEngine.evaluate(script);
     if (scriptEngine.hasUncaughtException()) {
         int line = scriptEngine.uncaughtExceptionLineNumber();
-        emit hasException(tr("Uncaught exception at line") + QString::number(line) + tr(": ") + result.toString());
+        emit hasException(tr("Uncaught exception at line ") + QString::number(line) + tr(": ") + result.toString());
     }
     emit finished();
 }
