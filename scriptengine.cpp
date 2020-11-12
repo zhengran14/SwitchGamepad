@@ -1,28 +1,10 @@
 #include "scriptengine.h"
 #include <QDir>
 #include <QTextStream>
-
-
-#include <QStandardPaths>
-#include <QSettings>
-#include <QCoreApplication>
-#include <QDesktopServices>
-#include <QUrl>
-#include <QDebug>
+#include "setting.h"
 
 ScriptEngine::ScriptEngine(QObject *parent) : QObject(parent)
 {
-    QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
-    settings.setValue("Name", "Qt Creator");
-    QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
-    qDebug() << QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    qDebug() << QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
-    qDebug() << QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
-    // /home/user/.config
-    QDesktopServices::openUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
-
     scriptEngineEvaluation.moveToThread(&scriptEngineEvaluationThread);
 //    connect(&scriptEngineEvaluationThread, &QThread::finished, &scriptEngineEvaluation, &QObject::deleteLater);
     connect(this, &ScriptEngine::evaluate, &scriptEngineEvaluation, &ScriptEngineEvaluation::evaluate);
@@ -49,7 +31,7 @@ ScriptEngine::~ScriptEngine()
 
 QStringList ScriptEngine::getAllScripts()
 {
-    QDir dir("/Users/rabbit/Documents/develop/SwitchGamepad/js");
+    QDir dir(Setting::instance()->getScriptPath());
     QStringList nameFilters;
     nameFilters << "*.js";
     QStringList files = dir.entryList(nameFilters, QDir::Files | QDir::Readable, QDir::Time);
@@ -59,7 +41,7 @@ QStringList ScriptEngine::getAllScripts()
 QString ScriptEngine::getScript(QString scriptName)
 {
     QString contents = "";
-    QFile scriptFile("/Users/rabbit/Documents/develop/SwitchGamepad/js/" + scriptName + ".js");
+    QFile scriptFile(Setting::instance()->getScriptPath() + "/" + scriptName + ".js");
     if (scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream stream(&scriptFile);
         contents = stream.readAll();
@@ -72,10 +54,10 @@ QString ScriptEngine::addNewScript()
 {
     QString name = "script";
     int num = 1;
-    while(QFile::exists("/Users/rabbit/Documents/develop/SwitchGamepad/js/" + name + ".js")) {
+    while(QFile::exists(Setting::instance()->getScriptPath() + "/" + name + ".js")) {
         name = "script" + QString::number(num++);
     }
-    QFile newFile("/Users/rabbit/Documents/develop/SwitchGamepad/js/" + name + ".js");
+    QFile newFile(Setting::instance()->getScriptPath() + "/" + name + ".js");
     newFile.open(QIODevice::ReadWrite | QIODevice::Text);
     newFile.close();
     return name;
@@ -83,7 +65,7 @@ QString ScriptEngine::addNewScript()
 
 void ScriptEngine::setScript(QString scriptName, QString content)
 {
-    QFile scriptFile("/Users/rabbit/Documents/develop/SwitchGamepad/js/" + scriptName + ".js");
+    QFile scriptFile(Setting::instance()->getScriptPath() + "/" + scriptName + ".js");
     if (scriptFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream stream(&scriptFile);
         stream << content;
@@ -93,7 +75,7 @@ void ScriptEngine::setScript(QString scriptName, QString content)
 
 void ScriptEngine::removeScript(QString scriptName)
 {
-    QFile::remove("/Users/rabbit/Documents/develop/SwitchGamepad/js/" + scriptName + ".js");
+    QFile::remove(Setting::instance()->getScriptPath() + "/" + scriptName + ".js");
 }
 
 void ScriptEngine::runScript(QString content)

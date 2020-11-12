@@ -24,14 +24,16 @@ SOURCES += \
     gamepad.cpp \
     scriptengine.cpp \
     scriptengineevaluation.cpp \
-    serialport.cpp
+    serialport.cpp \
+    setting.cpp
 
 HEADERS += \
     gamepad.h \
     gamepadbtn.h \
     scriptengine.h \
     scriptengineevaluation.h \
-    serialport.h
+    serialport.h \
+    setting.h
 
 FORMS += \
     gamepad.ui
