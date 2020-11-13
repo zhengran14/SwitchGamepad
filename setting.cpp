@@ -10,7 +10,10 @@ Setting::Setting()
     if (!settings->contains("scriptPath")) {
         setScriptPath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/scripts");
     }
-    //    QDesktopServices::openUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
+    else {
+        QDir dir;
+        dir.mkpath(getScriptPath());
+    }
 }
 
 Setting::~Setting()

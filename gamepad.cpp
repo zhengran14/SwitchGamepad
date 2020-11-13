@@ -3,6 +3,9 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QKeyEvent>
+#include "setting.h"
+#include <QDesktopServices>
+#include <QFileDialog>
 
 Gamepad::Gamepad(QWidget *parent)
     : QMainWindow(parent)
@@ -16,6 +19,7 @@ Gamepad::Gamepad(QWidget *parent)
     on_serialPortRefresh_clicked();
     ui->splitter->setStretchFactor(1, 2);
     on_scriptListRefresh_clicked();
+    ui->pathEdit->setText(Setting::instance()->getScriptPath());
 //    connect(&serialPort, &SerialPort::openFailed, this, [this]() {
 //        QMessageBox::critical(this, tr("Error"), tr("Failed to open!"), QMessageBox::Ok, QMessageBox::Ok);
 //    });
@@ -355,10 +359,22 @@ void Gamepad::on_scriptRun_clicked()
 
 void Gamepad::on_choosePath_clicked()
 {
-
+    QString newPath = QFileDialog::getExistingDirectory(this, tr("Choose Directory"), Setting::instance()->getScriptPath(), QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (!newPath.isEmpty()) {
+        QString oldPath = Setting::instance()->getScriptPath();
+        if (newPath.contains(oldPath)) {
+            QMessageBox::warning(this, tr("Warning"), tr("Can't choose this directory."), QMessageBox::Ok);
+            return;
+        }
+        newPath += "/scripts";
+        QDir dir;
+        dir.rename(oldPath, newPath);
+        Setting::instance()->setScriptPath(newPath);
+        ui->pathEdit->setText(newPath);
+    }
 }
 
 void Gamepad::on_openPath_clicked()
 {
-
+    QDesktopServices::openUrl(QUrl::fromLocalFile(ui->pathEdit->text()));
 }
