@@ -24,28 +24,19 @@ public:
 private slots:
     void on_serialPortSwitch_clicked();
     void on_serialPortRefresh_clicked();
-
     void on_scriptList_itemClicked(QListWidgetItem *item);
-
     void on_scriptEdit_textChanged();
-
     void on_scriptList_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
     void on_scriptSave_clicked();
-
     void on_scriptRefresh_clicked();
-
     void on_scriptListRefresh_clicked();
-
     void on_scriptRemove_clicked();
-
     void on_scriptAdd_clicked();
-
     void on_scriptRun_clicked();
-
     void on_choosePath_clicked();
-
     void on_openPath_clicked();
+    void on_addKey_clicked();
+    void on_addSleep_clicked();
 
 private:
     Ui::Gamepad *ui;

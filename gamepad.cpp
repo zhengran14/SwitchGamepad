@@ -329,6 +329,7 @@ void Gamepad::on_scriptAdd_clicked()
     listWidgetItem->setFlags(listWidgetItem->flags() | Qt::ItemIsEditable);
     ui->scriptList->insertItem(0, listWidgetItem);
     ui->scriptList->setCurrentItem(listWidgetItem);
+    ui->scriptEdit->setReadOnly(false);
     ui->scriptList->setFocus();
     ui->scriptList->repaint();
     this->repaint();
@@ -377,4 +378,30 @@ void Gamepad::on_choosePath_clicked()
 void Gamepad::on_openPath_clicked()
 {
     QDesktopServices::openUrl(QUrl::fromLocalFile(ui->pathEdit->text()));
+}
+
+void Gamepad::on_addKey_clicked()
+{
+    if (ui->scriptRun->isEnabled()) {
+        ui->scriptEdit->moveCursor(QTextCursor::EndOfLine);
+        if (ui->scriptEdit->textCursor().columnNumber() > 0) {
+            ui->scriptEdit->insertPlainText("\n");
+        }
+        ui->scriptEdit->insertPlainText("gp.pressButton(\'" + ui->keyName->currentText() + "\'," + QString::number(ui->keySleepSec->value()) + ");");
+        ui->scriptEdit->setFocus();
+        ui->scriptEdit->repaint();
+    }
+}
+
+void Gamepad::on_addSleep_clicked()
+{
+    if (ui->scriptRun->isEnabled()) {
+        ui->scriptEdit->moveCursor(QTextCursor::EndOfLine);
+        if (ui->scriptEdit->textCursor().columnNumber() > 0) {
+            ui->scriptEdit->insertPlainText("\n");
+        }
+        ui->scriptEdit->insertPlainText("gp.sleep(" + QString::number(ui->sleepSec->value()) + ");");
+        ui->scriptEdit->setFocus();
+        ui->scriptEdit->repaint();
+    }
 }

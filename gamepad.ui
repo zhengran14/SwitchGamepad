@@ -31,7 +31,7 @@
         <item>
          <widget class="QGroupBox" name="groupBox">
           <property name="title">
-           <string>Settings</string>
+           <string>Serial Port</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
@@ -54,6 +54,9 @@
                <widget class="QComboBox" name="serialPortBaudRate">
                 <property name="currentText">
                  <string>9600</string>
+                </property>
+                <property name="currentIndex">
+                 <number>3</number>
                 </property>
                 <item>
                  <property name="text">
@@ -766,7 +769,7 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="1" column="0">
-         <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+         <widget class="QDoubleSpinBox" name="sleepSec">
           <property name="decimals">
            <number>1</number>
           </property>
@@ -789,7 +792,7 @@
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QComboBox" name="comboBox">
+         <widget class="QComboBox" name="keyName">
           <item>
            <property name="text">
             <string>ZL</string>
@@ -923,7 +926,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QDoubleSpinBox" name="doubleSpinBox">
+         <widget class="QDoubleSpinBox" name="keySleepSec">
           <property name="decimals">
            <number>1</number>
           </property>
