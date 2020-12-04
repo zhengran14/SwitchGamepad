@@ -3,3 +3,4 @@
 *.autosave
 *.pro.user
 *.pro.user.*
+build-SwitchGamepad-*
