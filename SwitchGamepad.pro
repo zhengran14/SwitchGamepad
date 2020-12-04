@@ -17,6 +17,15 @@ CONFIG (release, debug|release) {
 #INCLUDEPATH += -I /usr/local/Cellar/python/3.7.6/Frameworks/Python.framework/Versions/3.7/Headers
 #LIBS += -L /usr/local/Cellar/python/3.7.6/Frameworks/Python.framework/Versions/3.7/lib/python3.7/config-3.7m-darwin -lpython3.7
 
+INCLUDEPATH += /usr/local/Cellar/opencv/4.5.0_5/include/opencv4/opencv2
+INCLUDEPATH += /usr/local/Cellar/opencv/4.5.0_5/include/opencv4
+INCLUDEPATH += /usr/local/Cellar/opencv/4.5.0_5/include
+LIBS += -L/usr/local/Cellar/opencv/4.5.0_5/lib \
+ -lopencv_core \
+ -lopencv_highgui \
+ -lopencv_imgproc \
+ -lopencv_imgcodecs \
+
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
