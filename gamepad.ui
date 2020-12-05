@@ -7,1052 +7,1157 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>800</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>800</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Gamepad</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_3">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QTabWidget" name="tabWidget">
-      <property name="focusPolicy">
-       <enum>Qt::NoFocus</enum>
+     <widget class="QSplitter" name="splitter_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
       </property>
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string>General</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QGroupBox" name="groupBox">
-          <property name="title">
-           <string>Serial Port</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QPushButton" name="serialPortSwitch">
-             <property name="text">
-              <string>Open</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QWidget" name="serialPortParamPanel" native="true">
-             <layout class="QHBoxLayout" name="horizontalLayout_2">
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QComboBox" name="serialPortBaudRate">
-                <property name="currentText">
-                 <string>9600</string>
-                </property>
-                <property name="currentIndex">
-                 <number>3</number>
-                </property>
-                <item>
-                 <property name="text">
-                  <string>1200</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>2400</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>4800</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>9600</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>19200</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>38400</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>57600</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>115200</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="serialPort"/>
-              </item>
-              <item>
-               <widget class="QPushButton" name="serialPortRefresh">
-                <property name="text">
-                 <string>Refresh</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox_2">
-          <property name="title">
-           <string>Script Path</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
-           <item>
-            <widget class="QLineEdit" name="pathEdit">
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="choosePath">
-             <property name="text">
-              <string>Choose</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="openPath">
-             <property name="text">
-              <string>Open</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_2">
-       <attribute name="title">
-        <string>Gamepad</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="4" column="0">
-         <widget class="GamepadBtn" name="lxMinBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>LX (C)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="5">
-         <widget class="GamepadBtn" name="ryMaxBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>RY (Down)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="5">
-         <widget class="GamepadBtn" name="bBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>B (K)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="6">
-         <widget class="GamepadBtn" name="rBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>R  (U)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="4">
-         <widget class="GamepadBtn" name="yBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>Y (J)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="GamepadBtn" name="lcBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>LC (F)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="5">
-         <widget class="GamepadBtn" name="rcBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>RC (H)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="1">
-         <widget class="GamepadBtn" name="upBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>Up (W)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="GamepadBtn" name="lyMinBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>LY (Z)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="4">
-         <widget class="GamepadBtn" name="plusBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>+ (Y)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="9" column="4">
-         <widget class="GamepadBtn" name="homeBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>Home (N)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="1">
-         <widget class="GamepadBtn" name="lyMaxBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>LY (X)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="1">
-         <widget class="GamepadBtn" name="downBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>Down (S)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="2">
-         <widget class="GamepadBtn" name="rightBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>Right (D)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="6">
-         <widget class="GamepadBtn" name="aBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>A (L)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="6">
-         <widget class="GamepadBtn" name="rxMaxBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>RX (Right)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="5">
-         <widget class="GamepadBtn" name="ryMinBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>RY (Up)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="2">
-         <widget class="GamepadBtn" name="lxMaxBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>LX (V)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="4">
-         <widget class="GamepadBtn" name="rxMinBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>RX (Up)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="GamepadBtn" name="lBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>L (E)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QCheckBox" name="keyboardControl">
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>Keyboard Contrtol</string>
-          </property>
-         </widget>
-        </item>
+      <widget class="QWidget" name="widget" native="true">
+       <layout class="QGridLayout" name="gridLayout_3">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <item row="0" column="0">
-         <widget class="GamepadBtn" name="zlBtn">
+         <widget class="QTabWidget" name="tabWidget">
           <property name="minimumSize">
            <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
+            <width>0</width>
+            <height>350</height>
            </size>
           </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
-          <property name="text">
-           <string>ZL (Q)</string>
+          <property name="currentIndex">
+           <number>0</number>
           </property>
-         </widget>
-        </item>
-        <item row="3" column="5">
-         <widget class="GamepadBtn" name="xBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>X (I)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="0">
-         <widget class="GamepadBtn" name="leftBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>Left (A)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="9" column="2">
-         <widget class="GamepadBtn" name="screenshotBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>Screenshot (B)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="6">
-         <widget class="GamepadBtn" name="zrBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>ZR (O)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
-         <widget class="GamepadBtn" name="minBtn">
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>90</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>- (R)</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_3">
-       <attribute name="title">
-        <string>Script</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_2">
-        <item row="1" column="0">
-         <widget class="QDoubleSpinBox" name="sleepSec">
-          <property name="decimals">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <double>3600.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>1.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QPushButton" name="addKey">
-          <property name="text">
-           <string>Add</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QComboBox" name="keyName">
-          <item>
-           <property name="text">
-            <string>ZL</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>L</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>ZR</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>R</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>-</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>+</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>LY MIN</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>LY MAX</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>LX MIN</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>LX MAX</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>LC</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>A</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>B</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>X</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Y</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Up</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Down</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Left</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Right</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RY MIN</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RY MAX</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RX MIN</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RX MAX</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RC</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Screenshot</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Home</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QDoubleSpinBox" name="keySleepSec">
-          <property name="decimals">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <double>3600.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>0.100000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QPushButton" name="addSleep">
-          <property name="text">
-           <string>Add</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0" colspan="3">
-         <widget class="QWidget" name="widget_2" native="true">
-          <layout class="QHBoxLayout" name="horizontalLayout_9">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QSplitter" name="splitter">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <widget class="QWidget" name="verticalLayoutWidget">
-              <layout class="QVBoxLayout" name="verticalLayout_3">
+          <widget class="QWidget" name="tab">
+           <attribute name="title">
+            <string>General</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <widget class="QGroupBox" name="groupBox">
+              <property name="title">
+               <string>Serial Port</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout">
                <item>
-                <widget class="QListWidget" name="scriptList"/>
+                <widget class="QPushButton" name="serialPortSwitch">
+                 <property name="text">
+                  <string>Open</string>
+                 </property>
+                </widget>
                </item>
                <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_7">
-                 <item>
-                  <widget class="QPushButton" name="scriptAdd">
-                   <property name="text">
-                    <string>+</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="scriptRemove">
-                   <property name="text">
-                    <string>-</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="scriptListRefresh">
-                   <property name="text">
-                    <string>Refresh</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
+                <widget class="QWidget" name="serialPortParamPanel" native="true">
+                 <layout class="QHBoxLayout" name="horizontalLayout_2">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="QComboBox" name="serialPortBaudRate">
+                    <property name="currentText">
+                     <string>9600</string>
+                    </property>
+                    <property name="currentIndex">
+                     <number>3</number>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>1200</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>2400</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>4800</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>9600</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>19200</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>38400</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>57600</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>115200</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="serialPort"/>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="serialPortRefresh">
+                    <property name="text">
+                     <string>Refresh</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
                </item>
               </layout>
              </widget>
-             <widget class="QWidget" name="verticalLayoutWidget_2">
-              <layout class="QVBoxLayout" name="verticalLayout_5">
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_2">
+              <property name="title">
+               <string>Script Path</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_4">
                <item>
-                <widget class="QPlainTextEdit" name="scriptEdit">
+                <widget class="QLineEdit" name="pathEdit">
                  <property name="readOnly">
                   <bool>true</bool>
                  </property>
                 </widget>
                </item>
                <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_5">
-                 <item>
-                  <widget class="QPushButton" name="scriptRefresh">
-                   <property name="text">
-                    <string>Refresh</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="scriptSave">
-                   <property name="enabled">
-                    <bool>false</bool>
-                   </property>
-                   <property name="text">
-                    <string>Save</string>
-                   </property>
-                   <property name="shortcut">
-                    <string>Ctrl+S</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="scriptRun">
-                   <property name="enabled">
-                    <bool>false</bool>
-                   </property>
-                   <property name="text">
-                    <string>Run</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
+                <widget class="QPushButton" name="choosePath">
+                 <property name="text">
+                  <string>Choose</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="openPath">
+                 <property name="text">
+                  <string>Open</string>
+                 </property>
+                </widget>
                </item>
               </layout>
              </widget>
-            </widget>
-           </item>
-          </layout>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_3">
+              <property name="title">
+               <string>Video Capture</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <item>
+                <widget class="QPushButton" name="videoCaptureSwitch">
+                 <property name="text">
+                  <string>Open</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QWidget" name="videoCaptureParamPanel" native="true">
+                 <layout class="QHBoxLayout" name="horizontalLayout_8">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="QComboBox" name="videoCaptureList"/>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="videoCaptureRefresh">
+                    <property name="text">
+                     <string>Refresh</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>424</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_2">
+           <attribute name="title">
+            <string>Gamepad</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="4" column="0">
+             <widget class="GamepadBtn" name="lxMinBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>LX (C)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="5">
+             <widget class="GamepadBtn" name="ryMaxBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>RY (Down)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="5">
+             <widget class="GamepadBtn" name="bBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>B (K)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="6">
+             <widget class="GamepadBtn" name="rBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>R  (U)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="4">
+             <widget class="GamepadBtn" name="yBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>Y (J)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="GamepadBtn" name="lcBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>LC (F)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="5">
+             <widget class="GamepadBtn" name="rcBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>RC (H)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="GamepadBtn" name="upBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>Up (W)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="GamepadBtn" name="lyMinBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>LY (Z)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="4">
+             <widget class="GamepadBtn" name="plusBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>+ (Y)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="4">
+             <widget class="GamepadBtn" name="homeBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>Home (N)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="GamepadBtn" name="lyMaxBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>LY (X)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="1">
+             <widget class="GamepadBtn" name="downBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>Down (S)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="2">
+             <widget class="GamepadBtn" name="rightBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>Right (D)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="6">
+             <widget class="GamepadBtn" name="aBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>A (L)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="6">
+             <widget class="GamepadBtn" name="rxMaxBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>RX (Right)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="5">
+             <widget class="GamepadBtn" name="ryMinBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>RY (Up)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="2">
+             <widget class="GamepadBtn" name="lxMaxBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>LX (V)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="4">
+             <widget class="GamepadBtn" name="rxMinBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>RX (Up)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="GamepadBtn" name="lBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>L (E)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3">
+             <widget class="QCheckBox" name="keyboardControl">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>Keyboard Contrtol</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="GamepadBtn" name="zlBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>ZL (Q)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="5">
+             <widget class="GamepadBtn" name="xBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>X (I)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="0">
+             <widget class="GamepadBtn" name="leftBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>Left (A)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="2">
+             <widget class="GamepadBtn" name="screenshotBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>Screenshot (B)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="6">
+             <widget class="GamepadBtn" name="zrBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>ZR (O)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="GamepadBtn" name="minBtn">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>- (R)</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_3">
+           <attribute name="title">
+            <string>Script</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="1" column="0">
+             <widget class="QDoubleSpinBox" name="sleepSec">
+              <property name="decimals">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <double>3600.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+              <property name="value">
+               <double>1.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QPushButton" name="addKey">
+              <property name="text">
+               <string>Add</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QComboBox" name="keyName">
+              <item>
+               <property name="text">
+                <string>ZL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>L</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>ZR</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>R</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>-</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>+</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>LY MIN</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>LY MAX</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>LX MIN</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>LX MAX</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>LC</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>A</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>B</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>X</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Y</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Up</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Down</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Left</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Right</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>RY MIN</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>RY MAX</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>RX MIN</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>RX MAX</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>RC</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Screenshot</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Home</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QDoubleSpinBox" name="keySleepSec">
+              <property name="decimals">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <double>3600.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+              <property name="value">
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QPushButton" name="addSleep">
+              <property name="text">
+               <string>Add</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0" colspan="3">
+             <widget class="QWidget" name="widget_2" native="true">
+              <layout class="QHBoxLayout" name="horizontalLayout_9">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QSplitter" name="splitter">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <widget class="QWidget" name="verticalLayoutWidget">
+                  <layout class="QVBoxLayout" name="verticalLayout_3">
+                   <item>
+                    <widget class="QListWidget" name="scriptList"/>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_7">
+                     <item>
+                      <widget class="QPushButton" name="scriptAdd">
+                       <property name="text">
+                        <string>+</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="scriptRemove">
+                       <property name="text">
+                        <string>-</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="scriptListRefresh">
+                       <property name="text">
+                        <string>Refresh</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </widget>
+                 <widget class="QWidget" name="verticalLayoutWidget_2">
+                  <layout class="QVBoxLayout" name="verticalLayout_5">
+                   <item>
+                    <widget class="QPlainTextEdit" name="scriptEdit">
+                     <property name="readOnly">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_5">
+                     <item>
+                      <widget class="QPushButton" name="scriptRefresh">
+                       <property name="text">
+                        <string>Refresh</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="scriptSave">
+                       <property name="enabled">
+                        <bool>false</bool>
+                       </property>
+                       <property name="text">
+                        <string>Save</string>
+                       </property>
+                       <property name="shortcut">
+                        <string>Ctrl+S</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="scriptRun">
+                       <property name="enabled">
+                        <bool>false</bool>
+                       </property>
+                       <property name="text">
+                        <string>Run</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="videoCaptureFrame" native="true">
+       <layout class="QGridLayout" name="gridLayout_4">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
        </layout>
       </widget>
      </widget>

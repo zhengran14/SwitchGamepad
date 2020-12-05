@@ -11,15 +11,20 @@ Gamepad::Gamepad(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Gamepad)
     , scriptEngine(&serialPort)
+    , videoCapture(this)
 {
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
     ui->serialPortSwitch->setProperty("isOpen", false);
+    ui->videoCaptureSwitch->setProperty("isOpen", false);
     ui->scriptRun->setProperty("isStop", false);
     on_serialPortRefresh_clicked();
     ui->splitter->setStretchFactor(1, 2);
     on_scriptListRefresh_clicked();
     ui->pathEdit->setText(Setting::instance()->getScriptPath());
+    on_videoCaptureRefresh_clicked();
+    videoCapture.init(ui->videoCaptureFrame->layout());
+    ui->splitter_2->setStretchFactor(1, 2);
 //    connect(&serialPort, &SerialPort::openFailed, this, [this]() {
 //        QMessageBox::critical(this, tr("Error"), tr("Failed to open!"), QMessageBox::Ok, QMessageBox::Ok);
 //    });
@@ -124,6 +129,7 @@ Gamepad::~Gamepad()
 {
     scriptEngine.deleteLater();
     serialPort.deleteLater();
+    videoCapture.deleteLater();
     delete ui;
 }
 
@@ -403,5 +409,37 @@ void Gamepad::on_addSleep_clicked()
         ui->scriptEdit->insertPlainText("gp.sleep(" + QString::number(ui->sleepSec->value()) + ");");
         ui->scriptEdit->setFocus();
         ui->scriptEdit->repaint();
+    }
+}
+
+void Gamepad::on_videoCaptureSwitch_clicked()
+{
+    if (ui->videoCaptureSwitch->property("isOpen").toBool()) {
+        videoCapture.close();
+    }
+    else {
+        if (ui->videoCaptureList->count() <= 0 || ui->videoCaptureList->currentText().isEmpty()) {
+            QMessageBox::warning(this, tr("Error"), tr("Please choose a video capture."), QMessageBox::Ok, QMessageBox::Ok);
+            return;
+        }
+//        if (!serialPort.open(ui->serialPort->currentText(), ui->serialPortBaudRate->currentText().toUInt())) {
+//            QMessageBox::critical(this, tr("Error"), tr("Failed to open!"), QMessageBox::Ok, QMessageBox::Ok);
+//            return;
+//        }
+        videoCapture.open(ui->videoCaptureList->currentIndex());
+    }
+    ui->videoCaptureSwitch->setText(ui->videoCaptureSwitch->property("isOpen").toBool() ? tr("Open") : tr("Close"));
+    ui->videoCaptureSwitch->setProperty("isOpen", !ui->videoCaptureSwitch->property("isOpen").toBool());
+    ui->videoCaptureParamPanel->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
+}
+
+void Gamepad::on_videoCaptureRefresh_clicked()
+{
+    ui->videoCaptureList->setCurrentText("");
+    ui->videoCaptureList->clear();
+    QString defaultName = "";
+    ui->videoCaptureList->addItems(videoCapture.refresh("USB Video", defaultName));
+    if (!defaultName.isEmpty()) {
+        ui->videoCaptureList->setCurrentText(defaultName);
     }
 }

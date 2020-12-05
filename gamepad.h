@@ -6,6 +6,7 @@
 #include "serialport.h"
 #include "scriptengine.h"
 #include <QListWidgetItem>
+#include "videocapture.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Gamepad; }
@@ -38,12 +39,17 @@ private slots:
     void on_addKey_clicked();
     void on_addSleep_clicked();
 
+    void on_videoCaptureSwitch_clicked();
+
+    void on_videoCaptureRefresh_clicked();
+
 private:
     Ui::Gamepad *ui;
     SerialPort serialPort;
     QHash<int, GamepadBtn*> gamepadBtns;
     ScriptEngine scriptEngine;
     QListWidgetItem *previousScriptListItem = Q_NULLPTR;
+    VideoCapture videoCapture;
 
     void saveScript(QListWidgetItem *item);
 };
