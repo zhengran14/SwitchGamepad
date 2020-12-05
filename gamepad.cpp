@@ -453,7 +453,10 @@ void Gamepad::on_videoCaptureSwitch_clicked()
 //            QMessageBox::critical(this, tr("Error"), tr("Failed to open!"), QMessageBox::Ok, QMessageBox::Ok);
 //            return;
 //        }
-        videoCapture.open(ui->videoCaptureList->currentIndex());
+        videoCapture.open(ui->videoCaptureList->currentIndex(),
+                          ui->videoCaptureResolution->currentText(),
+                          ui->videoCaptureFrameRateRange->currentText(),
+                          ui->videoCapturePixelFormat->currentText());
     }
     ui->videoCaptureSwitch->setText(ui->videoCaptureSwitch->property("isOpen").toBool() ? tr("Open") : tr("Close"));
     ui->videoCaptureSwitch->setProperty("isOpen", !ui->videoCaptureSwitch->property("isOpen").toBool());
@@ -468,5 +471,32 @@ void Gamepad::on_videoCaptureRefresh_clicked()
     ui->videoCaptureList->addItems(videoCapture.refresh("USB Video", defaultName));
     if (!defaultName.isEmpty()) {
         ui->videoCaptureList->setCurrentText(defaultName);
+    }
+    if (ui->videoCaptureList->count() > 0 && ui->videoCaptureList->currentIndex() >= 0) {
+        on_videoCaptureList_activated(ui->videoCaptureList->currentIndex());
+    }
+}
+
+void Gamepad::on_videoCaptureList_activated(int index)
+{
+    ui->videoCaptureFrameRateRange->setCurrentText("");
+    ui->videoCaptureFrameRateRange->clear();
+    ui->videoCaptureFrameRateRange->addItems(videoCapture.GetSupportedFrameRateRanges(index));
+    if (ui->videoCaptureFrameRateRange->count() > 0) {
+        ui->videoCaptureFrameRateRange->setCurrentIndex(ui->videoCaptureFrameRateRange->count() - 1);
+    }
+
+    ui->videoCapturePixelFormat->setCurrentText("");
+    ui->videoCapturePixelFormat->clear();
+    ui->videoCapturePixelFormat->addItems(videoCapture.GetSupportedPixelFormats(index));
+    if (ui->videoCapturePixelFormat->count() > 0) {
+        ui->videoCapturePixelFormat->setCurrentIndex(ui->videoCapturePixelFormat->count() - 1);
+    }
+
+    ui->videoCaptureResolution->setCurrentText("");
+    ui->videoCaptureResolution->clear();
+    ui->videoCaptureResolution->addItems(videoCapture.GetSupportedResolutions(index));
+    if (ui->videoCaptureResolution->count() > 0) {
+        ui->videoCaptureResolution->setCurrentIndex(ui->videoCaptureResolution->count() - 1);
     }
 }

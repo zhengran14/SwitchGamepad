@@ -43,6 +43,8 @@ private slots:
 
     void on_videoCaptureRefresh_clicked();
 
+    void on_videoCaptureList_activated(int index);
+
 private:
     Ui::Gamepad *ui;
     SerialPort serialPort;
