@@ -47,6 +47,7 @@ private:
     Ui::Gamepad *ui;
     SerialPort serialPort;
     QHash<int, GamepadBtn*> gamepadBtns;
+    QHash<QString, QString> buttomDatum;
     ScriptEngine scriptEngine;
     QListWidgetItem *previousScriptListItem = Q_NULLPTR;
     VideoCapture videoCapture;

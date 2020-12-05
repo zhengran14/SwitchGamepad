@@ -96,6 +96,33 @@ Gamepad::Gamepad(QWidget *parent)
         gamepadBtns.insert(Qt::Key_F, ui->lcBtn);
         gamepadBtns.insert(Qt::Key_H, ui->rcBtn);
 
+        buttomDatum.insert("ZL", "Button ZL");
+        buttomDatum.insert("L", "Button L");
+        buttomDatum.insert("ZR", "Button ZR");
+        buttomDatum.insert("R", "Button R");
+        buttomDatum.insert("-", "Button SELECT");
+        buttomDatum.insert("+", "Button START");
+        buttomDatum.insert("LY MIN", "LY MIN");
+        buttomDatum.insert("LY MAX", "LY MAX");
+        buttomDatum.insert("LX MIN", "LX MI");
+        buttomDatum.insert("LX MAX", "LX MAX");
+        buttomDatum.insert("LC", "Button LCLICK");
+        buttomDatum.insert("A", "Button A");
+        buttomDatum.insert("B", "Button B");
+        buttomDatum.insert("X", "Button X");
+        buttomDatum.insert("Y", "Button Y");
+        buttomDatum.insert("Up", "Button TOP");
+        buttomDatum.insert("Down", "Button DOWN");
+        buttomDatum.insert("Left", "Button LEFT");
+        buttomDatum.insert("Right", "Button RIGHT");
+        buttomDatum.insert("RY MIN", "RY MIN");
+        buttomDatum.insert("RY MAX", "RY MAX");
+        buttomDatum.insert("RX MIN", "RX MIN");
+        buttomDatum.insert("RX MAX", "RX MAX");
+        buttomDatum.insert("RC", "Button RCLICK");
+        buttomDatum.insert("Screenshot", "Button CAPTURE");
+        buttomDatum.insert("Home", "Button HOME");
+
         connect(ui->lyMinBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
         connect(ui->lyMaxBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
         connect(ui->lxMinBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
@@ -393,7 +420,7 @@ void Gamepad::on_addKey_clicked()
         if (ui->scriptEdit->textCursor().columnNumber() > 0) {
             ui->scriptEdit->insertPlainText("\n");
         }
-        ui->scriptEdit->insertPlainText("gp.pressButton(\'" + ui->keyName->currentText() + "\'," + QString::number(ui->keySleepSec->value()) + ");");
+        ui->scriptEdit->insertPlainText("gp.pressButton(\'" + buttomDatum.value(ui->keyName->currentText()) + "\'," + QString::number(ui->keySleepSec->value()) + ");");
         ui->scriptEdit->setFocus();
         ui->scriptEdit->repaint();
     }
