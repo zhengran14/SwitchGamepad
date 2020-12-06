@@ -18,6 +18,9 @@ ScriptEngine::ScriptEngine(QObject *parent) : QObject(parent)
     connect(&scriptEngineEvaluation, &ScriptEngineEvaluation::hasException, this, [this](QString ex) {
         emit hasException(ex);
     });
+    connect(&scriptEngineEvaluation, &ScriptEngineEvaluation::messageBoxShow, this, [this](QString title, QString content) {
+        emit messageBoxShow(title, content);
+    });
     scriptEngineEvaluationThread.start();
 }
 

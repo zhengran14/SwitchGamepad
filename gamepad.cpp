@@ -39,6 +39,9 @@ Gamepad::Gamepad(QWidget *parent)
     connect(&scriptEngine, &ScriptEngine::hasException, this, [this](QString ex) {
         QMessageBox::critical(this, tr("Error"), ex, QMessageBox::Ok, QMessageBox::Ok);
     });
+    connect(&scriptEngine, &ScriptEngine::messageBoxShow, this, [this](QString title, QString content) {
+        QMessageBox::information(0x0, title, content, QMessageBox::Ok | QMessageBox::Cancel);
+    });
 
 
     {

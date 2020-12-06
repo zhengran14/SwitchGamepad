@@ -30,6 +30,7 @@ signals:
 //    void stop();
     void runScriptFinish();
     void hasException(QString ex);
+    void messageBoxShow(QString title, QString content);
 };
 
 #endif // SCRIPTENGINE_H

@@ -75,3 +75,8 @@ void ScriptEngineEvaluation::pressButton(QString string, float sec)
     }
     emit sendData("RELEASE");
 }
+
+void ScriptEngineEvaluation::messageBox(QString title, QString content)
+{
+    emit messageBoxShow(title, content);
+}

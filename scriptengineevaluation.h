@@ -12,6 +12,7 @@ public:
     ~ScriptEngineEvaluation();
     Q_INVOKABLE void sleep(float sec);
     Q_INVOKABLE void pressButton(QString string, float sec);
+    Q_INVOKABLE void messageBox(QString title, QString content);
 
 public slots:
     void evaluate(QString script);
@@ -25,6 +26,7 @@ signals:
     void sendData(QString data);
     void finished();
     void hasException(QString ex);
+    void messageBoxShow(QString title, QString content);
 };
 
 #endif // SCRIPTENGINEEVALUATION_H
