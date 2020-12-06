@@ -12,6 +12,7 @@ Gamepad::Gamepad(QWidget *parent)
     , ui(new Ui::Gamepad)
     , scriptEngine(&serialPort)
     , videoCapture(this)
+    , miniTool(this)
 {
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
@@ -32,6 +33,7 @@ Gamepad::Gamepad(QWidget *parent)
     connect(&scriptEngine, &ScriptEngine::runScriptFinish, this, [this]() {
         if (ui->scriptRun->property("isStop").toBool()) {
             ui->scriptRun->setText(ui->scriptRun->property("isStop").toBool() ? tr("Run") : tr("Stop"));
+            miniTool.setScriptRunText(ui->scriptRun->text());
             ui->scriptRun->setProperty("isStop", !ui->scriptRun->property("isStop").toBool());
             ui->scriptEdit->setReadOnly(ui->scriptRun->property("isStop").toBool());
         }
@@ -39,8 +41,13 @@ Gamepad::Gamepad(QWidget *parent)
     connect(&scriptEngine, &ScriptEngine::hasException, this, [this](QString ex) {
         QMessageBox::critical(this, tr("Error"), ex, QMessageBox::Ok, QMessageBox::Ok);
     });
-    connect(&scriptEngine, &ScriptEngine::messageBoxShow, this, [this](QString title, QString content) {
+    connect(&scriptEngine, &ScriptEngine::messageBoxShow, this, [](QString title, QString content) {
         QMessageBox::information(0x0, title, content, QMessageBox::Ok | QMessageBox::Cancel);
+    });
+    connect(&miniTool, &MiniTool::runScriptClicked, this, &Gamepad::on_scriptRun_clicked);
+    connect(&miniTool, &MiniTool::scriptListCurrentIndexChanged, this, [this](int index) {
+        ui->scriptList->setCurrentRow(index);
+        this->on_scriptList_itemClicked(ui->scriptList->currentItem());
     });
 
 
@@ -157,6 +164,9 @@ Gamepad::Gamepad(QWidget *parent)
 
 Gamepad::~Gamepad()
 {
+    on_miniToolShow_clicked(false);
+    miniTool.close();
+    miniTool.deleteLater();
     scriptEngine.deleteLater();
     serialPort.deleteLater();
     videoCapture.deleteLater();
@@ -183,6 +193,13 @@ void Gamepad::keyReleaseEvent(QKeyEvent *event)
         QMouseEvent mouseEvent(QEvent::MouseButtonRelease, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
         QApplication::sendEvent(gamepadBtns.value(event->key()), &mouseEvent);
     }
+}
+
+void Gamepad::closeEvent(QCloseEvent *event)
+{
+    this->hide();
+    event->ignore();
+//    QMainWindow::closeEvent(event);
 }
 
 void Gamepad::on_serialPortSwitch_clicked()
@@ -231,6 +248,7 @@ void Gamepad::on_scriptList_itemClicked(QListWidgetItem *item)
             ui->scriptList->blockSignals(true);
             ui->scriptList->setCurrentItem(previousScriptListItem);
             ui->scriptList->blockSignals(false);
+            miniTool.setScriptListCurrentIndex(ui->scriptList->currentRow());
             return;
         }
         else if (ret == QMessageBox::Save) {
@@ -239,9 +257,11 @@ void Gamepad::on_scriptList_itemClicked(QListWidgetItem *item)
     }
 
     ui->scriptEdit->setPlainText(scriptEngine.getScript(item->text()));
+    miniTool.setScriptListCurrentIndex(ui->scriptList->currentRow());
     ui->scriptEdit->setReadOnly(false);
     ui->scriptSave->setEnabled(false);
     ui->scriptRun->setEnabled(true);
+    miniTool.setScriptRunEnabled(ui->scriptRun->isEnabled());
     this->repaint();
 }
 
@@ -279,9 +299,11 @@ void Gamepad::on_scriptRefresh_clicked()
         }
     }
     ui->scriptEdit->setPlainText(scriptEngine.getScript(ui->scriptList->currentItem()->text()));
+    miniTool.setScriptListCurrentIndex(ui->scriptList->currentRow());
     ui->scriptEdit->setReadOnly(false);
     ui->scriptSave->setEnabled(false);
     ui->scriptRun->setEnabled(true);
+    miniTool.setScriptRunEnabled(ui->scriptRun->isEnabled());
     this->repaint();
 }
 
@@ -305,13 +327,20 @@ void Gamepad::on_scriptListRefresh_clicked()
     ui->scriptEdit->setReadOnly(true);
     ui->scriptSave->setEnabled(false);
     ui->scriptRun->setEnabled(false);
+    miniTool.setScriptRunEnabled(ui->scriptRun->isEnabled());
     previousScriptListItem = Q_NULLPTR;
     ui->scriptList->clear();
-    for(QString script : scriptEngine.getAllScripts()) {
+    miniTool.clearScriptList();
+    QStringList scriptList = scriptEngine.getAllScripts();
+    for(QString script : scriptList) {
+        ui->scriptList->blockSignals(true);
         QListWidgetItem *listWidgetItem = new QListWidgetItem(script.split(".")[0], ui->scriptList);
         listWidgetItem->setFlags(listWidgetItem->flags() | Qt::ItemIsEditable);
         ui->scriptList->addItem(listWidgetItem);
+        ui->scriptList->blockSignals(false);
+        miniTool.AddScript(script);
     }
+    miniTool.setScriptListCurrentIndex(-1);
     ui->scriptList->repaint();
     this->repaint();
 }
@@ -361,9 +390,12 @@ void Gamepad::on_scriptAdd_clicked()
         }
     }
 
+    ui->scriptList->blockSignals(true);
     QListWidgetItem *listWidgetItem = new QListWidgetItem(scriptEngine.addNewScript());
     listWidgetItem->setFlags(listWidgetItem->flags() | Qt::ItemIsEditable);
     ui->scriptList->insertItem(0, listWidgetItem);
+    ui->scriptList->blockSignals(false);
+    miniTool.InsertScript(0, listWidgetItem->text());
     ui->scriptList->setCurrentItem(listWidgetItem);
     ui->scriptEdit->setReadOnly(false);
     ui->scriptList->setFocus();
@@ -390,6 +422,7 @@ void Gamepad::on_scriptRun_clicked()
         scriptEngine.runScript(ui->scriptEdit->toPlainText());
     }
     ui->scriptRun->setText(ui->scriptRun->property("isStop").toBool() ? tr("Run") : tr("Stop"));
+    miniTool.setScriptRunText(ui->scriptRun->text());
     ui->scriptRun->setProperty("isStop", !ui->scriptRun->property("isStop").toBool());
     ui->scriptEdit->setReadOnly(ui->scriptRun->property("isStop").toBool());
 }
@@ -504,13 +537,40 @@ void Gamepad::on_videoCaptureList_activated(int index)
     }
 }
 
-void Gamepad::on_topMost_clicked(bool checked)
+void Gamepad::on_miniToolShow_clicked(bool checked)
 {
     if (checked) {
-        this->setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint);
+        miniTool.show();
+        videoCapture.moveViewfinder(miniTool.GetVIdeoCaptionFrameLayout());
     }
     else {
-        this->setWindowFlags(this->windowFlags() & ~Qt::WindowStaysOnTopHint);
+        miniTool.hide();
+        videoCapture.moveViewfinder(ui->videoCaptureFrame->layout());
     }
-    this->show();
+}
+
+void Gamepad::on_scriptList_itemChanged(QListWidgetItem *item)
+{
+    if (!this->doubliClickScriptListItemText.isEmpty()) {
+        if (!scriptEngine.renameScript(this->doubliClickScriptListItemText, item->text())) {
+            ui->scriptList->blockSignals(true);
+            item->setText(this->doubliClickScriptListItemText);
+            ui->scriptList->blockSignals(false);
+        }
+        else {
+            miniTool.setScriptName(ui->scriptList->currentRow(), item->text());
+        }
+
+        this->doubliClickScriptListItemText = "";
+    }
+}
+
+void Gamepad::on_scriptList_itemDoubleClicked(QListWidgetItem *item)
+{
+    doubliClickScriptListItemText = item->text();
+}
+
+void Gamepad::on_quit_clicked()
+{
+    QApplication::quit();
 }

@@ -136,3 +136,14 @@ QStringList VideoCapture::GetSupportedPixelFormats(int index)
     _camera.deleteLater();
     return list;
 }
+
+void VideoCapture::moveViewfinder(QLayout *layout)
+{
+    if (viewfinder != Q_NULLPTR) {
+        QWidget *parent = (QWidget*)viewfinder->parent();
+        if (parent != Q_NULLPTR) {
+            parent->layout()->removeWidget(viewfinder);
+        }
+        layout->addWidget(viewfinder);
+    }
+}

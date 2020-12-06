@@ -19,6 +19,7 @@ public:
     void removeScript(QString scriptName);
     void runScript(QString content);
     void stopScript();
+    bool renameScript(QString oldScriptName, QString newScriptName);
 
 private:
     QThread scriptEngineEvaluationThread;

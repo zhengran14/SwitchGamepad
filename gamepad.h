@@ -7,6 +7,7 @@
 #include "scriptengine.h"
 #include <QListWidgetItem>
 #include "videocapture.h"
+#include <minitool.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Gamepad; }
@@ -19,8 +20,11 @@ class Gamepad : public QMainWindow
 public:
     Gamepad(QWidget *parent = nullptr);
     ~Gamepad();
+
+protected:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
+    void closeEvent(QCloseEvent *event);
 
 private slots:
     void on_serialPortSwitch_clicked();
@@ -38,14 +42,16 @@ private slots:
     void on_openPath_clicked();
     void on_addKey_clicked();
     void on_addSleep_clicked();
-
     void on_videoCaptureSwitch_clicked();
-
     void on_videoCaptureRefresh_clicked();
-
     void on_videoCaptureList_activated(int index);
+    void on_miniToolShow_clicked(bool checked);
 
-    void on_topMost_clicked(bool checked);
+    void on_scriptList_itemChanged(QListWidgetItem *item);
+
+    void on_scriptList_itemDoubleClicked(QListWidgetItem *item);
+
+    void on_quit_clicked();
 
 private:
     Ui::Gamepad *ui;
@@ -55,7 +61,8 @@ private:
     ScriptEngine scriptEngine;
     QListWidgetItem *previousScriptListItem = Q_NULLPTR;
     VideoCapture videoCapture;
-
+    MiniTool miniTool;
+    QString doubliClickScriptListItemText= "";
     void saveScript(QListWidgetItem *item);
 };
 #endif // GAMEPAD_H

@@ -66,6 +66,7 @@ public:
     QStringList GetSupportedResolutions(int index);
     QStringList GetSupportedFrameRateRanges(int index);
     QStringList GetSupportedPixelFormats(int index);
+    void moveViewfinder(QLayout *layout);
 
 private:
     QCamera *camera = Q_NULLPTR;

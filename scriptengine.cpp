@@ -91,3 +91,12 @@ void ScriptEngine::stopScript()
 //    emit stop();
     scriptEngineEvaluation.stop();
 }
+
+bool ScriptEngine::renameScript(QString oldScriptName, QString newScriptName)
+{
+    if (QFile::exists(Setting::instance()->getScriptPath() + "/" + newScriptName + ".js")) {
+        return false;
+    }
+    return QFile::rename(Setting::instance()->getScriptPath() + "/" + oldScriptName + ".js",
+                  Setting::instance()->getScriptPath() + "/" + newScriptName + ".js");
+}

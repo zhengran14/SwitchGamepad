@@ -36,6 +36,7 @@ SOURCES += \
     gamepadbtn.cpp \
     main.cpp \
     gamepad.cpp \
+    minitool.cpp \
     scriptengine.cpp \
     scriptengineevaluation.cpp \
     serialport.cpp \
@@ -45,6 +46,7 @@ SOURCES += \
 HEADERS += \
     gamepad.h \
     gamepadbtn.h \
+    minitool.h \
     scriptengine.h \
     scriptengineevaluation.h \
     serialport.h \
@@ -52,7 +54,8 @@ HEADERS += \
     videocapture.h
 
 FORMS += \
-    gamepad.ui
+    gamepad.ui \
+    minitool.ui
 
 TRANSLATIONS += \
     SwitchGamepad_en_US.ts
