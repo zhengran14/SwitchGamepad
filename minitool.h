@@ -19,14 +19,17 @@ public:
     void AddScript(QString script);
     void InsertScript(int index, QString script);
     void RefreshScriptList(QStringList scripts);
-    QLayout *GetVIdeoCaptionFrameLayout();
+    QLayout *GetVideoCaptionFrameLayout();
     void setScriptRunEnabled(bool b);
     void setScriptRunText(QString text);
     void setScriptName(int index, QString name);
     void setScriptListCurrentIndex(int index);
+    void adjustVideoCaptionFrameLayout();
+    void setScriptListEnabled(bool b);
 
 protected:
     bool eventFilter(QObject *target, QEvent *event);
+    void resizeEvent(QResizeEvent *event);
 
 private slots:
     void on_resize_clicked(bool checked);
@@ -37,8 +40,15 @@ private slots:
 
     void on_showMainWindow_clicked();
 
+    void on_zoomIn_clicked();
+
+    void on_zoomOut_clicked();
+
+    void on_restore_clicked();
+
 private:
     Ui::MiniTool *ui;
+    QPoint lastPoint;
 
 signals:
     void runScriptClicked();

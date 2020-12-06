@@ -36,6 +36,8 @@ Gamepad::Gamepad(QWidget *parent)
             miniTool.setScriptRunText(ui->scriptRun->text());
             ui->scriptRun->setProperty("isStop", !ui->scriptRun->property("isStop").toBool());
             ui->scriptEdit->setReadOnly(ui->scriptRun->property("isStop").toBool());
+            ui->scriptList->setEnabled(!ui->scriptRun->property("isStop").toBool());
+            miniTool.setScriptListEnabled(ui->scriptList->isEnabled());
         }
     });
     connect(&scriptEngine, &ScriptEngine::hasException, this, [this](QString ex) {
@@ -425,6 +427,8 @@ void Gamepad::on_scriptRun_clicked()
     miniTool.setScriptRunText(ui->scriptRun->text());
     ui->scriptRun->setProperty("isStop", !ui->scriptRun->property("isStop").toBool());
     ui->scriptEdit->setReadOnly(ui->scriptRun->property("isStop").toBool());
+    ui->scriptList->setEnabled(!ui->scriptRun->property("isStop").toBool());
+    miniTool.setScriptListEnabled(ui->scriptList->isEnabled());
 }
 
 void Gamepad::on_choosePath_clicked()
@@ -541,7 +545,8 @@ void Gamepad::on_miniToolShow_clicked(bool checked)
 {
     if (checked) {
         miniTool.show();
-        videoCapture.moveViewfinder(miniTool.GetVIdeoCaptionFrameLayout());
+        videoCapture.moveViewfinder(miniTool.GetVideoCaptionFrameLayout());
+        miniTool.adjustVideoCaptionFrameLayout();
     }
     else {
         miniTool.hide();

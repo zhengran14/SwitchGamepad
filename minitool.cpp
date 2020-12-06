@@ -11,7 +11,8 @@ MiniTool::MiniTool(QWidget *parent) :
     this->setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     ui->setupUi(this);
 
-    this->installEventFilter(this);
+    ui->centralwidget->installEventFilter(this);
+    ui->videoCaptureFrame->installEventFilter(this);
 }
 
 MiniTool::~MiniTool()
@@ -55,7 +56,7 @@ void MiniTool::RefreshScriptList(QStringList scripts)
     AddScriptList(scripts);
 }
 
-QLayout *MiniTool::GetVIdeoCaptionFrameLayout()
+QLayout *MiniTool::GetVideoCaptionFrameLayout()
 {
     return ui->videoCaptureFrame->layout();
 }
@@ -77,6 +78,17 @@ void MiniTool::setScriptListCurrentIndex(int index)
     ui->scriptList->blockSignals(false);
 }
 
+void MiniTool::adjustVideoCaptionFrameLayout()
+{
+    ui->videoCaptureFrame->setGeometry(0, 0, ui->videoCaptureFrameParent->width(), ui->videoCaptureFrameParent->height());
+    ui->zoom->move(ui->videoCaptureFrameParent->width() - ui->zoom->width(), ui->videoCaptureFrameParent->height() - ui->zoom->height());
+}
+
+void MiniTool::setScriptListEnabled(bool b)
+{
+    ui->scriptList->setEnabled(b);
+}
+
 void MiniTool::setScriptRunEnabled(bool b)
 {
     ui->runScript->setEnabled(b);
@@ -84,13 +96,32 @@ void MiniTool::setScriptRunEnabled(bool b)
 
 bool MiniTool::eventFilter(QObject *target, QEvent *event)
 {
-    switch (event->type()) {
-    case QEvent::MouseButtonPress: {
-        if (!ui->resize->isChecked()) {
-            this->windowHandle()->startSystemMove();
+    if (event->type() == QEvent::MouseButtonPress) {
+        if (target != ui->videoCaptureFrame) {
+            if (!ui->resize->isChecked()) {
+                this->windowHandle()->startSystemMove();
+            }
+        }
+        else {
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+            lastPoint = mouseEvent->pos();
+        }
+        return true;
+    }
+    else if (event->type() == QEvent::MouseMove) {
+        if (target == ui->videoCaptureFrame) {
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+            if (lastPoint.x() != 0 && lastPoint.y() != 0) {
+                QPoint p = mouseEvent->pos() - lastPoint;
+                ui->videoCaptureFrame->move(ui->videoCaptureFrame->pos() + p);
+            }
+            else {
+                lastPoint = mouseEvent->pos();
+            }
             return true;
         }
     }
+//    switch (event->type()) {
 //    case QEvent::MouseMove: {
 //        const int border = 5;
 //        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
@@ -100,16 +131,22 @@ bool MiniTool::eventFilter(QObject *target, QEvent *event)
 //        if (mouseEvent->pos().y() < border) edge |= Qt::TopEdge;
 //        if (mouseEvent->pos().y() >= this->height() - border) edge |= Qt::BottomEdge;
 //        if (edge == 0) {
-////            this->windowHandle()->startSystemMove();
+//            this->windowHandle()->startSystemMove();
 //        }
 //        else {
 //            qDebug() << this->windowHandle()->startSystemResize(edge);
 //        }
 //        return true;
 //    }
-    }
+//    }
 
     return QWidget::eventFilter(target, event);
+}
+
+void MiniTool::resizeEvent(QResizeEvent *event)
+{
+    adjustVideoCaptionFrameLayout();
+    QWidget::resizeEvent(event);
 }
 
 void MiniTool::on_resize_clicked(bool checked)
@@ -136,4 +173,29 @@ void MiniTool::on_scriptList_currentIndexChanged(int index)
 void MiniTool::on_showMainWindow_clicked()
 {
     ((QMainWindow*)this->parent())->show();
+}
+
+void MiniTool::on_zoomIn_clicked()
+{
+    QRect rc = ui->videoCaptureFrame->geometry();
+    ui->videoCaptureFrame->setGeometry(rc.x() - 20, rc.y() - 20, rc.width() + 40, rc.height() + 40);
+}
+
+void MiniTool::on_zoomOut_clicked()
+{
+    QRect rc = ui->videoCaptureFrame->geometry();
+    rc.setWidth(rc.width() - 40);
+    rc.setHeight(rc.height() - 40);
+    rc.moveTo(rc.x() + 20, rc.y() + 20);
+    if (rc.width() < ui->videoCaptureFrameParent->width() || rc.height() < ui->videoCaptureFrameParent->height()) {
+        ui->videoCaptureFrame->setGeometry(0, 0, ui->videoCaptureFrameParent->width(), ui->videoCaptureFrameParent->height());
+    }
+    else {
+        ui->videoCaptureFrame->setGeometry(rc);
+    }
+}
+
+void MiniTool::on_restore_clicked()
+{
+    adjustVideoCaptionFrameLayout();
 }
