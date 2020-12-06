@@ -503,3 +503,14 @@ void Gamepad::on_videoCaptureList_activated(int index)
         ui->videoCaptureResolution->setCurrentIndex(ui->videoCaptureResolution->count() - 1);
     }
 }
+
+void Gamepad::on_topMost_clicked(bool checked)
+{
+    if (checked) {
+        this->setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint);
+    }
+    else {
+        this->setWindowFlags(this->windowFlags() & ~Qt::WindowStaysOnTopHint);
+    }
+    this->show();
+}

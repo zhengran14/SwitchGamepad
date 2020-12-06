@@ -45,6 +45,8 @@ private slots:
 
     void on_videoCaptureList_activated(int index);
 
+    void on_topMost_clicked(bool checked);
+
 private:
     Ui::Gamepad *ui;
     SerialPort serialPort;
