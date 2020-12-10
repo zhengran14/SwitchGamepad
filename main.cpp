@@ -6,6 +6,7 @@
 //#define slots Q_SLOTS
 //#include "opencv2/core/core.hpp"
 //#include "opencv2/highgui/highgui.hpp"
+#include <player.h>
 
 int main(int argc, char *argv[])
 {
@@ -27,6 +28,7 @@ int main(int argc, char *argv[])
 //    cv::destroyAllWindows();
 
     QApplication a(argc, argv);
+    Player p;
     Gamepad w;
     w.show();
 

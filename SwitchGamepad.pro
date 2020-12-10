@@ -1,4 +1,20 @@
-QT       += core gui serialport script multimedia multimediawidgets
+T_PATH_QTAV_LIB = /Users/rabbit/Documents/develop/QtAV/bin/lib_osx_x86_64_llvm
+T_PATH_FFMPEG = /usr/local/Cellar/ffmpeg/4.3.1-with-options_6
+
+LIBS += -F$${T_PATH_QTAV_LIB}
+LIBS += -framework QtAV
+INCLUDEPATH += $${T_PATH_QTAV_LIB}/QtAV.framework/Headers
+
+LIBS += -L$${T_PATH_QTAV_LIB}
+LIBS += -lcommon
+
+INCLUDEPATH += $${T_PATH_FFMPEG}/include
+LIBS += -L$${T_PATH_FFMPEG}/lib -lavcodec -lavfilter -lavdevice -lavutil -lswscale -lavformat -lswresample
+
+LIBS += -framework QtAVWidgets
+INCLUDEPATH += $${T_PATH_QTAV_LIB}/QtAVWidgets.framework/Headers
+
+QT       += core gui serialport script multimedia multimediawidgets av avwidgets network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -37,6 +53,7 @@ SOURCES += \
     main.cpp \
     gamepad.cpp \
     minitool.cpp \
+    player.cpp \
     scriptengine.cpp \
     scriptengineevaluation.cpp \
     serialport.cpp \
@@ -47,6 +64,7 @@ HEADERS += \
     gamepad.h \
     gamepadbtn.h \
     minitool.h \
+    player.h \
     scriptengine.h \
     scriptengineevaluation.h \
     serialport.h \
