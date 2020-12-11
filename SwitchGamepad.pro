@@ -58,6 +58,7 @@ SOURCES += \
     scriptengineevaluation.cpp \
     serialport.cpp \
     setting.cpp \
+    socket.cpp \
     videocapture.cpp
 
 HEADERS += \
@@ -69,6 +70,7 @@ HEADERS += \
     scriptengineevaluation.h \
     serialport.h \
     setting.h \
+    socket.h \
     videocapture.h
 
 FORMS += \
