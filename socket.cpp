@@ -1,24 +1,37 @@
 #include "socket.h"
 
+TcpServer::TcpServer(QObject *parent) : QTcpServer(parent)
+{
+}
+
+void TcpServer::incomingConnection(qintptr socketDescriptor)
+{
+    qDebug() << "123";
+    QTcpServer::incomingConnection(socketDescriptor);
+}
+
 Socket::Socket(QObject *parent) : QObject(parent)
 {
-    //    QTcpServer* mp_TCPServer ;
-    //    mp_TCPServer = new QTcpServer();
-    //    mp_TCPServer->listen(QHostAddress::Any, 7000);
-    //    connect(mp_TCPServer, &QTcpServer::newConnection, this, [this, mp_TCPServer]() {
-    //        QTcpSocket *mp_TCPSocket = mp_TCPServer->nextPendingConnection();
-    //        connect(mp_TCPSocket, &QTcpSocket::readyRead, this, [this, mp_TCPSocket]() {
-    //            qDebug() << mp_TCPSocket->readAll();
-    //        });
-        //    });
+}
 
+Socket::~Socket()
+{
+}
 
-    //    QTcpSocket* mp_clientSocket;
-    //            mp_clientSocket = new QTcpSocket();
-    //            mp_clientSocket->connectToHost("127.0.0.1", 7000);
-    //            connect(mp_clientSocket, &QTcpSocket::connected, this, [this, mp_clientSocket]() {
-    //                mp_clientSocket->write("123123123");
-        //            });
+void Socket::wirte(QString str)
+{
+    if (!this->isConnected) {
+        return;
+    }
+    tcpSocket->write(str.toUtf8());
+}
+
+QString Socket::reed()
+{
+    if (!this->isConnected) {
+        return "";
+    }
+    return QString::fromUtf8(tcpSocket->readAll());
 }
 
 Server::Server(QObject *parent) : Socket(parent)
@@ -43,12 +56,23 @@ Server::~Server()
     }
 }
 
-void Server::open(quint16 port)
+bool Server::open(quint16 port)
 {
-    if (this->isConnected) {
-        return;
+    if (tcpServer->isListening()) {
+        return false;
     }
-    tcpServer->listen(QHostAddress::Any, port);
+    return tcpServer->listen(QHostAddress::Any, port);
+}
+
+void Server::close()
+{
+    if (tcpSocket != Q_NULLPTR) {
+        tcpSocket->close();
+        tcpSocket->deleteLater();
+        tcpSocket = Q_NULLPTR;
+    }
+    tcpServer->close();
+    this->isConnected = false;
 }
 
 void Server::newConnection()
@@ -60,10 +84,24 @@ void Server::newConnection()
         return;
     }
     tcpSocket = tcpServer->nextPendingConnection();
+    connect(tcpSocket, &QTcpSocket::disconnected, this, &Server::clientDisconnect);
     tcpServer->pauseAccepting();
     if (tcpSocket->state() == QTcpSocket::ConnectedState) {
         this->isConnected = true;
+        emit clientNewConnectiton("");
     }
+}
+
+void Server::clientDisconnect()
+{
+    if (tcpSocket != Q_NULLPTR) {
+        tcpSocket->close();
+        tcpSocket->deleteLater();
+        tcpSocket = Q_NULLPTR;
+    }
+    tcpServer->resumeAccepting();
+    this->isConnected = false;
+    emit clientConnectionClosed("");
 }
 
 Client::Client(QObject *parent) : Socket(parent)
@@ -71,6 +109,8 @@ Client::Client(QObject *parent) : Socket(parent)
     this->isConnected = false;
     tcpSocket = new QTcpSocket(this);
     connect(tcpSocket, &QTcpSocket::connected, this, &Client::connected);
+    connect(tcpSocket, &QTcpSocket::disconnected, this, &Client::disconnected);
+    connect(tcpSocket, &QTcpSocket::errorOccurred, this, &Client::errorOccurred);
 }
 
 Client::~Client()
@@ -90,6 +130,12 @@ void Client::connectServer(QString address, quint16 port)
     tcpSocket->connectToHost(address, port);
 }
 
+void Client::disConnectServer()
+{
+    tcpSocket->close();
+    this->isConnected = false;
+}
+
 void Client::connected()
 {
     if (this->isConnected) {
@@ -97,5 +143,18 @@ void Client::connected()
     }
     if (tcpSocket->state() == QTcpSocket::ConnectedState) {
         this->isConnected = true;
+        emit connectSuccess("");
     }
+}
+
+void Client::disconnected()
+{
+    emit closeConnect("");
+}
+
+void Client::errorOccurred(QAbstractSocket::SocketError socketError)
+{
+    this->disConnectServer();
+    this->isConnected = false;
+    emit connectError("");
 }

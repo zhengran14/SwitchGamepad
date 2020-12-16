@@ -8,6 +8,8 @@
 #include <QListWidgetItem>
 #include "videocapture.h"
 #include <minitool.h>
+#include <player.h>
+#include <socket.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Gamepad; }
@@ -46,12 +48,16 @@ private slots:
     void on_videoCaptureRefresh_clicked();
     void on_videoCaptureList_activated(int index);
     void on_miniToolShow_clicked(bool checked);
-
     void on_scriptList_itemChanged(QListWidgetItem *item);
-
     void on_scriptList_itemDoubleClicked(QListWidgetItem *item);
-
     void on_quit_clicked();
+    void on_serverSwitch_clicked();
+    void on_clientSwitch_clicked();
+    void on_remotePort_editingFinished();
+    void on_serverUrl_editingFinished();
+    void on_serverPort_editingFinished();
+    void on_liveUrl_editingFinished();
+    void on_remoteInfo_cursorPositionChanged();
 
 private:
     Ui::Gamepad *ui;
@@ -64,5 +70,8 @@ private:
     MiniTool miniTool;
     QString doubliClickScriptListItemText= "";
     void saveScript(QListWidgetItem *item);
+    Player player;
+    Server server;
+    Client client;
 };
 #endif // GAMEPAD_H

@@ -13,11 +13,16 @@ Gamepad::Gamepad(QWidget *parent)
     , scriptEngine(&serialPort)
     , videoCapture(this)
     , miniTool(this)
+    , player(this)
+    , server(this)
+    , client(this)
 {
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
     ui->serialPortSwitch->setProperty("isOpen", false);
     ui->videoCaptureSwitch->setProperty("isOpen", false);
+    ui->serverSwitch->setProperty("isOpen", false);
+    ui->clientSwitch->setProperty("isOpen", false);
     ui->scriptRun->setProperty("isStop", false);
     on_serialPortRefresh_clicked();
     ui->splitter->setStretchFactor(1, 2);
@@ -26,6 +31,10 @@ Gamepad::Gamepad(QWidget *parent)
     on_videoCaptureRefresh_clicked();
     videoCapture.init(ui->videoCaptureFrame->layout());
     ui->splitter_2->setStretchFactor(1, 2);
+    ui->remotePort->setValue(Setting::instance()->getRemotePort());
+    ui->serverUrl->setText(Setting::instance()->getServerUrl());
+    ui->serverPort->setValue(Setting::instance()->getServerPort());
+    ui->liveUrl->setText(Setting::instance()->getLiveUrl());
 //    connect(&serialPort, &SerialPort::openFailed, this, [this]() {
 //        QMessageBox::critical(this, tr("Error"), tr("Failed to open!"), QMessageBox::Ok, QMessageBox::Ok);
 //    });
@@ -50,6 +59,26 @@ Gamepad::Gamepad(QWidget *parent)
     connect(&miniTool, &MiniTool::scriptListCurrentIndexChanged, this, [this](int index) {
         ui->scriptList->setCurrentRow(index);
         this->on_scriptList_itemClicked(ui->scriptList->currentItem());
+    });
+    connect(&server, &Server::clientNewConnectiton, this, [this](QString str) {
+        ui->remoteInfo->append(tr("New client connected") + (str.isEmpty() ? tr("") : (tr(": ") + str)));
+    });
+    connect(&server, &Server::clientConnectionClosed, this, [this](QString str) {
+        ui->remoteInfo->append(tr("Client connection close") + (str.isEmpty() ? tr("") : (tr(": ") + str)));
+    });
+    connect(&client, &Client::connectSuccess, this, [this](QString str) {
+        ui->remoteInfo->append(tr("Connect success") + (str.isEmpty() ? tr("") : (tr(": ") + str)));
+    });
+    connect(&client, &Client::closeConnect, this, [this](QString str) {
+        ui->remoteInfo->append(tr("Connect close") + (str.isEmpty() ? tr("") : (tr(": ") + str)));
+    });
+    connect(&client, &Client::connectError, this, [this](QString str) {
+        ui->remoteInfo->append(tr("Connect error") + (str.isEmpty() ? tr("") : (tr(": ") + str)));
+        if (ui->clientSwitch->property("isOpen").toBool()) {
+//            QMouseEvent mouseEvent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+//            QApplication::sendEvent(ui->clientSwitch, &mouseEvent);
+            on_clientSwitch_clicked();
+        }
     });
 
 
@@ -87,9 +116,9 @@ Gamepad::Gamepad(QWidget *parent)
         gamepadBtns.insert(Qt::Key_V, ui->lxMaxBtn);
         gamepadBtns.insert(Qt::Key_E, ui->lBtn);
         gamepadBtns.insert(Qt::Key_Q, ui->zlBtn);
-        gamepadBtns.insert(Qt::Key_I, ui->yBtn);
+        gamepadBtns.insert(Qt::Key_J, ui->yBtn);
         gamepadBtns.insert(Qt::Key_K, ui->bBtn);
-        gamepadBtns.insert(Qt::Key_J, ui->xBtn);
+        gamepadBtns.insert(Qt::Key_I, ui->xBtn);
         gamepadBtns.insert(Qt::Key_L, ui->aBtn);
         gamepadBtns.insert(Qt::Key_U, ui->rBtn);
         gamepadBtns.insert(Qt::Key_O, ui->zrBtn);
@@ -172,6 +201,9 @@ Gamepad::~Gamepad()
     scriptEngine.deleteLater();
     serialPort.deleteLater();
     videoCapture.deleteLater();
+    player.deleteLater();
+    client.deleteLater();
+    server.deleteLater();
     delete ui;
 }
 
@@ -578,4 +610,69 @@ void Gamepad::on_scriptList_itemDoubleClicked(QListWidgetItem *item)
 void Gamepad::on_quit_clicked()
 {
     QApplication::quit();
+}
+
+void Gamepad::on_serverSwitch_clicked()
+{
+    if (ui->serverSwitch->property("isOpen").toBool()) {
+        ui->remoteInfo->append(tr("Close server"));
+        server.close();
+    }
+    else {
+        ui->remoteInfo->clear();
+        ui->remoteInfo->append(tr("Open port: ") + QString::number(ui->remotePort->value()));
+        if (!server.open(ui->remotePort->value())) {
+            server.close();
+            return;
+        }
+        ui->remoteInfo->append(tr("Listening..."));
+    }
+    ui->serverSwitch->setText(ui->serverSwitch->property("isOpen").toBool() ? tr("Open") : tr("Close"));
+    ui->serverSwitch->setProperty("isOpen", !ui->serverSwitch->property("isOpen").toBool());
+    ui->clientGroup->setEnabled(!ui->serverSwitch->property("isOpen").toBool());
+    ui->serverInfo->setEnabled(!ui->serverSwitch->property("isOpen").toBool());
+}
+
+void Gamepad::on_clientSwitch_clicked()
+{
+    if (ui->clientSwitch->property("isOpen").toBool()) {
+        ui->remoteInfo->append(tr("Close connect"));
+        client.disConnectServer();
+    }
+    else {
+        ui->remoteInfo->clear();
+        ui->remoteInfo->append(tr("Connecting ") + ui->serverUrl->text() + tr(":") + QString::number(ui->serverPort->value()));
+        client.connectServer(ui->serverUrl->text(), ui->serverPort->value());
+    }
+    ui->clientSwitch->setText(ui->clientSwitch->property("isOpen").toBool() ? tr("Open") : tr("Close"));
+    ui->clientSwitch->setProperty("isOpen", !ui->clientSwitch->property("isOpen").toBool());
+    ui->serverGroup->setEnabled(!ui->clientSwitch->property("isOpen").toBool());
+    ui->clientInfo->setEnabled(!ui->clientSwitch->property("isOpen").toBool());
+}
+
+void Gamepad::on_remotePort_editingFinished()
+{
+    Setting::instance()->setRemotePort(ui->remotePort->value());
+}
+
+void Gamepad::on_serverUrl_editingFinished()
+{
+    Setting::instance()->setServerUrl(ui->serverUrl->text());
+}
+
+void Gamepad::on_serverPort_editingFinished()
+{
+    Setting::instance()->setServerPort(ui->serverPort->value());
+}
+
+void Gamepad::on_liveUrl_editingFinished()
+{
+    Setting::instance()->setLiveUrl(ui->liveUrl->text());
+}
+
+void Gamepad::on_remoteInfo_cursorPositionChanged()
+{
+//    QTextCursor cursor =  ui->remoteInfo->textCursor();
+//    cursor.movePosition(QTextCursor::End);
+//    ui->remoteInfo->setTextCursor(cursor);
 }
