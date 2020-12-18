@@ -169,32 +169,32 @@ Gamepad::Gamepad(QWidget *parent)
         buttomDatum.insert("Screenshot", "Button CAPTURE");
         buttomDatum.insert("Home", "Button HOME");
 
-        connect(ui->lyMinBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->lyMaxBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->lxMinBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->lxMaxBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->lBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->zlBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->yBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->bBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->xBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->aBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->rBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->zrBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->ryMinBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->ryMaxBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->rxMinBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->rxMaxBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->upBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->downBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->leftBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->rightBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->screenshotBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->homeBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->minBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->plusBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->lcBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
-        connect(ui->rcBtn, &GamepadBtn::sendData, &serialPort, &SerialPort::sendData);
+        connect(ui->lyMinBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->lyMaxBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->lxMinBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->lxMaxBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->lBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->zlBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->yBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->bBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->xBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->aBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->rBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->zrBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->ryMinBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->ryMaxBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->rxMinBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->rxMaxBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->upBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->downBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->leftBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->rightBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->screenshotBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->homeBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->minBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->plusBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->lcBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+        connect(ui->rcBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
     }
 }
 
@@ -269,6 +269,19 @@ void Gamepad::on_serialPortRefresh_clicked()
     ui->serialPort->addItems(serialPort.getAllPortNames("tty.usbserial", defaultName));
     if (!defaultName.isEmpty()) {
         ui->serialPort->setCurrentText(defaultName);
+    }
+}
+
+void Gamepad::on_gamepadBtn_sendData(QString data)
+{
+    if (this->runMode == Utils::LocalRunMode || ui->serverSwitch->property("isOpen").toBool()) {
+        serialPort.sendData(data);
+    }
+    else if (this->runMode == Utils::RemoteRunMode && ui->clientSwitch->property("isOpen").toBool()) {
+        ui->remoteInfo->append(tr("Send key: ") + data);
+        QJsonObject json;
+        json.insert("data", data);
+        client.write(json, tr("Receive key: ") + data, Utils::ReceiveKey);
     }
 }
 
@@ -469,7 +482,7 @@ void Gamepad::operation(QJsonObject json, Utils::Operation operation)
             scriptEngine.runScript(json["script"].toString());
             ui->remoteInfo->append(tr("Start run script..."));
             QJsonObject json;
-            server.write(json, tr("Start run script..."), Utils::UnknownOperation);
+            server.write(json, tr("Start run script..."), Utils::ShowMessage);
             return;
         }
         break;
@@ -493,6 +506,20 @@ void Gamepad::operation(QJsonObject json, Utils::Operation operation)
             switchRunUIStatus();
         }
         ui->status->setText(tr(""));
+        return;
+    }
+    case Utils::ReceiveKey: {
+        if (json.contains("data")) {
+            QString data = json["data"].toString();
+            serialPort.sendData(data);
+            ui->remoteInfo->append(tr("Run key: ") + data);
+            QJsonObject json;
+            server.write(json, tr("Run key: ") + data, Utils::ShowMessage);
+            return;
+        }
+        break;
+    }
+    case Utils::ShowMessage: {
         return;
     }
     case Utils::UnknownOperation:

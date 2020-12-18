@@ -9,10 +9,12 @@ class Utils : public QObject
 public:
     enum Operation {
         UnknownOperation = -1,
+        ShowMessage = 0,
         GetRunScript,
         StopRunScript,
         ScriptStopped,
         ScriptFinished,
+        ReceiveKey,
     };
     enum RunMode {
         LocalRunMode,

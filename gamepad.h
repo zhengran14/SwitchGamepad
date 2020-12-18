@@ -32,6 +32,7 @@ protected:
 private slots:
     void on_serialPortSwitch_clicked();
     void on_serialPortRefresh_clicked();
+    void on_gamepadBtn_sendData(QString data);
     void on_scriptList_itemClicked(QListWidgetItem *item);
     void on_scriptEdit_textChanged();
     void on_scriptList_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
@@ -63,7 +64,6 @@ private slots:
     void on_client_receiveData();
     void on_server_clientNewConnectiton(QString str);
     void on_client_connectSuccess(QString str);
-
     void on_remoteInfoClear_clicked();
 
 private:
