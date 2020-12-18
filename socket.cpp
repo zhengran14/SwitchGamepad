@@ -1,4 +1,6 @@
 #include "socket.h"
+#include <QJsonObject>
+#include <QJsonDocument>
 
 TcpServer::TcpServer(QObject *parent) : QTcpServer(parent)
 {
@@ -18,20 +20,80 @@ Socket::~Socket()
 {
 }
 
-void Socket::wirte(QString str)
+//void Socket::wirte(QString str, bool isCompress)
+//{
+//    if (!this->isConnected || tcpSocket == Q_NULLPTR) {
+//        return;
+//    }
+//    QByteArray buffer = str.toUtf8();
+//    if (isCompress) {
+//        buffer = qCompress(buffer,-1);
+//    }
+//    tcpSocket->write(buffer);
+//}
+
+void Socket::write(QJsonObject json, QString message, Utils::Operation operation, bool isCompress)
 {
-    if (!this->isConnected) {
+    if (!this->isConnected || tcpSocket == Q_NULLPTR) {
         return;
     }
-    tcpSocket->write(str.toUtf8());
+    QJsonObject resultJson;
+    resultJson.insert("message", message);
+    resultJson.insert("status", true);
+    resultJson.insert("operation", operation);
+    resultJson.insert("data", json);
+    QByteArray buffer = QString(QJsonDocument(resultJson).toJson(QJsonDocument::Compact)).toUtf8();
+    if (isCompress) {
+        buffer = qCompress(buffer,-1);
+    }
+    tcpSocket->write(buffer);
 }
 
-QString Socket::reed()
+//QString Socket::read(bool isCompress)
+//{
+//    if (!this->isConnected || tcpSocket == Q_NULLPTR) {
+//        return "";
+//    }
+//    QByteArray buffer = tcpSocket->readAll();
+//    if (isCompress) {
+//        buffer = qUncompress(buffer);
+//    }
+//    return QString::fromUtf8(buffer);
+//}
+
+bool Socket::read(QJsonObject &json, QString &message, Utils::Operation &operation, bool isCompress)
 {
-    if (!this->isConnected) {
-        return "";
+    if (!this->isConnected || tcpSocket == Q_NULLPTR) {
+        json = QJsonObject();
+        message = "";
+        operation = Utils::UnknownOperation;
+        return false;
     }
-    return QString::fromUtf8(tcpSocket->readAll());
+    QByteArray buffer = tcpSocket->readAll();
+    if (isCompress) {
+        buffer = qUncompress(buffer);
+    }
+    QJsonParseError resultJsonError;
+    QJsonDocument resultJsonDocument = QJsonDocument::fromJson(buffer, &resultJsonError);
+    if (resultJsonError.error == QJsonParseError::NoError) {
+        if (resultJsonDocument.isObject()) {
+            QJsonObject resultJson = resultJsonDocument.object();
+            bool result = resultJson.contains("status") ? resultJson["status"].toBool(false) : false;
+            QString _message = resultJson.contains("message") ? resultJson["message"].toString("") : "";
+            QJsonObject _json = resultJson.contains("data") ? resultJson["data"].toObject() : QJsonObject();
+            Utils::Operation _operation = resultJson.contains("operation") ? (Utils::Operation)(resultJson["operation"].toInt(Utils::UnknownOperation)) : Utils::UnknownOperation;
+            if (result) {
+                message = _message;
+                json = _json;
+                operation = _operation;
+                return result;
+            }
+        }
+    }
+    json = QJsonObject();
+    message = "";
+    operation = Utils::UnknownOperation;
+    return false;
 }
 
 Server::Server(QObject *parent) : Socket(parent)
@@ -67,6 +129,8 @@ bool Server::open(quint16 port)
 void Server::close()
 {
     if (tcpSocket != Q_NULLPTR) {
+        disconnect(tcpSocket, &QTcpSocket::disconnected, this, &Server::clientDisconnect);
+        disconnect(tcpSocket, &QTcpSocket::readyRead, this, &Server::clientReadyRead);
         tcpSocket->close();
         tcpSocket->deleteLater();
         tcpSocket = Q_NULLPTR;
@@ -85,6 +149,7 @@ void Server::newConnection()
     }
     tcpSocket = tcpServer->nextPendingConnection();
     connect(tcpSocket, &QTcpSocket::disconnected, this, &Server::clientDisconnect);
+    connect(tcpSocket, &QTcpSocket::readyRead, this, &Server::clientReadyRead);
     tcpServer->pauseAccepting();
     if (tcpSocket->state() == QTcpSocket::ConnectedState) {
         this->isConnected = true;
@@ -104,6 +169,11 @@ void Server::clientDisconnect()
     emit clientConnectionClosed("");
 }
 
+void Server::clientReadyRead()
+{
+    emit receiveData();
+}
+
 Client::Client(QObject *parent) : Socket(parent)
 {
     this->isConnected = false;
@@ -111,6 +181,7 @@ Client::Client(QObject *parent) : Socket(parent)
     connect(tcpSocket, &QTcpSocket::connected, this, &Client::connected);
     connect(tcpSocket, &QTcpSocket::disconnected, this, &Client::disconnected);
     connect(tcpSocket, &QTcpSocket::errorOccurred, this, &Client::errorOccurred);
+    connect(tcpSocket, &QTcpSocket::readyRead, this, &Client::clientReadyRead);
 }
 
 Client::~Client()
@@ -157,4 +228,9 @@ void Client::errorOccurred(QAbstractSocket::SocketError socketError)
     this->disConnectServer();
     this->isConnected = false;
     emit connectError("");
+}
+
+void Client::clientReadyRead()
+{
+    emit receiveData();
 }

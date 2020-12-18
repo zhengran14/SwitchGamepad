@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <utils.h>
 
 class TcpServer : public QTcpServer
 {
@@ -21,8 +22,10 @@ class Socket : public QObject
 public:
     explicit Socket(QObject *parent = nullptr);
     ~Socket();
-    void wirte(QString str);
-    QString reed();
+//    void wirte(QString str, bool isCompress = true);
+    void write(QJsonObject json, QString message, Utils::Operation operation, bool isCompress = true);
+//    QString read(bool isCompress = true);
+    bool read(QJsonObject &json, QString &message, Utils::Operation &operation, bool isCompress = true);
 
 protected:
     bool isConnected = false;
@@ -41,14 +44,15 @@ public:
 private slots:
     void newConnection();
     void clientDisconnect();
+    void clientReadyRead();
 
 private:
     QTcpServer *tcpServer = Q_NULLPTR;
-    QTcpSocket *tcpSocket = Q_NULLPTR;
 
 signals:
     void clientNewConnectiton(QString str);
     void clientConnectionClosed(QString str);
+    void receiveData();
 
 };
 
@@ -65,6 +69,7 @@ private slots:
     void connected();
     void disconnected();
     void errorOccurred(QAbstractSocket::SocketError socketError);
+    void clientReadyRead();
 
 private:
 
@@ -72,6 +77,7 @@ signals:
     void connectSuccess(QString str);
     void closeConnect(QString str);
     void connectError(QString str);
+    void receiveData();
 
 };
 

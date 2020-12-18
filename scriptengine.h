@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QThread>
+#include <QJsonObject>
+#include <QJsonArray>
 #include "scriptengineevaluation.h"
 
 class ScriptEngine : public QObject
@@ -10,6 +12,10 @@ class ScriptEngine : public QObject
     Q_OBJECT
 
 public:
+//    enum ScriptEngineMode {
+//        ScriptEngineLocalMode,
+//        ScriptEngineRemoteMode
+//    };
     explicit ScriptEngine(QObject *parent = nullptr);
     ~ScriptEngine();
     QStringList getAllScripts();
@@ -20,10 +26,15 @@ public:
     void runScript(QString content);
     void stopScript();
     bool renameScript(QString oldScriptName, QString newScriptName);
+//    void setScriptEngineMode(ScriptEngineMode scriptEngineMode, QJsonArray filesJson = QJsonArray());
+//    ScriptEngineMode getScriptEngineMode();
+//    QJsonObject getAllScriptsIntoJson();
 
 private:
     QThread scriptEngineEvaluationThread;
     ScriptEngineEvaluation scriptEngineEvaluation;
+//    ScriptEngineMode scriptEngineMode = ScriptEngineLocalMode;
+//    QJsonArray filesJson;
 
 signals:
     void evaluate(QString script);
@@ -32,6 +43,7 @@ signals:
     void runScriptFinish();
     void hasException(QString ex);
     void messageBoxShow(QString title, QString content);
+    void runScriptStart();
 };
 
 #endif // SCRIPTENGINE_H

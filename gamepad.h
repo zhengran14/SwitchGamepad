@@ -10,6 +10,7 @@
 #include <minitool.h>
 #include <player.h>
 #include <socket.h>
+#include <utils.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Gamepad; }
@@ -58,6 +59,12 @@ private slots:
     void on_serverPort_editingFinished();
     void on_liveUrl_editingFinished();
     void on_remoteInfo_cursorPositionChanged();
+    void on_server_receiveData();
+    void on_client_receiveData();
+    void on_server_clientNewConnectiton(QString str);
+    void on_client_connectSuccess(QString str);
+
+    void on_remoteInfoClear_clicked();
 
 private:
     Ui::Gamepad *ui;
@@ -73,5 +80,9 @@ private:
     Player player;
     Server server;
     Client client;
+    void operation(QJsonObject json, Utils::Operation operation);
+//    void sendAllScripts();
+    Utils::RunMode runMode = Utils::LocalRunMode;
+    void switchRunUIStatus();
 };
 #endif // GAMEPAD_H

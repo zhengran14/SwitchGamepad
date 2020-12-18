@@ -28,7 +28,7 @@ Gamepad::Gamepad(QWidget *parent)
     ui->splitter->setStretchFactor(1, 2);
     on_scriptListRefresh_clicked();
     ui->pathEdit->setText(Setting::instance()->getScriptPath());
-    on_videoCaptureRefresh_clicked();
+//    on_videoCaptureRefresh_clicked();
     videoCapture.init(ui->videoCaptureFrame->layout());
     ui->splitter_2->setStretchFactor(1, 2);
     ui->remotePort->setValue(Setting::instance()->getRemotePort());
@@ -39,14 +39,20 @@ Gamepad::Gamepad(QWidget *parent)
 //        QMessageBox::critical(this, tr("Error"), tr("Failed to open!"), QMessageBox::Ok, QMessageBox::Ok);
 //    });
     connect(&scriptEngine, &ScriptEngine::sendData, &serialPort, &SerialPort::sendData);
+    connect(&scriptEngine, &ScriptEngine::runScriptStart, this, [this]() {
+        ui->status->setText(tr("Local script running"));
+    });
     connect(&scriptEngine, &ScriptEngine::runScriptFinish, this, [this]() {
-        if (ui->scriptRun->property("isStop").toBool()) {
-            ui->scriptRun->setText(ui->scriptRun->property("isStop").toBool() ? tr("Run") : tr("Stop"));
-            miniTool.setScriptRunText(ui->scriptRun->text());
-            ui->scriptRun->setProperty("isStop", !ui->scriptRun->property("isStop").toBool());
-            ui->scriptEdit->setReadOnly(ui->scriptRun->property("isStop").toBool());
-            ui->scriptList->setEnabled(!ui->scriptRun->property("isStop").toBool());
-            miniTool.setScriptListEnabled(ui->scriptList->isEnabled());
+        ui->status->setText(tr(""));
+        if (this->runMode == Utils::LocalRunMode) {
+            if (ui->scriptRun->property("isStop").toBool()) {
+                switchRunUIStatus();
+            }
+        }
+        else if (this->runMode == Utils::RemoteRunMode) {
+            ui->remoteInfo->append(tr("Script Finished"));
+            QJsonObject json;
+            server.write(json, tr("Script Finished"), Utils::ScriptFinished);
         }
     });
     connect(&scriptEngine, &ScriptEngine::hasException, this, [this](QString ex) {
@@ -60,15 +66,12 @@ Gamepad::Gamepad(QWidget *parent)
         ui->scriptList->setCurrentRow(index);
         this->on_scriptList_itemClicked(ui->scriptList->currentItem());
     });
-    connect(&server, &Server::clientNewConnectiton, this, [this](QString str) {
-        ui->remoteInfo->append(tr("New client connected") + (str.isEmpty() ? tr("") : (tr(": ") + str)));
-    });
+    connect(&server, &Server::clientNewConnectiton, this, &Gamepad::on_server_clientNewConnectiton);
     connect(&server, &Server::clientConnectionClosed, this, [this](QString str) {
         ui->remoteInfo->append(tr("Client connection close") + (str.isEmpty() ? tr("") : (tr(": ") + str)));
+        operation(QJsonObject(), Utils::StopRunScript);
     });
-    connect(&client, &Client::connectSuccess, this, [this](QString str) {
-        ui->remoteInfo->append(tr("Connect success") + (str.isEmpty() ? tr("") : (tr(": ") + str)));
-    });
+    connect(&client, &Client::connectSuccess, this, &Gamepad::on_client_connectSuccess);
     connect(&client, &Client::closeConnect, this, [this](QString str) {
         ui->remoteInfo->append(tr("Connect close") + (str.isEmpty() ? tr("") : (tr(": ") + str)));
     });
@@ -80,6 +83,8 @@ Gamepad::Gamepad(QWidget *parent)
             on_clientSwitch_clicked();
         }
     });
+    connect(&server, &Server::receiveData, this, &Gamepad::on_server_receiveData);
+    connect(&client, &Client::receiveData, this, &Gamepad::on_client_receiveData);
 
 
     {
@@ -447,20 +452,99 @@ void Gamepad::saveScript(QListWidgetItem *item)
     ui->scriptSave->repaint();
 }
 
-void Gamepad::on_scriptRun_clicked()
+void Gamepad::operation(QJsonObject json, Utils::Operation operation)
 {
-    if (ui->scriptRun->property("isStop").toBool()) {
+    switch (operation) {
+//    case Utils::GetAllScripts: {
+//        if (json.contains("files")) {
+//            QJsonArray filesJson = json["files"].toArray();
+//            scriptEngine.setScriptEngineMode(ScriptEngine::ScriptEngineRemoteMode, filesJson);
+//            on_scriptListRefresh_clicked();
+//            return;
+//        }
+//        break;
+//    }
+    case Utils::GetRunScript: {
+        if (json.contains("script")) {
+            scriptEngine.runScript(json["script"].toString());
+            ui->remoteInfo->append(tr("Start run script..."));
+            QJsonObject json;
+            server.write(json, tr("Start run script..."), Utils::UnknownOperation);
+            return;
+        }
+        break;
+    }
+    case Utils::StopRunScript: {
         scriptEngine.stopScript();
+        ui->remoteInfo->append(tr("Script stopped"));
+        QJsonObject json;
+        server.write(json, tr("Script stopped"), Utils::ScriptStopped);
+        return;
     }
-    else {
-        scriptEngine.runScript(ui->scriptEdit->toPlainText());
+    case Utils::ScriptStopped: {
+        if (ui->scriptRun->property("isStop").toBool()) {
+            switchRunUIStatus();
+        }
+        ui->status->setText(tr(""));
+        return;
     }
+    case Utils::ScriptFinished: {
+        if (ui->scriptRun->property("isStop").toBool()) {
+            switchRunUIStatus();
+        }
+        ui->status->setText(tr(""));
+        return;
+    }
+    case Utils::UnknownOperation:
+    default: {
+        break;
+    }
+    }
+    ui->remoteInfo->append(tr("Unknown operation"));
+}
+
+void Gamepad::switchRunUIStatus()
+{
     ui->scriptRun->setText(ui->scriptRun->property("isStop").toBool() ? tr("Run") : tr("Stop"));
     miniTool.setScriptRunText(ui->scriptRun->text());
     ui->scriptRun->setProperty("isStop", !ui->scriptRun->property("isStop").toBool());
     ui->scriptEdit->setReadOnly(ui->scriptRun->property("isStop").toBool());
     ui->scriptList->setEnabled(!ui->scriptRun->property("isStop").toBool());
     miniTool.setScriptListEnabled(ui->scriptList->isEnabled());
+}
+
+//void Gamepad::sendAllScripts()
+//{
+//    ui->remoteInfo->append(tr("Send all scripts"));
+//    server.write(scriptEngine.getAllScriptsIntoJson(), tr("Get all scripts"), Utils::GetAllScripts);
+//}
+
+void Gamepad::on_scriptRun_clicked()
+{
+    if (ui->scriptRun->property("isStop").toBool()) {
+        if (this->runMode == Utils::LocalRunMode) {
+            scriptEngine.stopScript();
+        }
+        else if (this->runMode == Utils::RemoteRunMode) {
+            ui->remoteInfo->append(tr("Stop run script"));
+            QJsonObject json;
+            client.write(json, tr("Stop run script"), Utils::StopRunScript);
+            return;
+        }
+    }
+    else {
+        if (this->runMode == Utils::LocalRunMode) {
+            scriptEngine.runScript(ui->scriptEdit->toPlainText());
+        }
+        else if (this->runMode == Utils::RemoteRunMode) {
+            ui->remoteInfo->append(tr("Send run script"));
+            QJsonObject json;
+            json.insert("script", ui->scriptEdit->toPlainText());
+            client.write(json, tr("Get run script"), Utils::GetRunScript);
+            ui->status->setText(tr("Remote script running"));
+        }
+    }
+    switchRunUIStatus();
 }
 
 void Gamepad::on_choosePath_clicked()
@@ -614,8 +698,10 @@ void Gamepad::on_quit_clicked()
 
 void Gamepad::on_serverSwitch_clicked()
 {
+    this->runMode = Utils::LocalRunMode;
     if (ui->serverSwitch->property("isOpen").toBool()) {
         ui->remoteInfo->append(tr("Close server"));
+        operation(QJsonObject(), Utils::StopRunScript);
         server.close();
     }
     else {
@@ -625,16 +711,25 @@ void Gamepad::on_serverSwitch_clicked()
             server.close();
             return;
         }
+        if (ui->scriptRun->property("isStop").toBool()) {
+            on_scriptRun_clicked();
+        }
         ui->remoteInfo->append(tr("Listening..."));
+        this->runMode = Utils::RemoteRunMode;
     }
     ui->serverSwitch->setText(ui->serverSwitch->property("isOpen").toBool() ? tr("Open") : tr("Close"));
     ui->serverSwitch->setProperty("isOpen", !ui->serverSwitch->property("isOpen").toBool());
     ui->clientGroup->setEnabled(!ui->serverSwitch->property("isOpen").toBool());
     ui->serverInfo->setEnabled(!ui->serverSwitch->property("isOpen").toBool());
+    ui->scriptTab->setEnabled(!ui->serverSwitch->property("isOpen").toBool());
 }
 
 void Gamepad::on_clientSwitch_clicked()
 {
+    this->runMode = Utils::LocalRunMode;
+    if (ui->scriptRun->property("isStop").toBool()) {
+        on_scriptRun_clicked();
+    }
     if (ui->clientSwitch->property("isOpen").toBool()) {
         ui->remoteInfo->append(tr("Close connect"));
         client.disConnectServer();
@@ -674,5 +769,46 @@ void Gamepad::on_remoteInfo_cursorPositionChanged()
 {
 //    QTextCursor cursor =  ui->remoteInfo->textCursor();
 //    cursor.movePosition(QTextCursor::End);
-//    ui->remoteInfo->setTextCursor(cursor);
+    //    ui->remoteInfo->setTextCursor(cursor);
+}
+
+void Gamepad::on_server_receiveData()
+{
+    QJsonObject json;
+    QString message = "";
+    Utils::Operation operation = Utils::UnknownOperation;
+    bool b = server.read(json, message, operation);
+    ui->remoteInfo->append(b ? (tr("Receive: ") + message) : tr("Receive failed"));
+    if (b) {
+        this->operation(json, operation);
+    }
+}
+
+void Gamepad::on_client_receiveData()
+{
+    QJsonObject json;
+    QString message = "";
+    Utils::Operation operation = Utils::UnknownOperation;
+    bool b = client.read(json, message, operation);
+    ui->remoteInfo->append(b ? (tr("Receive: ") + message) : tr("Receive failed"));
+    if (b) {
+        this->operation(json, operation);
+    }
+}
+
+void Gamepad::on_server_clientNewConnectiton(QString str)
+{
+    ui->remoteInfo->append(tr("New client connected") + (str.isEmpty() ? tr("") : (tr(": ") + str)));
+//    sendAllScripts();
+}
+
+void Gamepad::on_client_connectSuccess(QString str)
+{
+    ui->remoteInfo->append(tr("Connect success") + (str.isEmpty() ? tr("") : (tr(": ") + str)));
+    this->runMode = Utils::RemoteRunMode;
+}
+
+void Gamepad::on_remoteInfoClear_clicked()
+{
+    ui->remoteInfo->clear();
 }

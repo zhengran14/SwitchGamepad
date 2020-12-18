@@ -59,6 +59,7 @@ SOURCES += \
     serialport.cpp \
     setting.cpp \
     socket.cpp \
+    utils.cpp \
     videocapture.cpp
 
 HEADERS += \
@@ -71,6 +72,7 @@ HEADERS += \
     serialport.h \
     setting.h \
     socket.h \
+    utils.h \
     videocapture.h
 
 FORMS += \
