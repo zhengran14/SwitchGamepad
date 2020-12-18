@@ -28,8 +28,8 @@ Gamepad::Gamepad(QWidget *parent)
     ui->splitter->setStretchFactor(1, 2);
     on_scriptListRefresh_clicked();
     ui->pathEdit->setText(Setting::instance()->getScriptPath());
-//    on_videoCaptureRefresh_clicked();
-    videoCapture.init(ui->videoCaptureFrame->layout());
+    on_videoCaptureRefresh_clicked();
+//    videoCapture.init(ui->videoCaptureFrame->layout());
     ui->splitter_2->setStretchFactor(1, 2);
     ui->remotePort->setValue(Setting::instance()->getRemotePort());
     ui->serverUrl->setText(Setting::instance()->getServerUrl());
@@ -640,6 +640,9 @@ void Gamepad::on_videoCaptureSwitch_clicked()
                           ui->videoCaptureResolution->currentText(),
                           ui->videoCaptureFrameRateRange->currentText(),
                           ui->videoCapturePixelFormat->currentText());
+        if (videoCapture.getViewfinder() != Q_NULLPTR && videoCapture.getViewfinder()->parent() == Q_NULLPTR) {
+            on_miniToolShow_clicked(ui->miniToolShow->isChecked());
+        }
     }
     ui->videoCaptureSwitch->setText(ui->videoCaptureSwitch->property("isOpen").toBool() ? tr("Open") : tr("Close"));
     ui->videoCaptureSwitch->setProperty("isOpen", !ui->videoCaptureSwitch->property("isOpen").toBool());
@@ -770,6 +773,10 @@ void Gamepad::on_clientSwitch_clicked()
     ui->clientSwitch->setProperty("isOpen", !ui->clientSwitch->property("isOpen").toBool());
     ui->serverGroup->setEnabled(!ui->clientSwitch->property("isOpen").toBool());
     ui->clientInfo->setEnabled(!ui->clientSwitch->property("isOpen").toBool());
+    if (ui->videoCaptureSwitch->property("isOpen").toBool()) {
+        on_videoCaptureSwitch_clicked();
+    }
+    ui->videoCaptureGroup->setEnabled(!ui->clientSwitch->property("isOpen").toBool());
 }
 
 void Gamepad::on_remotePort_editingFinished()

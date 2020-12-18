@@ -59,7 +59,7 @@ public:
     Q_ENUM(PixelFormat)
     explicit VideoCapture(QObject *parent);
     ~VideoCapture();
-    void init(QLayout *layout);
+//    void init(QLayout *layout);
     void open(int index, QString resolution, QString frameRateRange, QString pixelFormat);
     void close();
     QStringList refresh(QString defaultSearch, QString &defaultName);
@@ -67,6 +67,7 @@ public:
     QStringList GetSupportedFrameRateRanges(int index);
     QStringList GetSupportedPixelFormats(int index);
     void moveViewfinder(QLayout *layout);
+    QCameraViewfinder* getViewfinder();
 
 private:
     QCamera *camera = Q_NULLPTR;

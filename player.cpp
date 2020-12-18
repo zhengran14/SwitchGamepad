@@ -17,6 +17,7 @@ Player::~Player()
 void Player::play(QString path)
 {
     // rtmp://rrabbit.xyz/live/mystream
+    // rtmp://58.200.131.2:1935/livetv/hunantv
     avPlayer->play(path);
 }
 

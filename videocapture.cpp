@@ -5,6 +5,7 @@
 VideoCapture::VideoCapture(QObject *parent) : QObject(parent)
 {
     metaEnum = QMetaEnum::fromType<PixelFormat>();
+    viewfinder = new QCameraViewfinder();
 }
 
 VideoCapture::~VideoCapture()
@@ -16,11 +17,11 @@ VideoCapture::~VideoCapture()
     }
 }
 
-void VideoCapture::init(QLayout *layout)
-{
-    viewfinder = new QCameraViewfinder(layout->parentWidget());
-    layout->addWidget(viewfinder);
-}
+//void VideoCapture::init(QLayout *layout)
+//{
+////    viewfinder = new QCameraViewfinder(layout->parentWidget());
+////    layout->addWidget(viewfinder);
+//}
 
 void VideoCapture::open(int index, QString resolution, QString frameRateRange, QString pixelFormat)
 {
@@ -146,4 +147,9 @@ void VideoCapture::moveViewfinder(QLayout *layout)
         }
         layout->addWidget(viewfinder);
     }
+}
+
+QCameraViewfinder *VideoCapture::getViewfinder()
+{
+    return viewfinder;
 }

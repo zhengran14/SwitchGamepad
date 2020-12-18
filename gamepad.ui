@@ -55,7 +55,7 @@
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="currentIndex">
-           <number>2</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tab">
            <attribute name="title">
@@ -194,7 +194,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QGroupBox" name="groupBox_3">
+             <widget class="QGroupBox" name="videoCaptureGroup">
               <property name="title">
                <string>Video Capture</string>
               </property>
