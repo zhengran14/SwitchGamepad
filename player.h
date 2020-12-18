@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QtAV>
+#include <QLayout>
 
 class Player : public QObject
 {
@@ -10,12 +11,16 @@ class Player : public QObject
 public:
     explicit Player(QObject *parent = nullptr);
     ~Player();
-    void play(QString path);
+    void play(QString path, QLayout *layout);
     void stop();
+//    void moveVideoOutput(QLayout *layout);
+//    QtAV::VideoOutput *getVideoOutput();
 
 private:
     QtAV::VideoOutput *videoOutput = Q_NULLPTR;
     QtAV::AVPlayer *avPlayer = Q_NULLPTR;
+    void removeVideoOutput();
+    QString playPath;
 
 signals:
 

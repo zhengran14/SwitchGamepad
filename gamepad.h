@@ -84,5 +84,7 @@ private:
 //    void sendAllScripts();
     Utils::RunMode runMode = Utils::LocalRunMode;
     void switchRunUIStatus();
+
+signals:
 };
 #endif // GAMEPAD_H

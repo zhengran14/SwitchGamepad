@@ -67,11 +67,12 @@ public:
     QStringList GetSupportedFrameRateRanges(int index);
     QStringList GetSupportedPixelFormats(int index);
     void moveViewfinder(QLayout *layout);
+    void removeViewfinder();
     QCameraViewfinder* getViewfinder();
 
 private:
     QCamera *camera = Q_NULLPTR;
-    QCameraViewfinder *viewfinder = Q_NULLPTR;
+    QCameraViewfinder viewfinder;
     QCameraImageCapture *imageCapture = Q_NULLPTR;
     QList<QCameraInfo> cameraList;
     QMetaEnum metaEnum;

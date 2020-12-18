@@ -82,6 +82,7 @@ void MiniTool::adjustVideoCaptionFrameLayout()
 {
     ui->videoCaptureFrame->setGeometry(0, 0, ui->videoCaptureFrameParent->width(), ui->videoCaptureFrameParent->height());
     ui->zoom->move(ui->videoCaptureFrameParent->width() - ui->zoom->width(), ui->videoCaptureFrameParent->height() - ui->zoom->height());
+//    ui->videoCaptureFrame->repaint();
 }
 
 void MiniTool::setScriptListEnabled(bool b)

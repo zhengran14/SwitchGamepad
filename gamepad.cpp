@@ -624,6 +624,7 @@ void Gamepad::on_addSleep_clicked()
 
 void Gamepad::on_videoCaptureSwitch_clicked()
 {
+    player.stop();
     if (ui->videoCaptureSwitch->property("isOpen").toBool()) {
         videoCapture.close();
     }
@@ -636,13 +637,12 @@ void Gamepad::on_videoCaptureSwitch_clicked()
 //            QMessageBox::critical(this, tr("Error"), tr("Failed to open!"), QMessageBox::Ok, QMessageBox::Ok);
 //            return;
 //        }
+        on_miniToolShow_clicked(!ui->miniToolShow->isChecked());
         videoCapture.open(ui->videoCaptureList->currentIndex(),
                           ui->videoCaptureResolution->currentText(),
                           ui->videoCaptureFrameRateRange->currentText(),
                           ui->videoCapturePixelFormat->currentText());
-        if (videoCapture.getViewfinder() != Q_NULLPTR && videoCapture.getViewfinder()->parent() == Q_NULLPTR) {
-            on_miniToolShow_clicked(ui->miniToolShow->isChecked());
-        }
+        on_miniToolShow_clicked(ui->miniToolShow->isChecked());
     }
     ui->videoCaptureSwitch->setText(ui->videoCaptureSwitch->property("isOpen").toBool() ? tr("Open") : tr("Close"));
     ui->videoCaptureSwitch->setProperty("isOpen", !ui->videoCaptureSwitch->property("isOpen").toBool());
@@ -691,12 +691,27 @@ void Gamepad::on_miniToolShow_clicked(bool checked)
 {
     if (checked) {
         miniTool.show();
-        videoCapture.moveViewfinder(miniTool.GetVideoCaptionFrameLayout());
+        if (ui->clientSwitch->property("isOpen").toBool()) {
+            videoCapture.removeViewfinder();
+            player.play(ui->liveUrl->text(), miniTool.GetVideoCaptionFrameLayout());
+        }
+        else {
+            player.stop();
+            videoCapture.moveViewfinder(miniTool.GetVideoCaptionFrameLayout());
+        }
         miniTool.adjustVideoCaptionFrameLayout();
     }
     else {
         miniTool.hide();
-        videoCapture.moveViewfinder(ui->videoCaptureFrame->layout());
+        if (ui->clientSwitch->property("isOpen").toBool()) {
+            videoCapture.removeViewfinder();
+            player.play(ui->liveUrl->text(), ui->videoCaptureFrame->layout());
+        }
+        else {
+            player.stop();
+            videoCapture.moveViewfinder(ui->videoCaptureFrame->layout());
+        }
+//        ui->videoCaptureFrame->repaint();
     }
 }
 
@@ -756,27 +771,31 @@ void Gamepad::on_serverSwitch_clicked()
 
 void Gamepad::on_clientSwitch_clicked()
 {
+    if (ui->videoCaptureSwitch->property("isOpen").toBool()) {
+        on_videoCaptureSwitch_clicked();
+    }
+    videoCapture.close();
+    videoCapture.removeViewfinder();
     this->runMode = Utils::LocalRunMode;
     if (ui->scriptRun->property("isStop").toBool()) {
         on_scriptRun_clicked();
-    }
-    if (ui->clientSwitch->property("isOpen").toBool()) {
-        ui->remoteInfo->append(tr("Close connect"));
-        client.disConnectServer();
-    }
-    else {
-        ui->remoteInfo->clear();
-        ui->remoteInfo->append(tr("Connecting ") + ui->serverUrl->text() + tr(":") + QString::number(ui->serverPort->value()));
-        client.connectServer(ui->serverUrl->text(), ui->serverPort->value());
     }
     ui->clientSwitch->setText(ui->clientSwitch->property("isOpen").toBool() ? tr("Open") : tr("Close"));
     ui->clientSwitch->setProperty("isOpen", !ui->clientSwitch->property("isOpen").toBool());
     ui->serverGroup->setEnabled(!ui->clientSwitch->property("isOpen").toBool());
     ui->clientInfo->setEnabled(!ui->clientSwitch->property("isOpen").toBool());
-    if (ui->videoCaptureSwitch->property("isOpen").toBool()) {
-        on_videoCaptureSwitch_clicked();
-    }
     ui->videoCaptureGroup->setEnabled(!ui->clientSwitch->property("isOpen").toBool());
+    if (!ui->clientSwitch->property("isOpen").toBool()) {
+        ui->remoteInfo->append(tr("Close connect"));
+        client.disConnectServer();
+        player.stop();
+    }
+    else {
+        ui->remoteInfo->clear();
+        ui->remoteInfo->append(tr("Connecting ") + ui->serverUrl->text() + tr(":") + QString::number(ui->serverPort->value()));
+        client.connectServer(ui->serverUrl->text(), ui->serverPort->value());
+        on_miniToolShow_clicked(ui->miniToolShow->isChecked());
+    }
 }
 
 void Gamepad::on_remotePort_editingFinished()

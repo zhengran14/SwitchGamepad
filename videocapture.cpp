@@ -2,19 +2,17 @@
 #include <QCameraInfo>
 #include <QLayout>
 
-VideoCapture::VideoCapture(QObject *parent) : QObject(parent)
+VideoCapture::VideoCapture(QObject *parent)
+    : QObject(parent)
+    , viewfinder()
 {
     metaEnum = QMetaEnum::fromType<PixelFormat>();
-    viewfinder = new QCameraViewfinder();
 }
 
 VideoCapture::~VideoCapture()
 {
     close();
-    if (viewfinder != Q_NULLPTR) {
-        viewfinder->deleteLater();
-        viewfinder = Q_NULLPTR;
-    }
+    viewfinder.deleteLater();
 }
 
 //void VideoCapture::init(QLayout *layout)
@@ -61,7 +59,7 @@ void VideoCapture::open(int index, QString resolution, QString frameRateRange, Q
     camera->setViewfinderSettings(viewfinderSettings);
 
     //设置取景器
-    camera->setViewfinder(viewfinder);
+    camera->setViewfinder(&viewfinder);
     //开启相机
     camera->start();
 }
@@ -140,16 +138,19 @@ QStringList VideoCapture::GetSupportedPixelFormats(int index)
 
 void VideoCapture::moveViewfinder(QLayout *layout)
 {
-    if (viewfinder != Q_NULLPTR) {
-        QWidget *parent = (QWidget*)viewfinder->parent();
-        if (parent != Q_NULLPTR) {
-            parent->layout()->removeWidget(viewfinder);
-        }
-        layout->addWidget(viewfinder);
+    removeViewfinder();
+    layout->addWidget(&viewfinder);
+}
+
+void VideoCapture::removeViewfinder()
+{
+    QWidget *parent = (QWidget*)viewfinder.parent();
+    if (parent != Q_NULLPTR) {
+        parent->layout()->removeWidget(&viewfinder);
     }
 }
 
 QCameraViewfinder *VideoCapture::getViewfinder()
 {
-    return viewfinder;
+    return &viewfinder;
 }

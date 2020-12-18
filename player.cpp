@@ -1,27 +1,65 @@
 #include "player.h"
+#include <QWidget>
 
-Player::Player(QObject *parent) : QObject(parent)
+Player::Player(QObject *parent)
+    : QObject(parent)
 {
-    avPlayer = new QtAV::AVPlayer(this);
-    videoOutput = new QtAV::VideoOutput(this);
-    avPlayer->setRenderer(videoOutput);
 }
 
 Player::~Player()
 {
-    avPlayer->stop();
-    avPlayer->deleteLater();
-    videoOutput->deleteLater();
+    stop();
 }
 
-void Player::play(QString path)
+void Player::play(QString path, QLayout *layout)
 {
     // rtmp://rrabbit.xyz/live/mystream
-    // rtmp://58.200.131.2:1935/livetv/hunantv
+    // rtmp://58.200.131.2:1935/livetv/cctv1
+    if (videoOutput != Q_NULLPTR || avPlayer != Q_NULLPTR) {
+        stop();
+    }
+    this->playPath = path;
+    videoOutput = new QtAV::VideoOutput(this);
+    avPlayer = new QtAV::AVPlayer(this);
+    avPlayer->setRenderer(videoOutput);
+    layout->addWidget(videoOutput->widget());
     avPlayer->play(path);
 }
 
 void Player::stop()
 {
-    avPlayer->stop();
+    if (avPlayer != Q_NULLPTR) {
+        avPlayer->stop();
+        avPlayer->deleteLater();
+        avPlayer = Q_NULLPTR;
+    }
+    if (videoOutput != Q_NULLPTR) {
+        removeVideoOutput();
+        videoOutput->deleteLater();
+        videoOutput = Q_NULLPTR;
+    }
 }
+
+//void Player::moveVideoOutput(QLayout *layout)
+//{
+//    if (videoOutput != Q_NULLPTR) {
+//        stop();
+//        play(this->playPath);
+//        layout->addWidget(videoOutput->widget());
+//    }
+//}
+
+void Player::removeVideoOutput()
+{
+    if (videoOutput != Q_NULLPTR) {
+        QWidget *parent = (QWidget*)videoOutput->widget()->parent();
+        if (parent != Q_NULLPTR) {
+            parent->layout()->removeWidget(videoOutput->widget());
+        }
+    }
+}
+
+//QtAV::VideoOutput *Player::getVideoOutput()
+//{
+//    return &videoOutput;
+//}
