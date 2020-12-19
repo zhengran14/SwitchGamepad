@@ -1,18 +1,20 @@
-T_PATH_QTAV_LIB = /Users/rabbit/Documents/develop/QtAV/bin/lib_osx_x86_64_llvm
-T_PATH_FFMPEG = /usr/local/Cellar/ffmpeg/4.3.1-with-options_6
+mac {
+    T_PATH_QTAV_LIB = /Users/rabbit/Documents/develop/QtAV/bin/lib_osx_x86_64_llvm
+    T_PATH_FFMPEG = /usr/local/Cellar/ffmpeg/4.3.1
 
-LIBS += -F$${T_PATH_QTAV_LIB}
-LIBS += -framework QtAV
-INCLUDEPATH += $${T_PATH_QTAV_LIB}/QtAV.framework/Headers
+    LIBS += -F$${T_PATH_QTAV_LIB}
+    LIBS += -framework QtAV
+    INCLUDEPATH += $${T_PATH_QTAV_LIB}/QtAV.framework/Headers
 
-LIBS += -L$${T_PATH_QTAV_LIB}
-LIBS += -lcommon
+    LIBS += -L$${T_PATH_QTAV_LIB}
+    LIBS += -lcommon
 
-INCLUDEPATH += $${T_PATH_FFMPEG}/include
-LIBS += -L$${T_PATH_FFMPEG}/lib -lavcodec -lavfilter -lavdevice -lavutil -lswscale -lavformat -lswresample
+    INCLUDEPATH += $${T_PATH_FFMPEG}/include
+    LIBS += -L$${T_PATH_FFMPEG}/lib -lavcodec -lavfilter -lavdevice -lavutil -lswscale -lavformat -lswresample
 
-LIBS += -framework QtAVWidgets
-INCLUDEPATH += $${T_PATH_QTAV_LIB}/QtAVWidgets.framework/Headers
+    LIBS += -framework QtAVWidgets
+    INCLUDEPATH += $${T_PATH_QTAV_LIB}/QtAVWidgets.framework/Headers
+}
 
 QT       += core gui serialport script multimedia multimediawidgets av avwidgets network
 
@@ -86,3 +88,10 @@ TRANSLATIONS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+
+mac {
+    QMAKE_INFO_PLIST = Info.plist
+#    QMAKE_TARGET_BUNDLE_PREFIX = cn.maaya
+#    QMAKE_BUNDLE = chat
+}
