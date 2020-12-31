@@ -52,7 +52,7 @@ Gamepad::Gamepad(QWidget *parent)
         else if (this->runMode == Utils::RemoteRunMode) {
             ui->remoteInfo->append(tr("Script Finished"));
             QJsonObject json;
-            server.write(json, tr("Script Finished"), Utils::ScriptFinished);
+            server.write(json, tr("Script Finished"), Utils::ScriptFinished, false);
         }
     });
     connect(&scriptEngine, &ScriptEngine::hasException, this, [this](QString ex) {
@@ -487,6 +487,21 @@ void Gamepad::operation(QJsonObject json, Utils::Operation operation)
         }
         break;
     }
+    case Utils::RunScriptName: {
+        if (json.contains("scriptName")) {
+            QString scriptName = json["scriptName"].toString();
+            QStringList scriptNames = scriptName.split(".");
+            if (scriptNames.count() == 2 && scriptNames[1] == "js") {
+                scriptName = scriptNames[0];
+            }
+            scriptEngine.runScript(scriptEngine.getScript(scriptName));
+            ui->remoteInfo->append(tr("Start run script..."));
+            QJsonObject json;
+            server.write(json, tr("Start run script..."), Utils::ShowMessage);
+            return;
+        }
+        break;
+    }
     case Utils::StopRunScript: {
         scriptEngine.stopScript();
         ui->remoteInfo->append(tr("Script stopped"));
@@ -518,6 +533,15 @@ void Gamepad::operation(QJsonObject json, Utils::Operation operation)
             return;
         }
         break;
+    }
+    case Utils::SendAllScriptsName: {
+        ui->remoteInfo->append(tr("Send all scripts name"));
+        QJsonArray array = QJsonArray::fromStringList(scriptEngine.getAllScripts());
+        QJsonObject json;
+        json.insert("scripts", array);
+        server.write(json, tr("Send all scripts name"), Utils::GetAllScriptsName, false);
+
+        return;
     }
     case Utils::ShowMessage: {
         return;

@@ -71,7 +71,10 @@ bool Socket::read(QJsonObject &json, QString &message, Utils::Operation &operati
     }
     QByteArray buffer = tcpSocket->readAll();
     if (isCompress) {
-        buffer = qUncompress(buffer);
+        QByteArray _buffer = qUncompress(buffer);
+        if (!_buffer.isEmpty()) {
+            buffer = _buffer;
+        }
     }
     QJsonParseError resultJsonError;
     QJsonDocument resultJsonDocument = QJsonDocument::fromJson(buffer, &resultJsonError);

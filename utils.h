@@ -15,6 +15,9 @@ public:
         ScriptStopped,
         ScriptFinished,
         ReceiveKey,
+        SendAllScriptsName,
+        GetAllScriptsName,
+        RunScriptName,
     };
     enum RunMode {
         LocalRunMode,
