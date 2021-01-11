@@ -7,6 +7,7 @@
 //#include "opencv2/core/core.hpp"
 //#include "opencv2/opencv.hpp"
 //#include "opencv2/highgui/highgui.hpp"
+//#include <utils.h>
 #include <player.h>
 
 int main(int argc, char *argv[])
@@ -28,18 +29,26 @@ int main(int argc, char *argv[])
 //    videoCapture.release();
 //    cv::destroyAllWindows();
 
-//    cv::Mat img1 = cv::imread("/Users/rabbit/Downloads/capture test.jpg");
-//    cv::Mat img2 = cv::imread("/Users/rabbit/Downloads/capture.jpg");
+//    QImage img(":/res/shine_template.jpg");
+//    cv::Mat captureFrame = cv::imread("/Users/rabbit/Downloads/capture test.jpg");
+//    cv::Mat shineTemplate = Utils::QImage2cvMat(img);
+//    cv::Mat shineTemplate2;
+//    cv::cvtColor(shineTemplate, shineTemplate2, cv::COLOR_BGR2RGB);
 //    cv::Mat dstImg;
-//    dstImg.create(img1.dims,img1.size,img1.type());
-//    cv::matchTemplate(img1, img2, dstImg, 0);
+//    dstImg.create(captureFrame.dims, captureFrame.size, captureFrame.type());
+//    cv::matchTemplate(captureFrame, shineTemplate2, dstImg, 0);
 //    cv::Point minPoint;
 //    cv::Point maxPoint;
 //    double *minVal = 0;
 //    double *maxVal = 0;
 //    cv::minMaxLoc(dstImg, minVal, maxVal, &minPoint,&maxPoint);
-//    cv::rectangle(img1, minPoint, cv::Point(minPoint.x + img2.cols, minPoint.y + img2.rows),  	cv::Scalar(0,255,0), 2, 8);
-//    cv::imshow("123", img1);
+//    maxPoint = cv::Point(minPoint.x + shineTemplate2.cols, minPoint.y + shineTemplate2.rows);
+//    cv::rectangle(captureFrame, minPoint, maxPoint, cv::Scalar(0,255,0), 2, 8);
+//    cv::imshow("123", captureFrame);
+//    dstImg.release();
+//    captureFrame.release();
+//    shineTemplate2.release();
+//    shineTemplate.release();
 
     QApplication a(argc, argv);
     Player p;

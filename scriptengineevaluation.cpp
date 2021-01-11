@@ -4,6 +4,9 @@
 #include <QEventLoop>
 #include <QDebug>
 #include <QImage>
+#include "opencv2/core/core.hpp"
+#include "opencv2/opencv.hpp"
+#include <utils.h>
 
 ScriptEngineEvaluation::ScriptEngineEvaluation(QObject *parent) : QObject(parent)
 {
@@ -99,6 +102,27 @@ void ScriptEngineEvaluation::judgeShinePokemon()
     eventLoop->deleteLater();
 //    qDebug() << (videoFrame == Q_NULLPTR ? QSize() : videoFrame->size());
     if (videoFrame != Q_NULLPTR) {
-
+        QImage img(":/res/shine_template.jpg");
+        cv::Mat captureFrame = Utils::QImage2cvMat(*videoFrame);
+        cv::Mat captureFrame2;
+        cv::cvtColor(captureFrame, captureFrame2, cv::COLOR_BGR2RGB);
+        cv::Mat shineTemplate = Utils::QImage2cvMat(img);
+        cv::Mat shineTemplate2;
+        cv::cvtColor(shineTemplate, shineTemplate2, cv::COLOR_BGR2RGB);
+        cv::Mat dstImg;
+        dstImg.create(captureFrame2.dims, captureFrame2.size, captureFrame2.type());
+        cv::matchTemplate(captureFrame2, shineTemplate2, dstImg, 0);
+        cv::Point minPoint;
+        cv::Point maxPoint;
+        double *minVal = 0;
+        double *maxVal = 0;
+        cv::minMaxLoc(dstImg, minVal, maxVal, &minPoint,&maxPoint);
+        maxPoint = cv::Point(minPoint.x + shineTemplate2.cols, minPoint.y + shineTemplate2.rows);
+        qDebug() << minPoint.x << minPoint.y << maxPoint.x << maxPoint.y;
+        dstImg.release();
+        captureFrame.release();
+        captureFrame2.release();
+        shineTemplate.release();
+        shineTemplate2.release();
     }
 }

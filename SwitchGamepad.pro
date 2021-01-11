@@ -112,3 +112,6 @@ mac {
 #    QMAKE_TARGET_BUNDLE_PREFIX = cn.maaya
 #    QMAKE_BUNDLE = chat
 }
+
+RESOURCES += \
+    resource.qrc
