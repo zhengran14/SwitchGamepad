@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 //    double *maxVal = 0;
 //    cv::minMaxLoc(dstImg, minVal, maxVal, &minPoint,&maxPoint);
 //    cv::rectangle(img1, minPoint, cv::Point(minPoint.x + img2.cols, minPoint.y + img2.rows),  	cv::Scalar(0,255,0), 2, 8);
-//    cv::imshow("【匹配后的图像】", img1);
+//    cv::imshow("123", img1);
 
     QApplication a(argc, argv);
     Player p;

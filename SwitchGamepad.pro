@@ -28,6 +28,19 @@ mac {
 win32 {
     LIBS += C:/Qt/5.15.2/msvc2019/lib/Qt5AV.lib
     LIBS += C:/Qt/5.15.2/msvc2019/lib/Qt5AVWidgets.lib
+
+    CONFIG (debug, debug|release) {
+        INCLUDEPATH += C:/Project/opencv/Debug/include
+        LIBS += C:/Project/opencv/Debug/lib/opencv_core400d.lib
+        LIBS += C:/Project/opencv/Debug/lib/opencv_highgui400d.lib
+        LIBS += C:/Project/opencv/Debug/lib/opencv_imgcodecs400d.lib
+        LIBS += C:/Project/opencv/Debug/lib/opencv_imgproc400d.lib
+        LIBS += C:/Project/opencv/Debug/lib/opencv_videoio400d.lib
+    }
+    else {
+        INCLUDEPATH += C:/Project/opencv/Release/include
+        LIBS += C:/Project/opencv/Release/lib/opencv_world420.lib
+    }
 }
 
 QT       += core gui serialport script multimedia multimediawidgets av avwidgets network
