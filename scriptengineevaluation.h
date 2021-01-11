@@ -13,7 +13,7 @@ public:
     Q_INVOKABLE void sleep(float sec);
     Q_INVOKABLE void pressButton(QString string, float sec);
     Q_INVOKABLE void messageBox(QString title, QString content);
-    Q_INVOKABLE void judgeShinePokemon();
+    Q_INVOKABLE bool judgeShinePokemon();
 
 public slots:
     void evaluate(QString script);

@@ -93,14 +93,16 @@ void ScriptEngineEvaluation::messageBox(QString title, QString content)
     emit messageBoxShow(title, content);
 }
 
-void ScriptEngineEvaluation::judgeShinePokemon()
+bool ScriptEngineEvaluation::judgeShinePokemon()
 {
+    bool result = false;
     QEventLoop* eventLoop = new QEventLoop();
     connect(this, &ScriptEngineEvaluation::hasCaptureCamera, eventLoop, &QEventLoop::quit);
     emit needCaptureCamera();
     eventLoop->exec();
     eventLoop->deleteLater();
 //    qDebug() << (videoFrame == Q_NULLPTR ? QSize() : videoFrame->size());
+//    videoFrame->save("C:/Project/123.jpg");
     if (videoFrame != Q_NULLPTR) {
         QImage img(":/res/shine_template.jpg");
         cv::Mat captureFrame = Utils::QImage2cvMat(*videoFrame);
@@ -118,11 +120,16 @@ void ScriptEngineEvaluation::judgeShinePokemon()
         double *maxVal = 0;
         cv::minMaxLoc(dstImg, minVal, maxVal, &minPoint,&maxPoint);
         maxPoint = cv::Point(minPoint.x + shineTemplate2.cols, minPoint.y + shineTemplate2.rows);
-        qDebug() << minPoint.x << minPoint.y << maxPoint.x << maxPoint.y;
+        // 110 590 210 635
+//        qDebug() << minPoint.x << minPoint.y << maxPoint.x << maxPoint.y;
+        if (minPoint.x != 110 || minPoint.y != 590) {
+            result = true;
+        }
         dstImg.release();
         captureFrame.release();
         captureFrame2.release();
         shineTemplate.release();
         shineTemplate2.release();
     }
+    return result;
 }
