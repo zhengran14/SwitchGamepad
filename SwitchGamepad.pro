@@ -15,6 +15,10 @@ mac {
     LIBS += -framework QtAVWidgets
     INCLUDEPATH += $${T_PATH_QTAV_LIB}/QtAVWidgets.framework/Headers
 }
+win32 {
+    LIBS += C:/Qt/5.15.2/msvc2019/lib/Qt5AV.lib
+    LIBS += C:/Qt/5.15.2/msvc2019/lib/Qt5AVWidgets.lib
+}
 
 QT       += core gui serialport script multimedia multimediawidgets av avwidgets network
 
