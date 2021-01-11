@@ -1,6 +1,9 @@
 #include "scriptengineevaluation.h"
 #include <QThread>
 #include <QTime>
+#include <QEventLoop>
+#include <QDebug>
+#include <QImage>
 
 ScriptEngineEvaluation::ScriptEngineEvaluation(QObject *parent) : QObject(parent)
 {
@@ -33,6 +36,12 @@ void ScriptEngineEvaluation::evaluate(QString script)
 void ScriptEngineEvaluation::stop()
 {
     needStop = true;
+}
+
+void ScriptEngineEvaluation::cameraCaptured(QImage *videoFrame)
+{
+    this->videoFrame = videoFrame;
+    emit hasCaptureCamera();
 }
 
 void ScriptEngineEvaluation::sleep(float sec)
@@ -79,4 +88,17 @@ void ScriptEngineEvaluation::pressButton(QString string, float sec)
 void ScriptEngineEvaluation::messageBox(QString title, QString content)
 {
     emit messageBoxShow(title, content);
+}
+
+void ScriptEngineEvaluation::judgeShinePokemon()
+{
+    QEventLoop* eventLoop = new QEventLoop();
+    connect(this, &ScriptEngineEvaluation::hasCaptureCamera, eventLoop, &QEventLoop::quit);
+    emit needCaptureCamera();
+    eventLoop->exec();
+    eventLoop->deleteLater();
+//    qDebug() << (videoFrame == Q_NULLPTR ? QSize() : videoFrame->size());
+    if (videoFrame != Q_NULLPTR) {
+
+    }
 }

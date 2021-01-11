@@ -69,13 +69,18 @@ public:
     void moveViewfinder(QLayout *layout);
     void removeViewfinder();
     QCameraViewfinder* getViewfinder();
+    QImage *capture();
+
+private slots:
+    void imageAvailable(int id, const QVideoFrame &frame);
 
 private:
     QCamera *camera = Q_NULLPTR;
+    QCameraImageCapture *cameraImageCapture = Q_NULLPTR;
     QCameraViewfinder viewfinder;
-    QCameraImageCapture *imageCapture = Q_NULLPTR;
     QList<QCameraInfo> cameraList;
     QMetaEnum metaEnum;
+    QImage *videoFrame = Q_NULLPTR;
 
 signals:
 

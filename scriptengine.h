@@ -30,6 +30,9 @@ public:
 //    ScriptEngineMode getScriptEngineMode();
 //    QJsonObject getAllScriptsIntoJson();
 
+public slots:
+    void cameraCaptured(QImage *videoFrame);
+
 private:
     QThread scriptEngineEvaluationThread;
     ScriptEngineEvaluation scriptEngineEvaluation;
@@ -44,6 +47,7 @@ signals:
     void hasException(QString ex);
     void messageBoxShow(QString title, QString content);
     void runScriptStart();
+    void needCaptureCamera();
 };
 
 #endif // SCRIPTENGINE_H

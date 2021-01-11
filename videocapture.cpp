@@ -1,6 +1,7 @@
 #include "videocapture.h"
 #include <QCameraInfo>
 #include <QLayout>
+#include <QEventLoop>
 
 VideoCapture::VideoCapture(QObject *parent)
     : QObject(parent)
@@ -28,13 +29,24 @@ void VideoCapture::open(int index, QString resolution, QString frameRateRange, Q
         return;
     }
     camera = new QCamera(cameraList[index], this->parent());  //分配内存空间
-//    imageCapture = new QCameraImageCapture(camera);
+    cameraImageCapture = new QCameraImageCapture(camera);
     //设置采集目标
-//    imageCapture->setCaptureDestination(QCameraImageCapture::CaptureToFile);
+//    cameraImageCapture->setCaptureDestination(QCameraImageCapture::CaptureToFile);
+    cameraImageCapture->setCaptureDestination(QCameraImageCapture::CaptureToBuffer);
+//    cameraImageCapture->setBufferFormat(QVideoFrame::PixelFormat::Format_Jpeg);
+//    QImageEncoderSettings imageEncoderSettings;
+//    imageEncoderSettings.setResolution(1280,720);
+//    cameraImageCapture->setEncodingSettings(imageEncoderSettings);
+    connect(cameraImageCapture, &QCameraImageCapture::imageAvailable, this, &VideoCapture::imageAvailable);
+    connect(cameraImageCapture,
+            QOverload<int, QCameraImageCapture::Error, const QString &>::of(&QCameraImageCapture::error),
+            [=](int id, QCameraImageCapture::Error error, const QString &errorString){
+        qDebug() << errorString;
+    });
     //设置采集模式
-//    camera->setCaptureMode(QCamera::CaptureStillImage);//将其采集为图片
+    camera->setCaptureMode(QCamera::CaptureStillImage);//将其采集为图片
 //    camera->setCaptureMode(QCamera::CaptureMode::CaptureViewfinder);//将其采集到取景器中
-    camera->setCaptureMode(QCamera::CaptureViewfinder);
+//    camera->setCaptureMode(QCamera::CaptureViewfinder);
 
     QCameraViewfinderSettings viewfinderSettings;
     if (!resolution.isEmpty()) {
@@ -71,9 +83,9 @@ void VideoCapture::close()
         camera->deleteLater();
         camera = Q_NULLPTR;
     }
-    if (imageCapture != Q_NULLPTR) {
-        imageCapture->deleteLater();
-        imageCapture = Q_NULLPTR;
+    if (cameraImageCapture != Q_NULLPTR) {
+        cameraImageCapture->deleteLater();
+        cameraImageCapture = Q_NULLPTR;
     }
 }
 
@@ -153,4 +165,30 @@ void VideoCapture::removeViewfinder()
 QCameraViewfinder *VideoCapture::getViewfinder()
 {
     return &viewfinder;
+}
+
+QImage *VideoCapture::capture()
+{
+    if (cameraImageCapture != Q_NULLPTR && camera != Q_NULLPTR) {
+        QEventLoop* eventLoop = new QEventLoop();
+        camera->searchAndLock();
+        connect(cameraImageCapture, &QCameraImageCapture::imageAvailable, eventLoop, &QEventLoop::quit);
+        cameraImageCapture->capture();
+        camera->unlock();
+        eventLoop->exec();
+        disconnect(cameraImageCapture, &QCameraImageCapture::imageAvailable, eventLoop, &QEventLoop::quit);
+        eventLoop->deleteLater();
+        return videoFrame;
+    }
+    return Q_NULLPTR;
+}
+
+void VideoCapture::imageAvailable(int id, const QVideoFrame &frame)
+{
+//    frame.image().save("/Users/rabbit/Downloads/123.jpg");
+    if (videoFrame != Q_NULLPTR) {
+        delete videoFrame;
+        videoFrame = Q_NULLPTR;
+    }
+    videoFrame = new QImage(frame.image());
 }

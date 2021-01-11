@@ -22,6 +22,9 @@ ScriptEngine::ScriptEngine(QObject *parent) : QObject(parent)
     connect(&scriptEngineEvaluation, &ScriptEngineEvaluation::messageBoxShow, this, [this](QString title, QString content) {
         emit messageBoxShow(title, content);
     });
+    connect(&scriptEngineEvaluation, &ScriptEngineEvaluation::needCaptureCamera, this, [this]() {
+        emit needCaptureCamera();
+    });
     scriptEngineEvaluationThread.start();
 }
 
@@ -187,6 +190,11 @@ bool ScriptEngine::renameScript(QString oldScriptName, QString newScriptName)
     }
     return QFile::rename(Setting::instance()->getScriptPath() + "/" + oldScriptName + ".js",
                          Setting::instance()->getScriptPath() + "/" + newScriptName + ".js");
+}
+
+void ScriptEngine::cameraCaptured(QImage *videoFrame)
+{
+    scriptEngineEvaluation.cameraCaptured(videoFrame);
 }
 
 //void ScriptEngine::setScriptEngineMode(ScriptEngine::ScriptEngineMode scriptEngineMode, QJsonArray filesJson)

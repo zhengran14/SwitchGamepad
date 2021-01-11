@@ -61,6 +61,8 @@ Gamepad::Gamepad(QWidget *parent)
     connect(&scriptEngine, &ScriptEngine::messageBoxShow, this, [](QString title, QString content) {
         QMessageBox::information(0x0, title, content, QMessageBox::Ok | QMessageBox::Cancel);
     });
+    connect(&scriptEngine, &ScriptEngine::needCaptureCamera, this, &Gamepad::captureCamera);
+    connect(this, &Gamepad::cameraCaptured, &scriptEngine, &ScriptEngine::cameraCaptured);
     connect(&miniTool, &MiniTool::runScriptClicked, this, &Gamepad::on_scriptRun_clicked);
     connect(&miniTool, &MiniTool::scriptListCurrentIndexChanged, this, [this](int index) {
         ui->scriptList->setCurrentRow(index);
@@ -888,4 +890,10 @@ void Gamepad::on_client_connectSuccess(QString str)
 void Gamepad::on_remoteInfoClear_clicked()
 {
     ui->remoteInfo->clear();
+}
+
+void Gamepad::captureCamera()
+{
+    QImage *videoFrame = this->videoCapture.capture();
+    emit cameraCaptured(videoFrame);
 }

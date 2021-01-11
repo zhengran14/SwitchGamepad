@@ -65,6 +65,7 @@ private slots:
     void on_server_clientNewConnectiton(QString str);
     void on_client_connectSuccess(QString str);
     void on_remoteInfoClear_clicked();
+    void captureCamera();
 
 private:
     Ui::Gamepad *ui;
@@ -86,5 +87,6 @@ private:
     void switchRunUIStatus();
 
 signals:
+    void cameraCaptured(QImage *videoFrame);
 };
 #endif // GAMEPAD_H
