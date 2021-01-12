@@ -7,6 +7,7 @@
 #include "opencv2/core/core.hpp"
 #include "opencv2/opencv.hpp"
 #include <utils.h>
+#include <QTcpSocket>
 
 ScriptEngineEvaluation::ScriptEngineEvaluation(QObject *parent) : QObject(parent)
 {
@@ -142,6 +143,81 @@ bool ScriptEngineEvaluation::judgeShinePokemon()
 void ScriptEngineEvaluation::statusText(QString text)
 {
     emit setStatusText(text);
+}
+
+void ScriptEngineEvaluation::mail(QString username, QString password, QString receiver, QString subject, QString content)
+{
+
+    QTcpSocket clientsocket;
+//    QByteArray username = "372082225@qq.com";
+//    QByteArray password = "jlwqgvncoupzcbbi";
+//    QByteArray recvaddr = "372082225@qq.com";
+    QByteArray mailfrom = "mail from:<";
+    QByteArray rcptto = "rcpt to:<";
+    QByteArray prefrom = "from:";
+    QByteArray preto = "to:";
+    QByteArray presubject ="subject:";
+//    QString subject = "test from qt";                //主题
+//    QString content = "test from qt";                //发送内容
+    QByteArray recvdata;            //接收到的数据
+    QByteArray usernametmp = username.toUtf8();
+    QByteArray recvaddrtmp = receiver.toUtf8();
+    clientsocket.connectToHost("smtp.qq.com", 25, QTcpSocket::ReadWrite);
+    clientsocket.waitForConnected(1000);
+    clientsocket.waitForReadyRead(1000);
+    recvdata = clientsocket.readAll();
+//    qDebug() << recvdata;
+    clientsocket.write("HELO smtp.qq.com\r\n");
+    clientsocket.waitForReadyRead(1000);
+    recvdata = clientsocket.readAll();
+//    qDebug() << recvdata;
+    clientsocket.write("AUTH LOGIN\r\n");
+    clientsocket.waitForReadyRead(1000);
+    recvdata = clientsocket.readAll();
+//    qDebug() << recvdata;
+//    qDebug() << "username:" << username;
+    clientsocket.write(username.toUtf8().toBase64().append("\r\n"));
+    clientsocket.waitForReadyRead(1000);
+    recvdata = clientsocket.readAll();
+//    qDebug() << recvdata;
+//    qDebug() << "password:" << password;
+    clientsocket.write(password.toUtf8().toBase64().append("\r\n"));
+    clientsocket.waitForReadyRead(1000);
+    recvdata = clientsocket.readAll();
+//    qDebug() << recvdata;
+    clientsocket.write(mailfrom.append(usernametmp.append(">\r\n")));
+    clientsocket.waitForReadyRead(1000);
+    recvdata = clientsocket.readAll();
+//    qDebug() << recvdata;
+    //发送邮箱
+    //qDebug() << "mail from:"<<mailfrom.append(usernametmp.append(">\r\n"));
+    clientsocket.write(rcptto.append(recvaddrtmp.append(">\r\n")));
+    clientsocket.waitForReadyRead(1000);
+    recvdata = clientsocket.readAll();
+//    qDebug() << recvdata;
+    //接收邮箱
+    //qDebug() << "rcp to:"<<rcptto.append(recvaddrtmp.append(">\r\n"));
+    //data表示开始传输数据
+    clientsocket.write("data\r\n");
+    clientsocket.waitForReadyRead(1000);
+    recvdata = clientsocket.readAll();
+//    qDebug() << recvdata;
+    usernametmp = username.toUtf8();
+    recvaddrtmp = receiver.toUtf8();
+    clientsocket.write(prefrom.append(usernametmp.append("\r\n")));
+    clientsocket.write(preto.append(recvaddrtmp.append("\r\n")));
+    clientsocket.write(presubject.append(subject.toLocal8Bit().append("\r\n")));
+    clientsocket.write("\r\n");
+    clientsocket.write(content.toLocal8Bit().append("\r\n"));
+    clientsocket.write(".\r\n");
+    clientsocket.waitForReadyRead(1000);
+    recvdata = clientsocket.readAll();
+//    qDebug() << recvdata;
+    clientsocket.write("quit\r\n");
+    clientsocket.waitForReadyRead(1000);
+    recvdata = clientsocket.readAll();
+//    qDebug() << recvdata;
+    clientsocket.deleteLater();
 }
 
 void ScriptEngineEvaluation::messageBoxReturn(bool result)
