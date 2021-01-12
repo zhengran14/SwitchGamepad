@@ -49,6 +49,7 @@ signals:
     void messageBoxShow(QString title, QString content);
     void runScriptStart();
     void needCaptureCamera();
+    void setStatusText(QString text);
 };
 
 #endif // SCRIPTENGINE_H

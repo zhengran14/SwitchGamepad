@@ -25,6 +25,9 @@ ScriptEngine::ScriptEngine(QObject *parent) : QObject(parent)
     connect(&scriptEngineEvaluation, &ScriptEngineEvaluation::needCaptureCamera, this, [this]() {
         emit needCaptureCamera();
     });
+    connect(&scriptEngineEvaluation, &ScriptEngineEvaluation::setStatusText, this, [this](QString text) {
+        emit setStatusText(text);
+    });
     scriptEngineEvaluationThread.start();
 }
 

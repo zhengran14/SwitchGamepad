@@ -14,6 +14,7 @@ public:
     Q_INVOKABLE void pressButton(QString string, float sec);
     Q_INVOKABLE bool messageBox(QString title, QString content);
     Q_INVOKABLE bool judgeShinePokemon();
+    Q_INVOKABLE void statusText(QString text);
     void messageBoxReturn(bool result);
 
 public slots:
@@ -35,6 +36,7 @@ signals:
     void needCaptureCamera();
     void hasCaptureCamera();
     void messageBoxReturned();
+    void setStatusText(QString text);
 };
 
 #endif // SCRIPTENGINEEVALUATION_H

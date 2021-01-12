@@ -63,6 +63,9 @@ Gamepad::Gamepad(QWidget *parent)
         bool result = (QMessageBox::information(0x0, title, content, QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok);
         scriptEngine.messageBoxReturn(result);
     });
+    connect(&scriptEngine, &ScriptEngine::setStatusText, this, [this](QString text) {
+        ui->status->setText(text);
+    });
     connect(&scriptEngine, &ScriptEngine::needCaptureCamera, this, &Gamepad::captureCamera);
     connect(this, &Gamepad::cameraCaptured, &scriptEngine, &ScriptEngine::cameraCaptured);
     connect(&miniTool, &MiniTool::runScriptClicked, this, &Gamepad::on_scriptRun_clicked);

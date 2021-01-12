@@ -139,6 +139,11 @@ bool ScriptEngineEvaluation::judgeShinePokemon()
     return result;
 }
 
+void ScriptEngineEvaluation::statusText(QString text)
+{
+    emit setStatusText(text);
+}
+
 void ScriptEngineEvaluation::messageBoxReturn(bool result)
 {
     this->messageBoxResult = result;
