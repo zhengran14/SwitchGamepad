@@ -256,16 +256,38 @@ bool Gamepad::eventFilter(QObject *object, QEvent *event)
         else if (keyEvent->key() == Qt::Key_Backspace) {
             QTextCursor cursor = ui->scriptEdit->textCursor();
             int col = cursor.columnNumber();
-            int row = cursor.blockNumber();
+//            int row = cursor.blockNumber();
             for (int i = 0; i < 4 && col > 0; i++) {
                 cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
                 col = cursor.columnNumber();
-                row = cursor.blockNumber();
+//                row = cursor.blockNumber();
             }
             if (cursor.selectedText() == "    ") {
                 ui->scriptEdit->setTextCursor(cursor);
 //                return true;
             }
+        }
+        else if (keyEvent->key() == Qt::Key_Slash && (keyEvent->modifiers() & Qt::ControlModifier)) {
+            QTextCursor cursor = ui->scriptEdit->textCursor();
+//            int oriCol = cursor.columnNumber();
+            int oriRow = cursor.blockNumber();
+            cursor.movePosition(QTextCursor::StartOfLine);
+            int row = cursor.blockNumber();
+            for (int i = 0; i < 2 && row == oriRow; i++) {
+                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+                row = cursor.blockNumber();
+            }
+            if (row != oriRow) {
+                cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+            }
+            if (cursor.selectedText() == "//") {
+                cursor.insertText("");
+            }
+            else {
+                cursor.movePosition(QTextCursor::StartOfLine);
+                cursor.insertText("//");
+            }
+            return true;
         }
     }
     return false;
