@@ -29,6 +29,7 @@ public:
 //    void setScriptEngineMode(ScriptEngineMode scriptEngineMode, QJsonArray filesJson = QJsonArray());
 //    ScriptEngineMode getScriptEngineMode();
 //    QJsonObject getAllScriptsIntoJson();
+    void messageBoxReturn(bool result);
 
 public slots:
     void cameraCaptured(QImage *videoFrame);

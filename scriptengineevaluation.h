@@ -12,8 +12,9 @@ public:
     ~ScriptEngineEvaluation();
     Q_INVOKABLE void sleep(float sec);
     Q_INVOKABLE void pressButton(QString string, float sec);
-    Q_INVOKABLE void messageBox(QString title, QString content);
+    Q_INVOKABLE bool messageBox(QString title, QString content);
     Q_INVOKABLE bool judgeShinePokemon();
+    void messageBoxReturn(bool result);
 
 public slots:
     void evaluate(QString script);
@@ -24,6 +25,7 @@ private:
     QScriptEngine scriptEngine;
     bool needStop = false;
     QImage *videoFrame = Q_NULLPTR;
+    bool messageBoxResult = false;
 
 signals:
     void sendData(QString data);
@@ -32,6 +34,7 @@ signals:
     void messageBoxShow(QString title, QString content);
     void needCaptureCamera();
     void hasCaptureCamera();
+    void messageBoxReturned();
 };
 
 #endif // SCRIPTENGINEEVALUATION_H

@@ -192,6 +192,11 @@ bool ScriptEngine::renameScript(QString oldScriptName, QString newScriptName)
                          Setting::instance()->getScriptPath() + "/" + newScriptName + ".js");
 }
 
+void ScriptEngine::messageBoxReturn(bool result)
+{
+    scriptEngineEvaluation.messageBoxReturn(result);
+}
+
 void ScriptEngine::cameraCaptured(QImage *videoFrame)
 {
     scriptEngineEvaluation.cameraCaptured(videoFrame);

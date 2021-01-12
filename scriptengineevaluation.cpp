@@ -88,9 +88,14 @@ void ScriptEngineEvaluation::pressButton(QString string, float sec)
     emit sendData("RELEASE");
 }
 
-void ScriptEngineEvaluation::messageBox(QString title, QString content)
+bool ScriptEngineEvaluation::messageBox(QString title, QString content)
 {
+    QEventLoop* eventLoop = new QEventLoop();
+    connect(this, &ScriptEngineEvaluation::messageBoxReturned, eventLoop, &QEventLoop::quit);
     emit messageBoxShow(title, content);
+    eventLoop->exec();
+    eventLoop->deleteLater();
+    return this->messageBoxResult;
 }
 
 bool ScriptEngineEvaluation::judgeShinePokemon()
@@ -132,4 +137,10 @@ bool ScriptEngineEvaluation::judgeShinePokemon()
         shineTemplate2.release();
     }
     return result;
+}
+
+void ScriptEngineEvaluation::messageBoxReturn(bool result)
+{
+    this->messageBoxResult = result;
+    emit messageBoxReturned();
 }
