@@ -28,6 +28,7 @@ protected:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
     void closeEvent(QCloseEvent *event);
+    bool eventFilter(QObject *object, QEvent *event);
 
 private slots:
     void on_serialPortSwitch_clicked();

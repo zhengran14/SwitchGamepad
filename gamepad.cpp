@@ -35,6 +35,7 @@ Gamepad::Gamepad(QWidget *parent)
     ui->serverUrl->setText(Setting::instance()->getServerUrl());
     ui->serverPort->setValue(Setting::instance()->getServerPort());
     ui->liveUrl->setText(Setting::instance()->getLiveUrl());
+    ui->scriptEdit->installEventFilter(this);
 //    connect(&serialPort, &SerialPort::openFailed, this, [this]() {
 //        QMessageBox::critical(this, tr("Error"), tr("Failed to open!"), QMessageBox::Ok, QMessageBox::Ok);
 //    });
@@ -241,7 +242,33 @@ void Gamepad::closeEvent(QCloseEvent *event)
 {
     this->hide();
     event->ignore();
-//    QMainWindow::closeEvent(event);
+    //    QMainWindow::closeEvent(event);
+}
+
+bool Gamepad::eventFilter(QObject *object, QEvent *event)
+{
+    if (object == ui->scriptEdit && event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent->key() == Qt::Key_Tab) {
+            ui->scriptEdit->insertPlainText("    ");
+            return true;
+        }
+        else if (keyEvent->key() == Qt::Key_Backspace) {
+            QTextCursor cursor = ui->scriptEdit->textCursor();
+            int col = cursor.columnNumber();
+            int row = cursor.blockNumber();
+            for (int i = 0; i < 4 && col > 0; i++) {
+                cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+                col = cursor.columnNumber();
+                row = cursor.blockNumber();
+            }
+            if (cursor.selectedText() == "    ") {
+                ui->scriptEdit->setTextCursor(cursor);
+//                return true;
+            }
+        }
+    }
+    return false;
 }
 
 void Gamepad::on_serialPortSwitch_clicked()
