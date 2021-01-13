@@ -19,13 +19,13 @@ Setting::Setting()
         setRemotePort(8080);
     }
     if (!settings->contains("serverUrl")) {
-        setServerUrl("");
+        setServerUrl("xxx.com");
     }
     if (!settings->contains("serverPort")) {
         setServerPort(8080);
     }
     if (!settings->contains("liveUrl")) {
-        setLiveUrl("");
+        setLiveUrl("rtmp://xxx.com/live/xxx");
     }
 }
 

@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 //    cv::destroyAllWindows();
 
 //    QImage img(":/res/shine_template.jpg");
-//    cv::Mat captureFrame = cv::imread("/Users/rabbit/Downloads/capture test.jpg");
+//    cv::Mat captureFrame = cv::imread("capture test.jpg");
 //    cv::Mat shineTemplate = Utils::QImage2cvMat(img);
 //    cv::Mat shineTemplate2;
 //    cv::cvtColor(shineTemplate, shineTemplate2, cv::COLOR_BGR2RGB);
