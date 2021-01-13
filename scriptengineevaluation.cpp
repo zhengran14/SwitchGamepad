@@ -108,7 +108,7 @@ bool ScriptEngineEvaluation::judgeShinePokemon()
     eventLoop->exec();
     eventLoop->deleteLater();
 //    qDebug() << (videoFrame == Q_NULLPTR ? QSize() : videoFrame->size());
-//    videoFrame->save("C:/Project/123.jpg");
+//    videoFrame->save("123.jpg");
     if (videoFrame != Q_NULLPTR) {
         QImage img(":/res/shine_template.jpg");
         cv::Mat captureFrame = Utils::QImage2cvMat(*videoFrame);
@@ -149,9 +149,9 @@ void ScriptEngineEvaluation::mail(QString username, QString password, QString re
 {
 
     QTcpSocket clientsocket;
-//    QByteArray username = "372082225@qq.com";
-//    QByteArray password = "jlwqgvncoupzcbbi";
-//    QByteArray recvaddr = "372082225@qq.com";
+//    QByteArray username = "@qq.com";
+//    QByteArray password = "";
+//    QByteArray recvaddr = "@qq.com";
     QByteArray mailfrom = "mail from:<";
     QByteArray rcptto = "rcpt to:<";
     QByteArray prefrom = "from:";

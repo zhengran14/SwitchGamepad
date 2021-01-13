@@ -185,7 +185,7 @@ QImage *VideoCapture::capture()
 
 void VideoCapture::imageAvailable(int id, const QVideoFrame &frame)
 {
-//    frame.image().save("/Users/rabbit/Downloads/123.jpg");
+//    frame.image().save("123.jpg");
     if (videoFrame != Q_NULLPTR) {
         delete videoFrame;
         videoFrame = Q_NULLPTR;

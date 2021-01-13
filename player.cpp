@@ -13,8 +13,6 @@ Player::~Player()
 
 void Player::play(QString path, QLayout *layout)
 {
-    // rtmp://rrabbit.xyz/live/mystream
-    // rtmp://58.200.131.2:1935/livetv/cctv1
     if (videoOutput != Q_NULLPTR || avPlayer != Q_NULLPTR) {
         stop();
     }
