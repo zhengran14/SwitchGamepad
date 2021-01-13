@@ -101,7 +101,7 @@ Gamepad::Gamepad(QWidget *parent)
         connect(tcpSocket, &QTcpSocket::disconnected, this, []() {
         });
         connect(tcpSocket, &QTcpSocket::readyRead, this, [this, tcpSocket]() {
-            QString contentStr = QString("{'status':'%1'}").arg(ui->status->text());
+            QString contentStr = QString("{\"status\":\"%1\"}").arg(ui->status->text());
             //send msg
             QString str = "HTTP/1.1 200 OK\r\n";
             str.append("Server:nginx\r\n");
