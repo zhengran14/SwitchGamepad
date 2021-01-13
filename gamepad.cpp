@@ -93,6 +93,33 @@ Gamepad::Gamepad(QWidget *parent)
     connect(&server, &Server::receiveData, this, &Gamepad::on_server_receiveData);
     connect(&client, &Client::receiveData, this, &Gamepad::on_client_receiveData);
 
+    // test get status text
+    QTcpServer *tcpServer = new QTcpServer(this);
+    tcpServer->listen(QHostAddress::Any, 7000);
+    connect(tcpServer, &QTcpServer::newConnection, this, [this, tcpServer]() {
+        QTcpSocket *tcpSocket = tcpServer->nextPendingConnection();
+        connect(tcpSocket, &QTcpSocket::disconnected, this, []() {
+        });
+        connect(tcpSocket, &QTcpSocket::readyRead, this, [this, tcpSocket]() {
+            QString contentStr = QString("{'status':'%1'}").arg(ui->status->text());
+            //send msg
+            QString str = "HTTP/1.1 200 OK\r\n";
+            str.append("Server:nginx\r\n");
+            str.append("Content-Type:application/json;charset=UTF-8\r\n");
+            str.append("Connection:keep-alive\r\n");
+            str.append(QString("Content-Length:%1\r\n\r\n").arg(contentStr.size()));
+            str.append(contentStr);
+            tcpSocket->write(str.toStdString().c_str());
+            tcpSocket->close();
+//            tcpSocket->deleteLater();
+        });
+    });
+    connect(this, &Gamepad::destroyed, this, [tcpServer]() {
+        tcpServer->close();
+        tcpServer->deleteLater();
+    });
+
+
 
     {
         ui->lyMinBtn->setProperty("data", "LY MIN");
