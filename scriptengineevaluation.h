@@ -14,6 +14,7 @@ public:
     Q_INVOKABLE void pressButton(QString string, float sec);
     Q_INVOKABLE bool messageBox(QString title, QString content);
     Q_INVOKABLE bool judgeShinePokemon();
+    Q_INVOKABLE bool judgeShinePokemon2();
     Q_INVOKABLE void capture(QString path);
     Q_INVOKABLE void statusText(QString text);
     Q_INVOKABLE void mail(QString username, QString password, QString receiver, QString subject, QString content);

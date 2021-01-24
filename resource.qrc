@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/res">
         <file>shine_template.jpg</file>
+        <file>shine_template2.jpg</file>
     </qresource>
 </RCC>
