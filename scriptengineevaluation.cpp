@@ -140,6 +140,22 @@ bool ScriptEngineEvaluation::judgeShinePokemon()
     return result;
 }
 
+void ScriptEngineEvaluation::capture(QString path)
+{
+    bool result = false;
+    QEventLoop* eventLoop = new QEventLoop();
+    connect(this, &ScriptEngineEvaluation::hasCaptureCamera, eventLoop, &QEventLoop::quit);
+    emit needCaptureCamera();
+    eventLoop->exec();
+    eventLoop->deleteLater();
+//    qDebug() << (videoFrame == Q_NULLPTR ? QSize() : videoFrame->size());
+//    videoFrame->save("123.jpg");
+    if (videoFrame != Q_NULLPTR) {
+        videoFrame->save(path);
+    }
+//    return result;
+}
+
 void ScriptEngineEvaluation::statusText(QString text)
 {
     emit setStatusText(text);
