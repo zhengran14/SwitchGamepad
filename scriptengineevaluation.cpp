@@ -255,6 +255,45 @@ void ScriptEngineEvaluation::captureCut(QString path)
     //    return result;
 }
 
+QString ScriptEngineEvaluation::judgeShinePokemonTest(QString path)
+{
+    QString result = "";
+    QEventLoop* eventLoop = new QEventLoop();
+    connect(this, &ScriptEngineEvaluation::hasCaptureCamera, eventLoop, &QEventLoop::quit);
+    emit needCaptureCamera();
+    eventLoop->exec();
+    eventLoop->deleteLater();
+//    qDebug() << (videoFrame == Q_NULLPTR ? QSize() : videoFrame->size());
+//    videoFrame->save("123.jpg");
+    if (videoFrame != Q_NULLPTR) {
+        QImage img(path);
+        cv::Mat captureFrame = Utils::QImage2cvMat(*videoFrame);
+        cv::Mat captureFrame2;
+        cv::cvtColor(captureFrame, captureFrame2, cv::COLOR_BGR2RGB);
+        cv::Mat shineTemplate = Utils::QImage2cvMat(img);
+        cv::Mat shineTemplate2;
+        cv::cvtColor(shineTemplate, shineTemplate2, cv::COLOR_BGR2RGB);
+        cv::Mat dstImg;
+        dstImg.create(captureFrame2.dims, captureFrame2.size, captureFrame2.type());
+        cv::matchTemplate(captureFrame2, shineTemplate2, dstImg, 0);
+        cv::Point minPoint;
+        cv::Point maxPoint;
+        double *minVal = 0;
+        double *maxVal = 0;
+        cv::minMaxLoc(dstImg, minVal, maxVal, &minPoint,&maxPoint);
+        maxPoint = cv::Point(minPoint.x + shineTemplate2.cols, minPoint.y + shineTemplate2.rows);
+        // 110 590 210 635
+//        qDebug() << minPoint.x << minPoint.y << maxPoint.x << maxPoint.y;
+        result = QString("%1, %2").arg(minPoint.x).arg(minPoint.y);
+        dstImg.release();
+        captureFrame.release();
+        captureFrame2.release();
+        shineTemplate.release();
+        shineTemplate2.release();
+    }
+    return result;
+}
+
 void ScriptEngineEvaluation::statusText(QString text)
 {
     emit setStatusText(text);

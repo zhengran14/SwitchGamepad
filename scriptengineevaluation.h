@@ -16,6 +16,7 @@ public:
     Q_INVOKABLE bool judgeShinePokemon();
     Q_INVOKABLE bool judgeShinePokemon2();
     Q_INVOKABLE bool judgeShinePokemonCustome(QString path);
+    Q_INVOKABLE QString judgeShinePokemonTest(QString path);
     Q_INVOKABLE void capture(QString path);
     Q_INVOKABLE void captureCut(QString path);
     Q_INVOKABLE void statusText(QString text);
