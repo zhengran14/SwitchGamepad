@@ -327,7 +327,7 @@
                <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
-               <string>LX (C)</string>
+               <string>LX (A)</string>
               </property>
              </widget>
             </item>
@@ -481,7 +481,7 @@
                <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
-               <string>Up (W)</string>
+               <string>Up (Z)</string>
               </property>
              </widget>
             </item>
@@ -503,7 +503,7 @@
                <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
-               <string>LY (Z)</string>
+               <string>LY (W)</string>
               </property>
              </widget>
             </item>
@@ -569,7 +569,7 @@
                <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
-               <string>LY (X)</string>
+               <string>LY (S)</string>
               </property>
              </widget>
             </item>
@@ -591,7 +591,7 @@
                <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
-               <string>Down (S)</string>
+               <string>Down (X)</string>
               </property>
              </widget>
             </item>
@@ -613,7 +613,7 @@
                <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
-               <string>Right (D)</string>
+               <string>Right (V)</string>
               </property>
              </widget>
             </item>
@@ -701,7 +701,7 @@
                <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
-               <string>LX (V)</string>
+               <string>LX (D)</string>
               </property>
              </widget>
             </item>
@@ -821,7 +821,7 @@
                <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
-               <string>Left (A)</string>
+               <string>Left (C)</string>
               </property>
              </widget>
             </item>

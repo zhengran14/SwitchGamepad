@@ -149,10 +149,14 @@ Gamepad::Gamepad(QWidget *parent)
         ui->lcBtn->setProperty("data", "Button LCLICK");
         ui->rcBtn->setProperty("data", "Button RCLICK");
 
-        gamepadBtns.insert(Qt::Key_Z, ui->lyMinBtn);
-        gamepadBtns.insert(Qt::Key_X, ui->lyMaxBtn);
-        gamepadBtns.insert(Qt::Key_C, ui->lxMinBtn);
-        gamepadBtns.insert(Qt::Key_V, ui->lxMaxBtn);
+        gamepadBtns.insert(Qt::Key_W, ui->lyMinBtn);
+        gamepadBtns.insert(Qt::Key_S, ui->lyMaxBtn);
+        gamepadBtns.insert(Qt::Key_A, ui->lxMinBtn);
+        gamepadBtns.insert(Qt::Key_D, ui->lxMaxBtn);
+        gamepadBtns.insert(Qt::Key_Z, ui->upBtn);
+        gamepadBtns.insert(Qt::Key_X, ui->downBtn);
+        gamepadBtns.insert(Qt::Key_C, ui->leftBtn);
+        gamepadBtns.insert(Qt::Key_V, ui->rightBtn);
         gamepadBtns.insert(Qt::Key_E, ui->lBtn);
         gamepadBtns.insert(Qt::Key_Q, ui->zlBtn);
         gamepadBtns.insert(Qt::Key_J, ui->yBtn);
@@ -165,10 +169,6 @@ Gamepad::Gamepad(QWidget *parent)
         gamepadBtns.insert(Qt::Key_Down, ui->ryMaxBtn);
         gamepadBtns.insert(Qt::Key_Left, ui->rxMinBtn);
         gamepadBtns.insert(Qt::Key_Right, ui->rxMaxBtn);
-        gamepadBtns.insert(Qt::Key_W, ui->upBtn);
-        gamepadBtns.insert(Qt::Key_S, ui->downBtn);
-        gamepadBtns.insert(Qt::Key_A, ui->leftBtn);
-        gamepadBtns.insert(Qt::Key_D, ui->rightBtn);
         gamepadBtns.insert(Qt::Key_B, ui->screenshotBtn);
         gamepadBtns.insert(Qt::Key_N, ui->homeBtn);
         gamepadBtns.insert(Qt::Key_R, ui->minBtn);
