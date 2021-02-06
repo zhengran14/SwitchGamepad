@@ -222,9 +222,9 @@ bool ScriptEngineEvaluation::judgeShinePokemonCustome(QString path)
     return result;
 }
 
-void ScriptEngineEvaluation::capture(QString path)
+void ScriptEngineEvaluation::capture(QString path, int x, int y, int width, int height)
 {
-    bool result = false;
+//    bool result = false;
     QEventLoop* eventLoop = new QEventLoop();
     connect(this, &ScriptEngineEvaluation::hasCaptureCamera, eventLoop, &QEventLoop::quit);
     emit needCaptureCamera();
@@ -233,24 +233,14 @@ void ScriptEngineEvaluation::capture(QString path)
 //    qDebug() << (videoFrame == Q_NULLPTR ? QSize() : videoFrame->size());
 //    videoFrame->save("123.jpg");
     if (videoFrame != Q_NULLPTR) {
-        videoFrame->save(path);
-    }
-    //    return result;
-}
-
-void ScriptEngineEvaluation::captureCut(QString path)
-{
-    bool result = false;
-    QEventLoop* eventLoop = new QEventLoop();
-    connect(this, &ScriptEngineEvaluation::hasCaptureCamera, eventLoop, &QEventLoop::quit);
-    emit needCaptureCamera();
-    eventLoop->exec();
-    eventLoop->deleteLater();
-//    qDebug() << (videoFrame == Q_NULLPTR ? QSize() : videoFrame->size());
-//    videoFrame->save("123.jpg");
-    if (videoFrame != Q_NULLPTR) {
-        QImage newCut = videoFrame->copy(110, 590, 100, 45);
-        newCut.save(path);
+        // 110, 590, 100, 45
+        if (x < 0 || y < 0 || width <= 0 || height <= 0) {
+            videoFrame->save(path);
+        }
+        else {
+            QImage newCut = videoFrame->copy(x, y, width, height);
+            newCut.save(path);
+        }
     }
     //    return result;
 }
@@ -290,6 +280,103 @@ QString ScriptEngineEvaluation::judgeShinePokemonTest(QString path)
         captureFrame2.release();
         shineTemplate.release();
         shineTemplate2.release();
+    }
+    return result;
+}
+
+bool ScriptEngineEvaluation::judgeCapture(QString path, int x, int y, int offsetX, int offsetY, int offsetWidth, int offsetHeight)
+{
+    bool result = false;
+    QEventLoop* eventLoop = new QEventLoop();
+    connect(this, &ScriptEngineEvaluation::hasCaptureCamera, eventLoop, &QEventLoop::quit);
+    emit needCaptureCamera();
+    eventLoop->exec();
+    eventLoop->deleteLater();
+    if (videoFrame != Q_NULLPTR) {
+        QImage img(path);
+        cv::Mat captureFrame;
+        if (offsetX < 0 || offsetY < 0 || offsetWidth <= 0 || offsetHeight <= 0) {
+            captureFrame = Utils::QImage2cvMat(*videoFrame);
+        }
+        else {
+            QImage cut = videoFrame->copy(offsetX, offsetY, offsetWidth, offsetHeight);
+            captureFrame = Utils::QImage2cvMat(cut);
+        }
+        cv::Mat captureFrame2;
+        cv::cvtColor(captureFrame, captureFrame2, cv::COLOR_BGR2RGB);
+        cv::Mat template1 = Utils::QImage2cvMat(img);
+        cv::Mat template2;
+        cv::cvtColor(template1, template2, cv::COLOR_BGR2RGB);
+        cv::Mat dstImg;
+        dstImg.create(captureFrame2.dims, captureFrame2.size, captureFrame2.type());
+        cv::matchTemplate(captureFrame2, template2, dstImg, 0);
+        cv::Point minPoint;
+        cv::Point maxPoint;
+        double *minVal = 0;
+        double *maxVal = 0;
+        cv::minMaxLoc(dstImg, minVal, maxVal, &minPoint,&maxPoint);
+        maxPoint = cv::Point(minPoint.x + template2.cols, minPoint.y + template2.rows);
+        // 110 590 210 635
+//        qDebug() << minPoint.x << minPoint.y << maxPoint.x << maxPoint.y;
+        if (offsetX >= 0 && offsetY >= 0) {
+            x -= offsetX;
+            y -= offsetY;
+        }
+        if (minPoint.x == x && minPoint.y == y) {
+            result = true;
+        }
+        dstImg.release();
+        captureFrame.release();
+        captureFrame2.release();
+        template1.release();
+        template2.release();
+    }
+    return result;
+}
+
+QString ScriptEngineEvaluation::judgeCaptureTest(QString path, int offsetX, int offsetY, int offsetWidth, int offsetHeight)
+{
+    QString result = "";
+    QEventLoop* eventLoop = new QEventLoop();
+    connect(this, &ScriptEngineEvaluation::hasCaptureCamera, eventLoop, &QEventLoop::quit);
+    emit needCaptureCamera();
+    eventLoop->exec();
+    eventLoop->deleteLater();
+    if (videoFrame != Q_NULLPTR) {
+        QImage img(path);
+        cv::Mat captureFrame;
+        if (offsetX < 0 || offsetY < 0 || offsetWidth <= 0 || offsetHeight <= 0) {
+            captureFrame = Utils::QImage2cvMat(*videoFrame);
+        }
+        else {
+            QImage cut = videoFrame->copy(offsetX, offsetY, offsetWidth, offsetHeight);
+            captureFrame = Utils::QImage2cvMat(cut);
+        }
+        cv::Mat captureFrame2;
+        cv::cvtColor(captureFrame, captureFrame2, cv::COLOR_BGR2RGB);
+        cv::Mat template1 = Utils::QImage2cvMat(img);
+        cv::Mat template2;
+        cv::cvtColor(template1, template2, cv::COLOR_BGR2RGB);
+        cv::Mat dstImg;
+        dstImg.create(captureFrame2.dims, captureFrame2.size, captureFrame2.type());
+        cv::matchTemplate(captureFrame2, template2, dstImg, 0);
+        cv::Point minPoint;
+        cv::Point maxPoint;
+        double *minVal = 0;
+        double *maxVal = 0;
+        cv::minMaxLoc(dstImg, minVal, maxVal, &minPoint,&maxPoint);
+        maxPoint = cv::Point(minPoint.x + template2.cols, minPoint.y + template2.rows);
+        // 110 590 210 635
+//        qDebug() << minPoint.x << minPoint.y << maxPoint.x << maxPoint.y;
+        result = QString("%1, %2").arg(minPoint.x).arg(minPoint.y);
+        if (offsetX >= 0 && offsetY >= 0) {
+            result += QString(", %1, %2").arg(minPoint.x + offsetX).arg(minPoint.y + offsetY);
+        }
+        dstImg.release();
+        captureFrame.release();
+        captureFrame2.release();
+        template1.release();
+        template2.release();
     }
     return result;
 }
