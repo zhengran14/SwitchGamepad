@@ -104,14 +104,17 @@ QStringList VideoCapture::refresh(QString defaultSearch, QString &defaultName)
     return cameraDes;
 }
 
-QStringList VideoCapture::GetSupportedResolutions(int index)
+QStringList VideoCapture::GetSupportedResolutions(int index, QString &defaultName, QString defaultSearch)
 {
     QStringList list;
     QCamera _camera(cameraList[index]);
     _camera.load();
     for (QSize resolution : _camera.supportedViewfinderResolutions()) {
-        list << (QString::number(resolution.width()) + "x" + QString::number(resolution.height()));
-
+        QString res = (QString::number(resolution.width()) + "x" + QString::number(resolution.height()));
+        list << res;
+        if (defaultName.isEmpty() && !defaultSearch.isEmpty() && res.contains(defaultSearch)) {
+            defaultName = res;
+        }
     }
 //    for (auto setting : _camera.supportedViewfinderSettings()) {
 //        qDebug() << setting.resolution() << setting.minimumFrameRate() << setting.maximumFrameRate() << setting.pixelFormat() << setting.pixelAspectRatio();
@@ -121,27 +124,34 @@ QStringList VideoCapture::GetSupportedResolutions(int index)
     return list;
 }
 
-QStringList VideoCapture::GetSupportedFrameRateRanges(int index)
+QStringList VideoCapture::GetSupportedFrameRateRanges(int index, QString &defaultName, QString defaultSearch)
 {
     QStringList list;
     QCamera _camera(cameraList[index]);
     _camera.load();
     for (QCamera::FrameRateRange frameRateRange : _camera.supportedViewfinderFrameRateRanges()) {
-        list << (QString::number(frameRateRange.minimumFrameRate) + "~" + QString::number(frameRateRange.maximumFrameRate));
-
+        QString frame = (QString::number(frameRateRange.minimumFrameRate) + "~" + QString::number(frameRateRange.maximumFrameRate));
+        list << frame;
+        if (defaultName.isEmpty() && !defaultSearch.isEmpty() && frame.contains(defaultSearch)) {
+            defaultName = frame;
+        }
     }
     _camera.unload();
     _camera.deleteLater();
     return list;
 }
 
-QStringList VideoCapture::GetSupportedPixelFormats(int index)
+QStringList VideoCapture::GetSupportedPixelFormats(int index, QString &defaultName, QString defaultSearch)
 {
     QStringList list;
     QCamera _camera(cameraList[index]);
     _camera.load();
     for (QVideoFrame::PixelFormat pixelFormat : _camera.supportedViewfinderPixelFormats()) {
-        list << metaEnum.key(pixelFormat);
+        QString format = metaEnum.key(pixelFormat);
+        list << format;
+        if (defaultName.isEmpty() && !defaultSearch.isEmpty() && format.contains(defaultSearch)) {
+            defaultName = format;
+        }
     }
     _camera.unload();
     _camera.deleteLater();

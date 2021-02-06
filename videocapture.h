@@ -63,9 +63,9 @@ public:
     void open(int index, QString resolution, QString frameRateRange, QString pixelFormat);
     void close();
     QStringList refresh(QString defaultSearch, QString &defaultName);
-    QStringList GetSupportedResolutions(int index);
-    QStringList GetSupportedFrameRateRanges(int index);
-    QStringList GetSupportedPixelFormats(int index);
+    QStringList GetSupportedResolutions(int index, QString &defaultName, QString defaultSearch = "");
+    QStringList GetSupportedFrameRateRanges(int index, QString &defaultName, QString defaultSearch = "");
+    QStringList GetSupportedPixelFormats(int index, QString &defaultName, QString defaultSearch = "");
     void moveViewfinder(QLayout *layout);
     void removeViewfinder();
     QCameraViewfinder* getViewfinder();

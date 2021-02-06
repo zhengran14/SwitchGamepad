@@ -773,22 +773,34 @@ void Gamepad::on_videoCaptureList_activated(int index)
 {
     ui->videoCaptureFrameRateRange->setCurrentText("");
     ui->videoCaptureFrameRateRange->clear();
-    ui->videoCaptureFrameRateRange->addItems(videoCapture.GetSupportedFrameRateRanges(index));
-    if (ui->videoCaptureFrameRateRange->count() > 0) {
+    QString defaultName = "";
+    ui->videoCaptureFrameRateRange->addItems(videoCapture.GetSupportedFrameRateRanges(index, defaultName, "30"));
+    if (!defaultName.isEmpty()) {
+        ui->videoCaptureFrameRateRange->setCurrentText(defaultName);
+    }
+    else if (ui->videoCaptureFrameRateRange->count() > 0) {
         ui->videoCaptureFrameRateRange->setCurrentIndex(ui->videoCaptureFrameRateRange->count() - 1);
     }
 
     ui->videoCapturePixelFormat->setCurrentText("");
     ui->videoCapturePixelFormat->clear();
-    ui->videoCapturePixelFormat->addItems(videoCapture.GetSupportedPixelFormats(index));
-    if (ui->videoCapturePixelFormat->count() > 0) {
+    defaultName = "";
+    ui->videoCapturePixelFormat->addItems(videoCapture.GetSupportedPixelFormats(index, defaultName));
+    if (!defaultName.isEmpty()) {
+        ui->videoCapturePixelFormat->setCurrentText(defaultName);
+    }
+    else if (ui->videoCapturePixelFormat->count() > 0) {
         ui->videoCapturePixelFormat->setCurrentIndex(ui->videoCapturePixelFormat->count() - 1);
     }
 
     ui->videoCaptureResolution->setCurrentText("");
     ui->videoCaptureResolution->clear();
-    ui->videoCaptureResolution->addItems(videoCapture.GetSupportedResolutions(index));
-    if (ui->videoCaptureResolution->count() > 0) {
+    defaultName = "";
+    ui->videoCaptureResolution->addItems(videoCapture.GetSupportedResolutions(index, defaultName, "1280x720"));
+    if (!defaultName.isEmpty()) {
+        ui->videoCaptureResolution->setCurrentText(defaultName);
+    }
+    else if (ui->videoCaptureResolution->count() > 0) {
         ui->videoCaptureResolution->setCurrentIndex(ui->videoCaptureResolution->count() - 1);
     }
 }
