@@ -184,7 +184,7 @@ Gamepad::Gamepad(QWidget *parent)
         buttomDatum.insert("+", "Button START");
         buttomDatum.insert("LY MIN", "LY MIN");
         buttomDatum.insert("LY MAX", "LY MAX");
-        buttomDatum.insert("LX MIN", "LX MI");
+        buttomDatum.insert("LX MIN", "LX MIN");
         buttomDatum.insert("LX MAX", "LX MAX");
         buttomDatum.insert("LC", "Button LCLICK");
         buttomDatum.insert("A", "Button A");
