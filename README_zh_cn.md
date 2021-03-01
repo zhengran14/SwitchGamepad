@@ -64,7 +64,7 @@ $ make
 等待完善。
 
 # 脚本demo
-[圣柱王demo脚本]https://github.com/zhengran14/SwitchGamepad/blob/master/scripts%20demo/%E5%9C%A3%E6%9F%B1%E7%8E%8Bdemo%E8%84%9A%E6%9C%AC.js
+[圣柱王demo脚本](https://github.com/zhengran14/SwitchGamepad/blob/master/scripts%20demo/%E5%9C%A3%E6%9F%B1%E7%8E%8Bdemo%E8%84%9A%E6%9C%AC.js)
 
 # 脚本函数
 ```
