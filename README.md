@@ -65,6 +65,9 @@ Wait for
 # How to use SwitchGamepad
 Wait for finish.
 
+# Script demo
+[Regigigas demo script]https://github.com/zhengran14/SwitchGamepad/blob/master/scripts%20demo/Regigigas%20demo%20script.js
+
 # Function of Script
 Wait for comment.
 ```
