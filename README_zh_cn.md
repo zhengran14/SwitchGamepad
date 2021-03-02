@@ -53,12 +53,22 @@ $ make
 等待完善
 ## 自己编译
 1. 安装Qt。
-2. 编译并安装QtAV：https://github.com/wang-bin/QtAV.
-3. 下载代码。
+2. 编译并安装QtAV：https://github.com/wang-bin/QtAV。
+3. 安装ffmpeg。（Windows不需要，macOS可通过brew安装）
+4. 安装opencv。（Windows可以直接解压使用‘opencv_win32.7z’，macOS可通过brew安装）
+5. 下载代码。
    ```
    $ git clone https://github.com/zhengran14/SwitchGamepad.git
    ```
-4. 用QtCreator编译工程。
+6. 用QtCreator打开工程。
+7. 修改pro文件，将ffmpeg、qtav、opencv的路径修改为自己的路径。（只需要修改对应的系统就行，Windows或者是macOS）
+8. 编译工程并运行。
+9. 如果需要直接运行编译出来的.exe或者.app，需要使用deployqt来增加运行库。
+    > 在macOS下，如运行提示：
+    > ```
+    > $ Qt缺失libiodbc.2.dylib和libpq.5.dylib
+    > ```
+    > 则可以参考该教程：https://blog.csdn.net/yutianyue126/article/details/106911948。
 
 # 如何使用SwitchGamepad
 等待完善。

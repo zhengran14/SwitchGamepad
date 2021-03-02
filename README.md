@@ -56,11 +56,21 @@ Wait for
 ## Build yourself
 1. Install Qt.
 2. Build and install QtAV: https://github.com/wang-bin/QtAV.
-3. Download code.
+3. Install ffmpeg. (No need for Windows, you can use brew for macOS)
+4. Install opencv. (You can unzip and use 'opencv_win32.7z' for Windows, for macOS can install by brew)
+5. Download code.
    ```
    $ git clone https://github.com/zhengran14/SwitchGamepad.git
    ```
-4. Build project by QtCreator.
+6. Open project by QtCreator.
+7. Edit .pro, replace the path of ffmpeg, qtav and opencv to your own. (Replace the part of your system, Windowsor macOS)
+8. Build and run the project.
+9. If you need to run .exe or .app you build directly，please use deployqt to add dependent libraries.
+    > For macOS, if show
+    > ```
+    > $ missing libiodbc.2.dylib and libpq.5.dylib
+    > ```
+    > you can see (Chinese): https://blog.csdn.net/yutianyue126/article/details/106911948.
 
 # How to use SwitchGamepad
 Wait for finish.
