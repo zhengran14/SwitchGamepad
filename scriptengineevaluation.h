@@ -34,6 +34,7 @@ private:
     bool needStop = false;
     QImage *videoFrame = Q_NULLPTR;
     bool messageBoxResult = false;
+    void abortscriptEngineEvaluation();
 
 signals:
     void sendData(QString data);

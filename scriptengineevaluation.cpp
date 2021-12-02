@@ -8,6 +8,7 @@
 #include "opencv2/opencv.hpp"
 #include <utils.h>
 #include <QTcpSocket>
+#include <QTimer>
 
 ScriptEngineEvaluation::ScriptEngineEvaluation(QObject *parent) : QObject(parent)
 {
@@ -19,7 +20,7 @@ ScriptEngineEvaluation::ScriptEngineEvaluation(QObject *parent) : QObject(parent
 
 ScriptEngineEvaluation::~ScriptEngineEvaluation()
 {
-    scriptEngine.abortEvaluation();
+    abortscriptEngineEvaluation();
     scriptEngine.deleteLater();
 }
 
@@ -27,7 +28,7 @@ void ScriptEngineEvaluation::evaluate(QString script)
 {
     stop();
     needStop = false;
-    scriptEngine.abortEvaluation();
+    abortscriptEngineEvaluation();
     scriptEngine.clearExceptions();
     QScriptValue result = scriptEngine.evaluate(script);
     if (scriptEngine.hasUncaughtException()) {
@@ -51,23 +52,26 @@ void ScriptEngineEvaluation::cameraCaptured(QImage *videoFrame)
 void ScriptEngineEvaluation::sleep(float sec)
 {
     if (needStop) {
-        scriptEngine.abortEvaluation();
+        abortscriptEngineEvaluation();
         return;
     }
 //    QThread::msleep((int)(time * 1000));
 
     for (int i = 1; i <= sec * 10; i++) {
         if (needStop) {
-            scriptEngine.abortEvaluation();
+            abortscriptEngineEvaluation();
             return;
         }
-        QThread::msleep((int)(100));
+//        QThread::msleep((int)(100));
+        QEventLoop eventLoop;
+        QTimer::singleShot(100, Qt::PreciseTimer, &eventLoop, &QEventLoop::quit);
+        eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
     }
 
 //    QTime timer = QTime::currentTime().addMSecs((int)(sec * 1000));
 //    while (QTime::currentTime() < timer) {
 //        if (needStop) {
-//            scriptEngine.abortEvaluation();
+//            abortscriptEngineEvaluation();
 //            return;
 //        }
 //        QThread::msleep((int)(100));
@@ -77,13 +81,13 @@ void ScriptEngineEvaluation::sleep(float sec)
 void ScriptEngineEvaluation::pressButton(QString string, float sec)
 {
     if (needStop) {
-        scriptEngine.abortEvaluation();
+        abortscriptEngineEvaluation();
         return;
     }
     emit sendData(string);
     sleep(sec);
     if (needStop) {
-        scriptEngine.abortEvaluation();
+        abortscriptEngineEvaluation();
         return;
     }
     emit sendData("RELEASE");
@@ -465,4 +469,10 @@ void ScriptEngineEvaluation::messageBoxReturn(bool result)
 {
     this->messageBoxResult = result;
     emit messageBoxReturned();
+}
+
+void ScriptEngineEvaluation::abortscriptEngineEvaluation()
+{
+    emit sendData("RELEASE");
+    scriptEngine.abortEvaluation();
 }
