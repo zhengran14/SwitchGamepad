@@ -13,6 +13,7 @@ public:
     ~Player();
     void play(QString path, QLayout *layout);
     void stop();
+    void pause(bool pause);
 //    void moveVideoOutput(QLayout *layout);
 //    QtAV::VideoOutput *getVideoOutput();
 

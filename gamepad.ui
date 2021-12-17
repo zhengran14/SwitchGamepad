@@ -55,7 +55,7 @@
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="currentIndex">
-           <number>3</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tab">
            <attribute name="title">
@@ -263,6 +263,13 @@
                 <widget class="QCheckBox" name="miniToolShow">
                  <property name="text">
                   <string>Show Mini Tool</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="hideVideoCapture">
+                 <property name="text">
+                  <string>Hide Video Capture</string>
                  </property>
                 </widget>
                </item>

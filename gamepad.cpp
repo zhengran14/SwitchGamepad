@@ -989,3 +989,14 @@ void Gamepad::captureCamera()
     QImage *videoFrame = this->videoCapture.capture();
     emit cameraCaptured(videoFrame);
 }
+
+void Gamepad::on_hideVideoCapture_clicked(bool checked)
+{
+    player.pause(checked);
+//    if (checked) {
+//        player.stop();
+//    }
+//    else {
+//        on_miniToolShow_clicked(ui->miniToolShow->isChecked());
+//    }
+}

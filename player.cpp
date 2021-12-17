@@ -38,6 +38,18 @@ void Player::stop()
     }
 }
 
+void Player::pause(bool pause)
+{
+    if (avPlayer != Q_NULLPTR) {
+        if (pause) {
+            avPlayer->pause();
+        }
+        else {
+            avPlayer->play();
+        }
+    }
+}
+
 //void Player::moveVideoOutput(QLayout *layout)
 //{
 //    if (videoOutput != Q_NULLPTR) {
