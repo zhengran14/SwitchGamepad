@@ -440,7 +440,7 @@ QString ScriptEngineEvaluation::judgeCaptureTest(QString sourcePath, QString tem
         result += QString(", %1, %2").arg(minPoint.x + offsetX).arg(minPoint.y + offsetY);
     }
     if (isShow) {
-        emit cvShow(sourcePath, templatePath, maxPoint);
+        emit cvShow(sourcePath, templatePath, minPoint);
 //        cv::Mat mask = captureFrame.clone();
 //        rectangle(mask, maxPoint, cv::Point(maxPoint.x + template1.cols, maxPoint.y + template1.rows), cv::Scalar(0, 255, 0), 2, 8, 0);
 //        cv::imshow("mask",mask);

@@ -69,12 +69,12 @@ Gamepad::Gamepad(QWidget *parent)
         ui->status->setText(text);
     });
     connect(&scriptEngine, &ScriptEngine::needCaptureCamera, this, &Gamepad::captureCamera);
-    connect(&scriptEngine, &ScriptEngine::cvShow, this, [this](QString sourcePath, QString templatePath, cv::Point maxPoint) {
+    connect(&scriptEngine, &ScriptEngine::cvShow, this, [this](QString sourcePath, QString templatePath, cv::Point point) {
         QImage img1(sourcePath);
         QImage img2(templatePath);
         cv::Mat captureFrame = Utils::QImage2cvMat(img1);
         cv::Mat template1 = Utils::QImage2cvMat(img2);
-        rectangle(captureFrame, maxPoint, cv::Point(maxPoint.x + template1.cols, maxPoint.y + template1.rows), cv::Scalar(0, 255, 0), 2, 8, 0);
+        rectangle(captureFrame, point, cv::Point(point.x + template1.cols, point.y + template1.rows), cv::Scalar(0, 255, 0), 2, 8, 0);
         cv::imshow("", captureFrame);
         cv::waitKey(0);
         cv::destroyAllWindows();

@@ -49,7 +49,7 @@ signals:
     void hasCaptureCamera();
     void messageBoxReturned();
     void setStatusText(QString text);
-    void cvShow(QString sourcePath, QString templatePath, cv::Point maxPoint);
+    void cvShow(QString sourcePath, QString templatePath, cv::Point point);
 };
 
 #endif // SCRIPTENGINEEVALUATION_H

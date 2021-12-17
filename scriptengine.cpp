@@ -30,8 +30,8 @@ ScriptEngine::ScriptEngine(QObject *parent) : QObject(parent)
     connect(&scriptEngineEvaluation, &ScriptEngineEvaluation::setStatusText, this, [this](QString text) {
         emit setStatusText(text);
     });
-    connect(&scriptEngineEvaluation, &ScriptEngineEvaluation::cvShow, this, [this](QString sourcePath, QString templatePath, cv::Point maxPoint) {
-        emit cvShow(sourcePath, templatePath, maxPoint);
+    connect(&scriptEngineEvaluation, &ScriptEngineEvaluation::cvShow, this, [this](QString sourcePath, QString templatePath, cv::Point point) {
+        emit cvShow(sourcePath, templatePath, point);
     });
     scriptEngineEvaluationThread.start();
 }
