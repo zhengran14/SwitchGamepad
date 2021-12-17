@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QScriptEngine>
+#include "opencv2/core/types.hpp"
 
 class ScriptEngineEvaluation : public QObject
 {
@@ -48,6 +49,7 @@ signals:
     void hasCaptureCamera();
     void messageBoxReturned();
     void setStatusText(QString text);
+    void cvShow(QString sourcePath, QString templatePath, cv::Point maxPoint);
 };
 
 #endif // SCRIPTENGINEEVALUATION_H

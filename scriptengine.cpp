@@ -3,9 +3,11 @@
 #include <QTextStream>
 #include "setting.h"
 #include <QJsonArray>
+#include <QMetaType>
 
 ScriptEngine::ScriptEngine(QObject *parent) : QObject(parent)
 {
+    qRegisterMetaType<cv::Point>("cv::Point");
     scriptEngineEvaluation.moveToThread(&scriptEngineEvaluationThread);
 //    connect(&scriptEngineEvaluationThread, &QThread::finished, &scriptEngineEvaluation, &QObject::deleteLater);
     connect(this, &ScriptEngine::evaluate, &scriptEngineEvaluation, &ScriptEngineEvaluation::evaluate);
@@ -27,6 +29,9 @@ ScriptEngine::ScriptEngine(QObject *parent) : QObject(parent)
     });
     connect(&scriptEngineEvaluation, &ScriptEngineEvaluation::setStatusText, this, [this](QString text) {
         emit setStatusText(text);
+    });
+    connect(&scriptEngineEvaluation, &ScriptEngineEvaluation::cvShow, this, [this](QString sourcePath, QString templatePath, cv::Point maxPoint) {
+        emit cvShow(sourcePath, templatePath, maxPoint);
     });
     scriptEngineEvaluationThread.start();
 }

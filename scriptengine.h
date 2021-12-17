@@ -50,6 +50,7 @@ signals:
     void runScriptStart();
     void needCaptureCamera();
     void setStatusText(QString text);
+    void cvShow(QString sourcePath, QString templatePath, cv::Point maxPoint);
 };
 
 #endif // SCRIPTENGINE_H
