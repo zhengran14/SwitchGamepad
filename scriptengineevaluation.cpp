@@ -405,7 +405,7 @@ QString ScriptEngineEvaluation::judgeCaptureTest(QString path, int offsetX, int 
     return result;
 }
 
-QString ScriptEngineEvaluation::judgeCaptureTest(QString sourcePath, QString templatePath, int offsetX, int offsetY, int offsetWidth, int offsetHeight, int method, bool isShow = false)
+QString ScriptEngineEvaluation::judgeCaptureTest(QString sourcePath, QString templatePath, int offsetX, int offsetY, int offsetWidth, int offsetHeight, int method, bool isShow)
 {
     QString result = "";
     QEventLoop* eventLoop = new QEventLoop();
