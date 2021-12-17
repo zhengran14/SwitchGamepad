@@ -269,6 +269,19 @@ void ScriptEngineEvaluation::capture(QString path, int x, int y, int width, int 
     //    return result;
 }
 
+void ScriptEngineEvaluation::capture(QString sourcePath, QString svePath, int x, int y, int width, int height)
+{
+    QImage img(sourcePath);
+    // 110, 590, 100, 45
+    if (x < 0 || y < 0 || width <= 0 || height <= 0) {
+        img.save(svePath);
+    }
+    else {
+        QImage newCut = img.copy(x, y, width, height);
+        newCut.save(svePath);
+    }
+}
+
 QString ScriptEngineEvaluation::judgeShinePokemonTest(QString path)
 {
     QString result = "";
@@ -334,6 +347,9 @@ bool ScriptEngineEvaluation::judgeCapture(QString path, int x, int y, int offset
         cv::Mat dstImg;
         dstImg.create(captureFrame2.dims, captureFrame2.size, captureFrame2.type());
         // enum { TM_SQDIFF=0, TM_SQDIFF_NORMED=1, TM_CCORR=2, TM_CCORR_NORMED=3, TM_CCOEFF=4, TM_CCOEFF_NORMED=5 };
+        if (method < 0 || method > 5) {
+            method = 0;
+        }
         cv::matchTemplate(captureFrame2, template2, dstImg, method);
         cv::Point minPoint;
         cv::Point maxPoint;
@@ -385,6 +401,9 @@ QString ScriptEngineEvaluation::judgeCaptureTest(QString path, int offsetX, int 
         cv::Mat dstImg;
         dstImg.create(captureFrame2.dims, captureFrame2.size, captureFrame2.type());
         // enum { TM_SQDIFF=0, TM_SQDIFF_NORMED=1, TM_CCORR=2, TM_CCORR_NORMED=3, TM_CCOEFF=4, TM_CCOEFF_NORMED=5 };
+        if (method < 0 || method > 5) {
+            method = 0;
+        }
         cv::matchTemplate(captureFrame2, template2, dstImg, method);
         cv::Point minPoint;
         cv::Point maxPoint;
