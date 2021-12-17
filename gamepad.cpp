@@ -730,6 +730,8 @@ void Gamepad::on_addSleep_clicked()
 
 void Gamepad::on_videoCaptureSwitch_clicked()
 {
+    on_hideVideoCapture_clicked(false);
+    ui->hideVideoCapture->setChecked(false);
     player.stop();
     if (ui->videoCaptureSwitch->property("isOpen").toBool()) {
         videoCapture.close();
@@ -992,11 +994,6 @@ void Gamepad::captureCamera()
 
 void Gamepad::on_hideVideoCapture_clicked(bool checked)
 {
-    player.pause(checked);
-//    if (checked) {
-//        player.stop();
-//    }
-//    else {
-//        on_miniToolShow_clicked(ui->miniToolShow->isChecked());
-//    }
+    ui->videoCaptureFrame->setVisible(!checked);
+    miniTool.GetVideoCaptionFrameLayout()->parentWidget()->setVisible(!checked);
 }

@@ -67,6 +67,7 @@ private slots:
     void on_client_connectSuccess(QString str);
     void on_remoteInfoClear_clicked();
     void captureCamera();
+    void on_hideVideoCapture_clicked(bool checked);
 
 private:
     Ui::Gamepad *ui;
