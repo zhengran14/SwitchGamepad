@@ -93,6 +93,24 @@ void ScriptEngineEvaluation::pressButton(QString string, float sec)
     emit sendData("RELEASE");
 }
 
+void ScriptEngineEvaluation::pressDownButton(QString string)
+{
+    if (needStop) {
+        abortscriptEngineEvaluation();
+        return;
+    }
+    emit sendData(string);
+}
+
+void ScriptEngineEvaluation::releaseButton()
+{
+    if (needStop) {
+        abortscriptEngineEvaluation();
+        return;
+    }
+    emit sendData("RELEASE");
+}
+
 bool ScriptEngineEvaluation::messageBox(QString title, QString content)
 {
     QEventLoop* eventLoop = new QEventLoop();
@@ -288,7 +306,7 @@ QString ScriptEngineEvaluation::judgeShinePokemonTest(QString path)
     return result;
 }
 
-bool ScriptEngineEvaluation::judgeCapture(QString path, int x, int y, int offsetX, int offsetY, int offsetWidth, int offsetHeight)
+bool ScriptEngineEvaluation::judgeCapture(QString path, int x, int y, int offsetX, int offsetY, int offsetWidth, int offsetHeight, int method)
 {
     bool result = false;
     QEventLoop* eventLoop = new QEventLoop();
@@ -313,7 +331,8 @@ bool ScriptEngineEvaluation::judgeCapture(QString path, int x, int y, int offset
         cv::cvtColor(template1, template2, cv::COLOR_BGR2RGB);
         cv::Mat dstImg;
         dstImg.create(captureFrame2.dims, captureFrame2.size, captureFrame2.type());
-        cv::matchTemplate(captureFrame2, template2, dstImg, 0);
+        // enum { TM_SQDIFF=0, TM_SQDIFF_NORMED=1, TM_CCORR=2, TM_CCORR_NORMED=3, TM_CCOEFF=4, TM_CCOEFF_NORMED=5 };
+        cv::matchTemplate(captureFrame2, template2, dstImg, method);
         cv::Point minPoint;
         cv::Point maxPoint;
         double *minVal = 0;
@@ -338,7 +357,7 @@ bool ScriptEngineEvaluation::judgeCapture(QString path, int x, int y, int offset
     return result;
 }
 
-QString ScriptEngineEvaluation::judgeCaptureTest(QString path, int offsetX, int offsetY, int offsetWidth, int offsetHeight)
+QString ScriptEngineEvaluation::judgeCaptureTest(QString path, int offsetX, int offsetY, int offsetWidth, int offsetHeight, int method)
 {
     QString result = "";
     QEventLoop* eventLoop = new QEventLoop();
@@ -363,7 +382,8 @@ QString ScriptEngineEvaluation::judgeCaptureTest(QString path, int offsetX, int 
         cv::cvtColor(template1, template2, cv::COLOR_BGR2RGB);
         cv::Mat dstImg;
         dstImg.create(captureFrame2.dims, captureFrame2.size, captureFrame2.type());
-        cv::matchTemplate(captureFrame2, template2, dstImg, 0);
+        // enum { TM_SQDIFF=0, TM_SQDIFF_NORMED=1, TM_CCORR=2, TM_CCORR_NORMED=3, TM_CCOEFF=4, TM_CCOEFF_NORMED=5 };
+        cv::matchTemplate(captureFrame2, template2, dstImg, method);
         cv::Point minPoint;
         cv::Point maxPoint;
         double *minVal = 0;
@@ -375,6 +395,54 @@ QString ScriptEngineEvaluation::judgeCaptureTest(QString path, int offsetX, int 
         result = QString("%1, %2").arg(minPoint.x).arg(minPoint.y);
         if (offsetX >= 0 && offsetY >= 0) {
             result += QString(", %1, %2").arg(minPoint.x + offsetX).arg(minPoint.y + offsetY);
+        }
+        dstImg.release();
+        captureFrame.release();
+        captureFrame2.release();
+        template1.release();
+        template2.release();
+    }
+    return result;
+}
+
+QString ScriptEngineEvaluation::judgeCaptureTest(QString sourcePath, QString templatePath, int offsetX, int offsetY, int offsetWidth, int offsetHeight, int method, bool isShow = false)
+{
+    QString result = "";
+    QEventLoop* eventLoop = new QEventLoop();
+    connect(this, &ScriptEngineEvaluation::hasCaptureCamera, eventLoop, &QEventLoop::quit);
+    emit needCaptureCamera();
+    eventLoop->exec();
+    eventLoop->deleteLater();
+    if (videoFrame != Q_NULLPTR) {
+        QImage img1(sourcePath);
+        QImage img2(templatePath);
+        cv::Mat captureFrame = Utils::QImage2cvMat(img1);
+        cv::Mat captureFrame2;
+        cv::cvtColor(captureFrame, captureFrame2, cv::COLOR_BGR2RGB);
+        cv::Mat template1 = Utils::QImage2cvMat(img2);
+        cv::Mat template2;
+        cv::cvtColor(template1, template2, cv::COLOR_BGR2RGB);
+        cv::Mat dstImg;
+        dstImg.create(captureFrame2.dims, captureFrame2.size, captureFrame2.type());
+        // enum { TM_SQDIFF=0, TM_SQDIFF_NORMED=1, TM_CCORR=2, TM_CCORR_NORMED=3, TM_CCOEFF=4, TM_CCOEFF_NORMED=5 };
+        cv::matchTemplate(captureFrame2, template2, dstImg, method);
+        cv::Point minPoint;
+        cv::Point maxPoint;
+        double *minVal = 0;
+        double *maxVal = 0;
+        cv::minMaxLoc(dstImg, minVal, maxVal, &minPoint,&maxPoint);
+        maxPoint = cv::Point(minPoint.x + template2.cols, minPoint.y + template2.rows);
+        // 110 590 210 635
+//        qDebug() << minPoint.x << minPoint.y << maxPoint.x << maxPoint.y;
+        result = QString("%1, %2").arg(minPoint.x).arg(minPoint.y);
+        if (offsetX >= 0 && offsetY >= 0) {
+            result += QString(", %1, %2").arg(minPoint.x + offsetX).arg(minPoint.y + offsetY);
+        }
+        if (isShow) {
+            cv::Mat mask = captureFrame.clone();
+            rectangle(mask, maxPoint, cv::Point(maxPoint.x + template1.cols, maxPoint.y + template1.rows), cv::Scalar(0, 255, 0), 2, 8, 0);
+            cv::imshow("mask",mask);
+            mask.release();
         }
         dstImg.release();
         captureFrame.release();

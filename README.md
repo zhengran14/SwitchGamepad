@@ -92,6 +92,10 @@ gp.pressButton(Button code, second);
 gp.pressButton('Button X', 0.1);
 gp.pressButton('LX MIN’, 5.5);
 
+gp.pressDownButton(Button code);
+gp.pressDownButton('Button X' code);
+gp.releaseButton();
+
 // Only support qq
 gp.mail(sender, sender, receiver, title, content);
 gp.mail(‘xxx@qq.com', 'xxxxxx’, ‘xxx@qq.com', ‘title’, ’content’);

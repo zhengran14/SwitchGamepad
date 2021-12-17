@@ -94,6 +94,12 @@ gp.pressButton(按钮名称, 秒); // 可以是小数来表示毫秒
 gp.pressButton('Button X', 0.1);
 gp.pressButton('LX MIN’, 5.5);
 
+// 按下一个按钮
+gp.pressDownButton(Button code);
+gp.pressDownButton('Button X' code);
+// 弹起按钮
+gp.releaseButton();
+
 // 发送邮件
 // 目前只支持qq邮箱
 gp.mail(发件人邮箱, 邮箱的授权密码, 收件人邮箱, 邮件标题, 邮件内容);
