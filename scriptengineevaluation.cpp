@@ -77,7 +77,20 @@ void ScriptEngineEvaluation::sleep(float sec)
 //            return;
 //        }
 //        QThread::msleep((int)(100));
-//    }
+    //    }
+}
+
+void ScriptEngineEvaluation::sleepClock(int ms)
+{
+    if (needStop) {
+        abortscriptEngineEvaluation();
+        return;
+    }
+
+
+    QEventLoop eventLoop;
+    QTimer::singleShot(ms, Qt::PreciseTimer, &eventLoop, &QEventLoop::quit);
+    eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
 }
 
 void ScriptEngineEvaluation::pressButton(QString string, float sec)
@@ -88,6 +101,21 @@ void ScriptEngineEvaluation::pressButton(QString string, float sec)
     }
     emit sendData(string);
     sleep(sec);
+    if (needStop) {
+        abortscriptEngineEvaluation();
+        return;
+    }
+    emit sendData("RELEASE");
+}
+
+void ScriptEngineEvaluation::pressButtonClock(QString string, int ms)
+{
+    if (needStop) {
+        abortscriptEngineEvaluation();
+        return;
+    }
+    emit sendData(string);
+    sleepClock(ms);
     if (needStop) {
         abortscriptEngineEvaluation();
         return;

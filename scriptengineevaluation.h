@@ -12,7 +12,9 @@ public:
     explicit ScriptEngineEvaluation(QObject *parent = nullptr);
     ~ScriptEngineEvaluation();
     Q_INVOKABLE void sleep(float sec);
+    Q_INVOKABLE void sleepClock(int ms);
     Q_INVOKABLE void pressButton(QString string, float sec);
+    Q_INVOKABLE void pressButtonClock(QString string, int ms);
     Q_INVOKABLE void pressDownButton(QString string);
     Q_INVOKABLE void releaseButton();
     Q_INVOKABLE bool messageBox(QString title, QString content);
