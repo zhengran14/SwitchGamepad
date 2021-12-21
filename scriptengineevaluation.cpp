@@ -464,7 +464,15 @@ QString ScriptEngineEvaluation::judgeCaptureTest(QString sourcePath, QString tem
     eventLoop->deleteLater();
     QImage img1(sourcePath);
     QImage img2(templatePath);
-    cv::Mat captureFrame = Utils::QImage2cvMat(img1);
+    cv::Mat captureFrame;
+    if (offsetX < 0 || offsetY < 0 || offsetWidth <= 0 || offsetHeight <= 0) {
+        captureFrame = Utils::QImage2cvMat(img1);
+    }
+    else {
+        QImage cut = img1.copy(offsetX, offsetY, offsetWidth, offsetHeight);
+        captureFrame = Utils::QImage2cvMat(cut);
+    }
+//    cv::Mat captureFrame = Utils::QImage2cvMat(img1);
     cv::Mat captureFrame2;
     cv::cvtColor(captureFrame, captureFrame2, cv::COLOR_BGR2RGB);
     cv::Mat template1 = Utils::QImage2cvMat(img2);
