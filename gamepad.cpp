@@ -110,7 +110,7 @@ Gamepad::Gamepad(QWidget *parent)
 
     // test get status text
     QTcpServer *tcpServer = new QTcpServer(this);
-    tcpServer->listen(QHostAddress::Any, 7000);
+    tcpServer->listen(QHostAddress::Any, 7001);
     connect(tcpServer, &QTcpServer::newConnection, this, [this, tcpServer]() {
         QTcpSocket *tcpSocket = tcpServer->nextPendingConnection();
         connect(tcpSocket, &QTcpSocket::disconnected, this, []() {
