@@ -30,6 +30,7 @@ Gamepad::Gamepad(QWidget *parent)
     ui->splitter->setStretchFactor(1, 2);
     on_scriptListRefresh_clicked();
     ui->pathEdit->setText(Setting::instance()->getScriptPath());
+    ui->tessdataPathEdit->setText(Setting::instance()->getTessdataPath());
     on_videoCaptureRefresh_clicked();
 //    videoCapture.init(ui->videoCaptureFrame->layout());
     ui->splitter_2->setStretchFactor(1, 2);
@@ -715,6 +716,28 @@ void Gamepad::on_choosePath_clicked()
 void Gamepad::on_openPath_clicked()
 {
     QDesktopServices::openUrl(QUrl::fromLocalFile(ui->pathEdit->text()));
+}
+
+void Gamepad::on_chooseTessdataPath_clicked()
+{
+    QString newPath = QFileDialog::getExistingDirectory(this, tr("Choose Directory"), Setting::instance()->getTessdataPath(), QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (!newPath.isEmpty()) {
+        QString oldPath = Setting::instance()->getTessdataPath();
+        if (newPath.contains(oldPath)) {
+            QMessageBox::warning(this, tr("Warning"), tr("Can't choose this directory."), QMessageBox::Ok);
+            return;
+        }
+        newPath += "/tessdata";
+        QDir dir;
+        dir.rename(oldPath, newPath);
+        Setting::instance()->setTessdataPath(newPath);
+        ui->tessdataPathEdit->setText(newPath);
+    }
+}
+
+void Gamepad::on_openTessdataPath_clicked()
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile(ui->tessdataPathEdit->text()));
 }
 
 void Gamepad::on_addKey_clicked()

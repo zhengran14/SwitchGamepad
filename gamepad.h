@@ -45,6 +45,8 @@ private slots:
     void on_scriptRun_clicked();
     void on_choosePath_clicked();
     void on_openPath_clicked();
+    void on_chooseTessdataPath_clicked();
+    void on_openTessdataPath_clicked();
     void on_addKey_clicked();
     void on_addSleep_clicked();
     void on_videoCaptureSwitch_clicked();

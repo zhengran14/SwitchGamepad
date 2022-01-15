@@ -9,6 +9,9 @@
 //#include "opencv2/highgui/highgui.hpp"
 //#include <utils.h>
 #include <player.h>
+//#include <tesseract/baseapi.h>      // tesseract提供的关于C++的接口
+//#include <tesseract/strngs.h>
+//#include <leptonica/allheaders.h>
 
 int main(int argc, char *argv[])
 {
@@ -49,6 +52,30 @@ int main(int argc, char *argv[])
 //    captureFrame.release();
 //    shineTemplate2.release();
 //    shineTemplate.release();
+
+//    tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
+//    // Initialize tesseract-ocr with English, without specifying tessdata path
+////    if (api->Init(NULL, NULL))
+////    if (api->Init("/Users/rabbit/Downloads/SwitchGamepad/tesseract/tessdata_fast", "chi_sim+eng"))
+//    if (api->Init("/Users/rabbit/Downloads/SwitchGamepad/tesseract/tessdata_best", "chi_sim"))
+//    {
+////        fprintf(stderr, "Could not initialize tesseract.\n");
+//        return 0;
+//    }
+
+//    // Open input image with leptonica library
+//    Pix *image = pixRead("/Users/rabbit/Downloads/2.png"); //absolute path of file
+//    api->SetImage(image);
+
+//    // Get OCR result
+//    char *outText = api->GetUTF8Text();
+//    qDebug() << QString::fromUtf8(outText);
+////    printf("OCR output:\n%s", outText);
+
+//    // Destroy used object and release memory
+//    api->End();
+//    delete [] outText;
+//    pixDestroy(&image);
 
     QApplication a(argc, argv);
     Player p;

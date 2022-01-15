@@ -1,6 +1,6 @@
 mac {
     T_PATH_QTAV_LIB = /Users/rabbit/Documents/develop/QtAV/bin/lib_osx_x86_64_llvm
-    T_PATH_FFMPEG = /usr/local/Cellar/ffmpeg/4.3.1
+    T_PATH_FFMPEG = /usr/local/Cellar/ffmpeg/4.4_2
 
     LIBS += -F$${T_PATH_QTAV_LIB}
     LIBS += -framework QtAV
@@ -15,15 +15,21 @@ mac {
     LIBS += -framework QtAVWidgets
     INCLUDEPATH += $${T_PATH_QTAV_LIB}/QtAVWidgets.framework/Headers
 
-    INCLUDEPATH += /usr/local/Cellar/opencv/4.5.1/include/opencv4/opencv2
-    INCLUDEPATH += /usr/local/Cellar/opencv/4.5.1/include/opencv4
-    INCLUDEPATH += /usr/local/Cellar/opencv/4.5.1/include
-    LIBS += -L/usr/local/Cellar/opencv/4.5.1/lib \
+    INCLUDEPATH += /usr/local/Cellar/opencv/4.5.3_2/include/opencv4/opencv2
+    INCLUDEPATH += /usr/local/Cellar/opencv/4.5.3_2/include/opencv4
+    INCLUDEPATH += /usr/local/Cellar/opencv/4.5.3_2/include
+    LIBS += -L/usr/local/Cellar/opencv/4.5.3_2/lib \
      -lopencv_core \
      -lopencv_highgui \
      -lopencv_imgproc \
      -lopencv_imgcodecs \
      -lopencv_videoio \
+
+    INCLUDEPATH += /usr/local/Cellar/tesseract/4.1.1/include
+    LIBS += -L/usr/local/Cellar/tesseract/4.1.1/lib -ltesseract
+
+    INCLUDEPATH += /usr/local/Cellar/leptonica/1.81.1/include
+    LIBS += -L/usr/local/Cellar/leptonica/1.81.1/lib -llept
 }
 win32 {
     LIBS += C:/Qt/5.15.2/msvc2019/lib/Qt5AV.lib

@@ -194,6 +194,36 @@
              </widget>
             </item>
             <item>
+             <widget class="QGroupBox" name="groupBox_3">
+              <property name="title">
+               <string>Tessdata path</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_15">
+               <item>
+                <widget class="QLineEdit" name="tessdataPathEdit">
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="chooseTessdataPath">
+                 <property name="text">
+                  <string>Choose</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="openTessdataPath">
+                 <property name="text">
+                  <string>Open</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
              <widget class="QGroupBox" name="videoCaptureGroup">
               <property name="title">
                <string>Video Capture</string>

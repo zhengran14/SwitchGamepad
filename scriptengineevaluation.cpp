@@ -10,6 +10,10 @@
 #include <QTcpSocket>
 #include <QTimer>
 #include <QMetaType>
+#include <tesseract/baseapi.h>
+#include <tesseract/strngs.h>
+#include <leptonica/allheaders.h>
+#include "setting.h"
 
 ScriptEngineEvaluation::ScriptEngineEvaluation(QObject *parent) : QObject(parent)
 {
@@ -587,6 +591,126 @@ void ScriptEngineEvaluation::mail(QString username, QString password, QString re
     recvdata = clientsocket.readAll();
 //    qDebug() << recvdata;
     clientsocket.deleteLater();
+}
+
+QString ScriptEngineEvaluation::getCaptureString(QString tessdata, int offsetX, int offsetY, int offsetWidth, int offsetHeight)
+{
+    QString result = "";
+
+    QEventLoop* eventLoop = new QEventLoop();
+    connect(this, &ScriptEngineEvaluation::hasCaptureCamera, eventLoop, &QEventLoop::quit);
+    emit needCaptureCamera();
+    eventLoop->exec();
+    eventLoop->deleteLater();
+    if (videoFrame != Q_NULLPTR) {
+
+        tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
+        std::string s_tessdata = tessdata.toStdString();
+        std::string s_tessdataPath = Setting::instance()->getTessdataPath().toStdString();
+        if (api->Init(s_tessdataPath.c_str(), tessdata.isEmpty() ? "chi_sim" : s_tessdata.c_str()))
+        {
+            api->End();
+            return result;
+        }
+
+        cv::Mat captureFrame;
+        if (offsetX < 0 || offsetY < 0 || offsetWidth <= 0 || offsetHeight <= 0) {
+            captureFrame = Utils::QImage2cvMat(*videoFrame);
+        }
+        else {
+            QImage cut = videoFrame->copy(offsetX, offsetY, offsetWidth, offsetHeight);
+            captureFrame = Utils::QImage2cvMat(cut);
+        }
+        cv::Mat captureFrame2;
+        cv::cvtColor(captureFrame, captureFrame2, cv::COLOR_BGR2GRAY);
+        api->SetImage((uchar*)captureFrame2.data, captureFrame2.cols, captureFrame2.rows, 1, captureFrame2.cols);
+        char *outText = api->GetUTF8Text();
+        result = QString::fromUtf8(outText);
+
+        captureFrame.release();
+        captureFrame2.release();
+        api->End();
+        delete [] outText;
+    }
+    return result;
+}
+
+QString ScriptEngineEvaluation::getCaptureStringTest(QString tessdataPath, QString tessdata, int offsetX, int offsetY, int offsetWidth, int offsetHeight)
+{
+    QString result = "";
+
+    QEventLoop* eventLoop = new QEventLoop();
+    connect(this, &ScriptEngineEvaluation::hasCaptureCamera, eventLoop, &QEventLoop::quit);
+    emit needCaptureCamera();
+    eventLoop->exec();
+    eventLoop->deleteLater();
+    if (videoFrame != Q_NULLPTR) {
+
+        tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
+        std::string s_tessdata = tessdata.toStdString();
+        std::string s_tessdataPath = tessdataPath.toStdString();
+        if (api->Init(s_tessdataPath.c_str(), tessdata.isEmpty() ? "chi_sim" : s_tessdata.c_str()))
+        {
+            api->End();
+            return result;
+        }
+
+        cv::Mat captureFrame;
+        if (offsetX < 0 || offsetY < 0 || offsetWidth <= 0 || offsetHeight <= 0) {
+            captureFrame = Utils::QImage2cvMat(*videoFrame);
+        }
+        else {
+            QImage cut = videoFrame->copy(offsetX, offsetY, offsetWidth, offsetHeight);
+            captureFrame = Utils::QImage2cvMat(cut);
+        }
+        cv::Mat captureFrame2;
+        cv::cvtColor(captureFrame, captureFrame2, cv::COLOR_BGR2GRAY);
+        api->SetImage((uchar*)captureFrame2.data, captureFrame2.cols, captureFrame2.rows, 1, captureFrame2.cols);
+        char *outText = api->GetUTF8Text();
+        result = QString::fromUtf8(outText);
+
+        captureFrame.release();
+        captureFrame2.release();
+        api->End();
+        delete [] outText;
+    }
+    return result;
+}
+
+QString ScriptEngineEvaluation::getCaptureStringTest(QString imgPath, QString tessdataPath, QString tessdata, int offsetX, int offsetY, int offsetWidth, int offsetHeight)
+{
+    QString result = "";
+
+    tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
+    std::string s_tessdata = tessdata.toStdString();
+    std::string s_tessdataPath = tessdataPath.toStdString();
+    if (api->Init(s_tessdataPath.c_str(), tessdata.isEmpty() ? "chi_sim" : s_tessdata.c_str()))
+    {
+        api->End();
+        return result;
+    }
+
+    QImage img1(imgPath);
+    cv::Mat captureFrame;
+    if (offsetX < 0 || offsetY < 0 || offsetWidth <= 0 || offsetHeight <= 0) {
+        captureFrame = Utils::QImage2cvMat(img1);
+    }
+    else {
+        QImage cut = img1.copy(offsetX, offsetY, offsetWidth, offsetHeight);
+        captureFrame = Utils::QImage2cvMat(cut);
+    }
+    cv::Mat captureFrame2;
+    cv::cvtColor(captureFrame, captureFrame2, cv::COLOR_BGR2GRAY);
+    api->SetImage((uchar*)captureFrame2.data, captureFrame2.cols, captureFrame2.rows, 1, captureFrame2.cols);
+    char *outText = api->GetUTF8Text();
+    result = QString::fromUtf8(outText);
+
+    captureFrame.release();
+    captureFrame2.release();
+    api->End();
+    delete [] outText;
+
+    return result;
 }
 
 void ScriptEngineEvaluation::messageBoxReturn(bool result)

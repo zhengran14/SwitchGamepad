@@ -14,6 +14,9 @@ public:
     QString getScriptPath() {
         return settings->value("scriptPath").toString();
     };
+    QString getTessdataPath() {
+        return settings->value("tessdataPath").toString();
+    };
     quint16 getRemotePort() {
         return settings->value("remotePort").toUInt();
     };
@@ -27,6 +30,7 @@ public:
         return settings->value("liveUrl").toString();
     };
     void setScriptPath(QString path);
+    void setTessdataPath(QString path);
     void setRemotePort(quint16 remotePort) {
         settings->setValue("remotePort", remotePort);
     };

@@ -15,6 +15,13 @@ Setting::Setting()
         QDir dir;
         dir.mkpath(getScriptPath());
     }
+    if (!settings->contains("tessdataPath")) {
+        setTessdataPath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/tessdata");
+    }
+    else {
+        QDir dir;
+        dir.mkpath(getTessdataPath());
+    }
     if (!settings->contains("remotePort")) {
         setRemotePort(8080);
     }
@@ -46,4 +53,11 @@ void Setting::setScriptPath(QString path)
     QDir dir;
     dir.mkpath(path);
     settings->setValue("scriptPath", path);
+}
+
+void Setting::setTessdataPath(QString path)
+{
+    QDir dir;
+    dir.mkpath(path);
+    settings->setValue("tessdataPath", path);
 }
