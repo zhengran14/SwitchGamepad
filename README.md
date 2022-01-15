@@ -31,9 +31,9 @@ The microcomputer need to write binaries to simulate ns gamepad.
 - Video Capture (if you need to use script 'judgeCapture()').
 
 # 1. Simulate Arduino as Gamepad
-## On macOS (Failed)
+## On macOS
 ```
-$ brew install avr-dude osx-cross/avr/avr-gcc
+$ brew install avrdude osx-cross/avr/avr-gcc
 
 $ git clone --recursive https://github.com/ebith/Switch-Fightstick.git
 
@@ -42,12 +42,13 @@ $ make
 
 # Pro Micro needs to be in DFU mode to write binaries.
 # Connect the RST and GND of the board with a test wire and execute within a few seconds.
+# Pro Micro need to open and close 1200 to into DFU mode to write binaries.
 # The option m32u4 is when the CPU is atmega32u4. For atmega16u2, use m16u2.
 # You need change the CPU to your own.
 & avrdude -pm32u4 -cavr109 -D -P$(ls /dev/tty.usbmodem*) -b57600 -Uflash:w:Joystick.hex
 ```
 
-## On Windows (Successed)
+## On Windows
 Follow by (Chinese): https://www.bilibili.com/read/cv4171076.
 
 # 2. Build SwitchGamepad
@@ -58,14 +59,16 @@ Wait for
 2. Build and install QtAV: https://github.com/wang-bin/QtAV.
 3. Install ffmpeg. (No need for Windows, you can use brew for macOS)
 4. Install opencv. (You can unzip and use 'opencv_win32.7z' for Windows, for macOS can install by brew)
-5. Download code.
+5. Install leptonica. (You can use brew for macOS)
+6. Install tesseract. (You can use brew for macOS)
+7. Download code.
    ```
    $ git clone https://github.com/zhengran14/SwitchGamepad.git
    ```
-6. Open project by QtCreator.
-7. Edit .pro, replace the path of ffmpeg, qtav and opencv to your own. (Replace the part of your system, Windowsor macOS)
-8. Build and run the project.
-9. If you need to run .exe or .app you build directly，please use deployqt to add dependent libraries.
+8. Open project by QtCreator.
+9. Edit .pro, replace the path of ffmpeg, qtav, opencv, leptonica and tesseract to your own. (Replace the part of your system, Windowsor macOS)
+10. Build and run the project.
+11. If you need to run .exe or .app you build directly，please use deployqt to add dependent libraries.
     > For macOS, if show
     > ```
     > $ missing libiodbc.2.dylib and libpq.5.dylib
@@ -109,7 +112,8 @@ gp.judgeCapture('C:\\xxx\\000.jpg', 110, 590);
 gp.judgeCaptureTest(pic path);
 gp.judgeCaptureTest('C:\\xxx\\000.jpg’);
 
-
 gp.capture(pic save path, x, y, width, height);
 gp.capture('C:\\xxx\\000.jpg', 110, 590, 100, 45);
+
+gp.getCaptureString();
 ```
