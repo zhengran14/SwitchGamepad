@@ -44,6 +44,18 @@ public:
      * @return 转换后的 cv::Mat 图像
     */
     static cv::Mat QImage2cvMat(QImage &image, bool clone = false, bool rb_swap = true);
+    // 均值哈希算法
+    static QString AHash(const cv::Mat& mat);
+    // 差值哈希算法
+    static QString DHash(const cv::Mat& mat);
+    // 灰度直方图算法
+    static double GrayHistogram(const cv::Mat& mat1, const cv::Mat& mat2);
+    // RGB每个通道的直方图相似度
+    static double RGBHistogram(const cv::Mat& mat1, const cv::Mat& mat2);
+    // Hash值对比
+    static int HashCompare(QString hash1, QString hash2);
+    // 图片相似度对比
+    static int SimilarImage(const cv::Mat& mat1, const cv::Mat& mat2, int method);
 
 signals:
 
