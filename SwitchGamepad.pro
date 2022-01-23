@@ -1,35 +1,42 @@
+#DEFINES += USE_QTAV
+DEFINES += TESSERACT_V5
+
 mac {
-    T_PATH_QTAV_LIB = /Users/rabbit/Documents/develop/QtAV/bin/lib_osx_x86_64_llvm
-    T_PATH_FFMPEG = /usr/local/Cellar/ffmpeg/4.4_2
+    contains(DEFINES,USE_QTAV) {
+        T_PATH_QTAV_LIB = /Users/rabbit/Documents/develop/QtAV/bin/lib_osx_x86_64_llvm
+        T_PATH_FFMPEG = /usr/local/Cellar/ffmpeg/4.4_2
 
-    LIBS += -F$${T_PATH_QTAV_LIB}
-    LIBS += -framework QtAV
-    INCLUDEPATH += $${T_PATH_QTAV_LIB}/QtAV.framework/Headers
+        LIBS += -F$${T_PATH_QTAV_LIB}
+        LIBS += -framework QtAV
+        INCLUDEPATH += $${T_PATH_QTAV_LIB}/QtAV.framework/Headers
 
-    LIBS += -L$${T_PATH_QTAV_LIB}
-    LIBS += -lcommon
+        LIBS += -L$${T_PATH_QTAV_LIB}
+        LIBS += -lcommon
 
-    INCLUDEPATH += $${T_PATH_FFMPEG}/include
-    LIBS += -L$${T_PATH_FFMPEG}/lib -lavcodec -lavfilter -lavdevice -lavutil -lswscale -lavformat -lswresample
+        INCLUDEPATH += $${T_PATH_FFMPEG}/include
+        LIBS += -L$${T_PATH_FFMPEG}/lib -lavcodec -lavfilter -lavdevice -lavutil -lswscale -lavformat -lswresample
 
-    LIBS += -framework QtAVWidgets
-    INCLUDEPATH += $${T_PATH_QTAV_LIB}/QtAVWidgets.framework/Headers
+        LIBS += -framework QtAVWidgets
+        INCLUDEPATH += $${T_PATH_QTAV_LIB}/QtAVWidgets.framework/Headers
+    }
+    else {
+    }
 
-    INCLUDEPATH += /usr/local/Cellar/opencv/4.5.3_2/include/opencv4/opencv2
-    INCLUDEPATH += /usr/local/Cellar/opencv/4.5.3_2/include/opencv4
-    INCLUDEPATH += /usr/local/Cellar/opencv/4.5.3_2/include
-    LIBS += -L/usr/local/Cellar/opencv/4.5.3_2/lib \
+    INCLUDEPATH += /usr/local/Cellar/opencv/4.5.4_3/include/opencv4/opencv2
+    INCLUDEPATH += /usr/local/Cellar/opencv/4.5.4_3/include/opencv4
+    INCLUDEPATH += /usr/local/Cellar/opencv/4.5.4_3/include
+    LIBS += -L/usr/local/Cellar/opencv/4.5.4_3/lib \
      -lopencv_core \
      -lopencv_highgui \
      -lopencv_imgproc \
      -lopencv_imgcodecs \
      -lopencv_videoio \
 
-    INCLUDEPATH += /usr/local/Cellar/tesseract/4.1.1/include
-    LIBS += -L/usr/local/Cellar/tesseract/4.1.1/lib -ltesseract
+    INCLUDEPATH += /usr/local/Cellar/tesseract/5.0.1/include
+    LIBS += -L/usr/local/Cellar/tesseract/5.0.1/lib -ltesseract
 
-    INCLUDEPATH += /usr/local/Cellar/leptonica/1.81.1/include
-    LIBS += -L/usr/local/Cellar/leptonica/1.81.1/lib -llept
+    INCLUDEPATH += /usr/local/Cellar/leptonica/1.82.0/include
+    LIBS += -L/usr/local/Cellar/leptonica/1.82.0/lib -llept
 }
 win32 {
     LIBS += C:/Qt/5.15.2/msvc2019/lib/Qt5AV.lib
@@ -49,7 +56,11 @@ win32 {
     }
 }
 
-QT       += core gui serialport script multimedia multimediawidgets av avwidgets network
+QT       += core gui serialport script multimedia multimediawidgets network
+
+contains(DEFINES,USE_QTAV) {
+    QT += av avwidgets
+}
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -78,7 +89,7 @@ SOURCES += \
     main.cpp \
     gamepad.cpp \
     minitool.cpp \
-    player.cpp \
+    qtavplayer.cpp \
     scriptengine.cpp \
     scriptengineevaluation.cpp \
     serialport.cpp \
@@ -91,7 +102,7 @@ HEADERS += \
     gamepad.h \
     gamepadbtn.h \
     minitool.h \
-    player.h \
+    qtavplayer.h \
     scriptengine.h \
     scriptengineevaluation.h \
     serialport.h \
