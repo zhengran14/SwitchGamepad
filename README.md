@@ -55,9 +55,19 @@ Follow by (Chinese): https://www.bilibili.com/read/cv4171076.
 ## Download Release
 Wait for
 ## Build yourself
+> NOTICE:
+> 
+> 1. To ensure successful multi-platform compilation, QTAV is not enabled by default (QTAV is only useful for playing live push streams in Client mode, and is not required for regular Local use or Server mode). If you need to open, please open in the .pro file:
+> ```
+> #DEFINES += USE_QTAV
+> ```
+> 2. Please check your tesseract version, and if it is not 5.0 or above, comment the .pro file with:
+> ```
+> DEFINES += TESSERACT_V5
+> ```
 1. Install Qt.
-2. Build and install QtAV: https://github.com/wang-bin/QtAV.
-3. Install ffmpeg. (No need for Windows, you can use brew for macOS)
+2. Need to build and install QtAV by yourself: https://github.com/wang-bin/QtAV (Ignore if disale QtAV).
+3. Install ffmpeg. (Ignore if disale QtAV. No need for Windows, you can use brew for macOS)
 4. Install opencv. (You can unzip and use 'opencv_win32.7z' for Windows, for macOS can install by brew)
 5. Install leptonica. (You can use brew for macOS)
 6. Install tesseract. (You can use brew for macOS)
@@ -66,7 +76,7 @@ Wait for
    $ git clone https://github.com/zhengran14/SwitchGamepad.git
    ```
 8. Open project by QtCreator.
-9. Edit .pro, replace the path of ffmpeg, qtav, opencv, leptonica and tesseract to your own. (Replace the part of your system, Windowsor macOS)
+9. Edit .pro, replace the path of ffmpeg (Ignore if disale QtAV), qtav (Ignore if disale QtAV), opencv, leptonica and tesseract to your own. (Replace the part of your system)
 10. Build and run the project.
 11. If you need to run .exe or .app you build directly，please use deployqt to add dependent libraries.
     > For macOS, if show

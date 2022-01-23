@@ -53,9 +53,19 @@ $ make
 ## 直接下载编译后的
 等待完善
 ## 自己编译
+> 注意事项：
+> 
+> 1. 为了确保多平台顺利编译，默认不开启QTAV（QTAV作用仅是Client模式下播放直播推流，常规的Local使用或者是Server模式不需要）。如需开启，请在.pro文件中打开:
+> ```
+> #DEFINES += USE_QTAV
+> ```
+> 2. 请确认自己的tesseract版本，如果非5.0以上，请注释.pro文件中的：
+> ```
+> DEFINES += TESSERACT_V5
+> ```
 1. 安装Qt。
-2. 编译并安装QtAV：https://github.com/wang-bin/QtAV。
-3. 安装ffmpeg。（Windows不需要，macOS可通过brew安装）
+2. 需要自行编译并安装QtAV：https://github.com/wang-bin/QtAV （未开启QtAV请忽略）。
+3. 安装ffmpeg。（未开启QtAV请忽略；Windows不需要，macOS可通过brew安装）
 4. 安装opencv。（Windows可以直接解压使用‘opencv_win32.7z’，macOS可通过brew安装）
 5. 安装leptonica。（macOS可通过brew安装）
 6. 安装tesseract。（macOS可通过brew安装）
@@ -64,7 +74,7 @@ $ make
    $ git clone https://github.com/zhengran14/SwitchGamepad.git
    ```
 8. 用QtCreator打开工程。
-9. 修改pro文件，将ffmpeg、qtav、opencv、leptonica、tesseract的路径修改为自己的路径。（只需要修改对应的系统就行，Windows或者是macOS）
+9. 修改pro文件，将ffmpeg（未开启QtAV请忽略）、qtav（未开启QtAV请忽略）、opencv、leptonica、tesseract的路径修改为自己的路径。（只需要修改对应的系统就行）
 10. 编译工程并运行。
 11. 如果需要直接运行编译出来的.exe或者.app，需要使用deployqt来增加运行库。
     > 在macOS下，如运行提示：
