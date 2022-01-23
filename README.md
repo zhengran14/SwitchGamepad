@@ -125,5 +125,9 @@ gp.judgeCaptureTest('C:\\xxx\\000.jpg’);
 gp.capture(pic save path, x, y, width, height);
 gp.capture('C:\\xxx\\000.jpg', 110, 590, 100, 45);
 
-gp.getCaptureString();
+gp.getCaptureString(x, y, width, height);
+gp.getCaptureString(110, 590, 100, 45);
+
+gp.compare(pic path, x, y, width, height);
+gp.compare('C:\\xxx\\000.jpg', 110, 590, 100, 45);
 ```

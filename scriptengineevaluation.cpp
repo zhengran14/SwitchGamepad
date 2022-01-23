@@ -595,7 +595,7 @@ void ScriptEngineEvaluation::mail(QString username, QString password, QString re
     clientsocket.deleteLater();
 }
 
-QString ScriptEngineEvaluation::getCaptureString(QString tessdata, int offsetX, int offsetY, int offsetWidth, int offsetHeight)
+QString ScriptEngineEvaluation::getCaptureString(int offsetX, int offsetY, int offsetWidth, int offsetHeight, QString tessdata)
 {
     QString result = "";
 
@@ -713,6 +713,49 @@ QString ScriptEngineEvaluation::getCaptureStringTest(QString imgPath, QString te
     delete [] outText;
 
     return result;
+}
+
+int ScriptEngineEvaluation::compareTest(QString imgPath1, QString imgPath2, int method)
+{
+    cv::Mat img1 = cv::imread(imgPath1.toStdString());
+    cv::Mat img2 = cv::imread(imgPath2.toStdString());
+
+    int res = Utils::SimilarImage(img1, img2, method);
+
+    img1.release();
+    img2.release();
+    return res;
+}
+
+int ScriptEngineEvaluation::compare(QString imgPath1, int offsetX, int offsetY, int offsetWidth, int offsetHeight, int method)
+{
+    int res = 0;
+
+    QEventLoop* eventLoop = new QEventLoop();
+    connect(this, &ScriptEngineEvaluation::hasCaptureCamera, eventLoop, &QEventLoop::quit);
+    emit needCaptureCamera();
+    eventLoop->exec();
+    eventLoop->deleteLater();
+    if (videoFrame != Q_NULLPTR) {
+        cv::Mat captureFrame;
+        if (offsetX < 0 || offsetY < 0 || offsetWidth <= 0 || offsetHeight <= 0) {
+            captureFrame = Utils::QImage2cvMat(*videoFrame);
+        }
+        else {
+            QImage cut = videoFrame->copy(offsetX, offsetY, offsetWidth, offsetHeight);
+            captureFrame = Utils::QImage2cvMat(cut);
+        }
+        cv::Mat captureFrame2;
+        cv::cvtColor(captureFrame, captureFrame2, cv::COLOR_BGR2RGB);
+
+        cv::Mat img1 = cv::imread(imgPath1.toStdString());
+        res = Utils::SimilarImage(img1, captureFrame2, method);
+
+        captureFrame.release();
+        captureFrame2.release();
+        img1.release();
+    }
+    return res;
 }
 
 void ScriptEngineEvaluation::messageBoxReturn(bool result)

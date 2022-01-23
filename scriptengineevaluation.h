@@ -29,9 +29,11 @@ public:
     Q_INVOKABLE void capture(QString sourcePath, QString svePath, int x = -1, int y = -1, int width = -1, int height = -1);
     Q_INVOKABLE void statusText(QString text);
     Q_INVOKABLE void mail(QString username, QString password, QString receiver, QString subject, QString content);
-    Q_INVOKABLE QString getCaptureString(QString tessdata = "chi_sim", int offsetX = -1, int offsetY = -1, int offsetWidth = -1, int offsetHeight = -1);
+    Q_INVOKABLE QString getCaptureString(int offsetX = -1, int offsetY = -1, int offsetWidth = -1, int offsetHeight = -1, QString tessdata = "chi_sim");
     Q_INVOKABLE QString getCaptureStringTest(QString tessdataPath, QString tessdata, int offsetX = -1, int offsetY = -1, int offsetWidth = -1, int offsetHeight = -1);
     Q_INVOKABLE QString getCaptureStringTest(QString imgPath, QString tessdataPath, QString tessdata, int offsetX = -1, int offsetY = -1, int offsetWidth = -1, int offsetHeight = -1);
+    Q_INVOKABLE int compareTest(QString imgPath1, QString imgPath2, int method);
+    Q_INVOKABLE int compare(QString imgPath1, int offsetX, int offsetY, int offsetWidth, int offsetHeight, int method = 1);
     void messageBoxReturn(bool result);
 
 public slots:
