@@ -55,6 +55,23 @@ win32 {
         LIBS += C:/Project/opencv/Release/lib/opencv_world420.lib
     }
 }
+unix {
+    INCLUDEPATH += /usr/include/opencv4/opencv2
+    INCLUDEPATH += /usr/include/opencv4
+    INCLUDEPATH += /usr/include
+    LIBS += -L/opt/opencv/lib \
+     -lopencv_core \
+     -lopencv_highgui \
+     -lopencv_imgproc \
+     -lopencv_imgcodecs \
+     -lopencv_videoio \
+
+    INCLUDEPATH += /usr/include/tesseract
+    LIBS += -L/usr/lib/aarch64-linux-gnu -ltesseract
+
+    INCLUDEPATH += /usr/include/leptonica
+    LIBS += -L/usr/lib/aarch64-linux-gnu -llept
+}
 
 QT       += core gui serialport script multimedia multimediawidgets network
 
