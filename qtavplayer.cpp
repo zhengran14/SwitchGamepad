@@ -1,4 +1,4 @@
-#include "player.h"
+#include "qtavplayer.h"
 #include <QWidget>
 
 Player::Player(QObject *parent)
@@ -13,6 +13,7 @@ Player::~Player()
 
 void Player::play(QString path, QLayout *layout)
 {
+#ifdef USE_QTAV
     if (videoOutput != Q_NULLPTR || avPlayer != Q_NULLPTR) {
         stop();
     }
@@ -22,10 +23,12 @@ void Player::play(QString path, QLayout *layout)
     avPlayer->setRenderer(videoOutput);
     layout->addWidget(videoOutput->widget());
     avPlayer->play(path);
+#endif
 }
 
 void Player::stop()
 {
+#ifdef USE_QTAV
     if (avPlayer != Q_NULLPTR) {
         avPlayer->stop();
         avPlayer->deleteLater();
@@ -36,10 +39,12 @@ void Player::stop()
         videoOutput->deleteLater();
         videoOutput = Q_NULLPTR;
     }
+#endif
 }
 
 void Player::pause(bool pause)
 {
+#ifdef USE_QTAV
     if (avPlayer != Q_NULLPTR) {
         if (pause) {
             avPlayer->pause();
@@ -48,6 +53,7 @@ void Player::pause(bool pause)
             avPlayer->play();
         }
     }
+#endif
 }
 
 //void Player::moveVideoOutput(QLayout *layout)
@@ -61,12 +67,14 @@ void Player::pause(bool pause)
 
 void Player::removeVideoOutput()
 {
+#ifdef USE_QTAV
     if (videoOutput != Q_NULLPTR) {
         QWidget *parent = (QWidget*)videoOutput->widget()->parent();
         if (parent != Q_NULLPTR) {
             parent->layout()->removeWidget(videoOutput->widget());
         }
     }
+#endif
 }
 
 //QtAV::VideoOutput *Player::getVideoOutput()

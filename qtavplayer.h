@@ -1,8 +1,10 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef QTAVPLAYER_H
+#define QTAVPLAYER_H
 
 #include <QObject>
+#ifdef USE_QTAV
 #include <QtAV>
+#endif
 #include <QLayout>
 
 class Player : public QObject
@@ -18,8 +20,10 @@ public:
 //    QtAV::VideoOutput *getVideoOutput();
 
 private:
+#ifdef USE_QTAV
     QtAV::VideoOutput *videoOutput = Q_NULLPTR;
     QtAV::AVPlayer *avPlayer = Q_NULLPTR;
+#endif
     void removeVideoOutput();
     QString playPath;
 
@@ -27,4 +31,4 @@ signals:
 
 };
 
-#endif // PLAYER_H
+#endif // QTAVPLAYER_H

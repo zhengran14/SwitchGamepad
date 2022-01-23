@@ -8,7 +8,7 @@
 //#include "opencv2/opencv.hpp"
 //#include "opencv2/highgui/highgui.hpp"
 //#include <utils.h>
-#include <player.h>
+#include <qtavplayer.h>
 //#include <tesseract/baseapi.h>      // tesseract提供的关于C++的接口
 //#include <tesseract/strngs.h>
 //#include <leptonica/allheaders.h>

@@ -8,7 +8,7 @@
 #include <QListWidgetItem>
 #include "videocapture.h"
 #include <minitool.h>
-#include <player.h>
+#include <qtavplayer.h>
 #include <socket.h>
 #include <utils.h>
 
