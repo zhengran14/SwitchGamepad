@@ -11,7 +11,9 @@
 #include <QTimer>
 #include <QMetaType>
 #include <tesseract/baseapi.h>
+#ifndef TESSERACT_V5
 #include <tesseract/strngs.h>
+#endif
 #include <leptonica/allheaders.h>
 #include "setting.h"
 
