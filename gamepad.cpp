@@ -27,13 +27,18 @@ Gamepad::Gamepad(QWidget *parent)
     ui->clientSwitch->setProperty("isOpen", false);
     ui->scriptRun->setProperty("isStop", false);
     on_serialPortRefresh_clicked();
-    ui->splitter->setStretchFactor(1, 2);
+    ui->splitter->setStretchFactor(0, 1);
+    ui->splitter->setStretchFactor(1, 3);
     on_scriptListRefresh_clicked();
     ui->pathEdit->setText(Setting::instance()->getScriptPath());
     ui->tessdataPathEdit->setText(Setting::instance()->getTessdataPath());
     on_videoCaptureRefresh_clicked();
 //    videoCapture.init(ui->videoCaptureFrame->layout());
-    ui->splitter_2->setStretchFactor(1, 2);
+//    ui->splitter_2->setStretchFactor(1, 2);
+//    ui->splitter_2->setStretchFactor(0, 1);
+    QList<int> list;
+    list << 100 << 600;
+    ui->splitter_2->setSizes(list);
     ui->remotePort->setValue(Setting::instance()->getRemotePort());
     ui->serverUrl->setText(Setting::instance()->getServerUrl());
     ui->serverPort->setValue(Setting::instance()->getServerPort());
@@ -356,7 +361,9 @@ void Gamepad::on_serialPortSwitch_clicked()
     }
     ui->serialPortSwitch->setText(ui->serialPortSwitch->property("isOpen").toBool() ? tr("Open") : tr("Close"));
     ui->serialPortSwitch->setProperty("isOpen", !ui->serialPortSwitch->property("isOpen").toBool());
-    ui->serialPortParamPanel->setEnabled(!ui->serialPortSwitch->property("isOpen").toBool());
+    ui->serialPortBaudRate->setEnabled(!ui->serialPortSwitch->property("isOpen").toBool());
+    ui->serialPort->setEnabled(!ui->serialPortSwitch->property("isOpen").toBool());
+    ui->serialPortRefresh->setEnabled(!ui->serialPortSwitch->property("isOpen").toBool());
 }
 
 void Gamepad::on_serialPortRefresh_clicked()
@@ -792,7 +799,11 @@ void Gamepad::on_videoCaptureSwitch_clicked()
     }
     ui->videoCaptureSwitch->setText(ui->videoCaptureSwitch->property("isOpen").toBool() ? tr("Open") : tr("Close"));
     ui->videoCaptureSwitch->setProperty("isOpen", !ui->videoCaptureSwitch->property("isOpen").toBool());
-    ui->videoCaptureParamPanel->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
+    ui->videoCaptureFrameRateRange->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
+    ui->videoCaptureList->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
+    ui->videoCapturePixelFormat->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
+    ui->videoCaptureRefresh->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
+    ui->videoCaptureResolution->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
 }
 
 void Gamepad::on_videoCaptureRefresh_clicked()
@@ -942,7 +953,7 @@ void Gamepad::on_clientSwitch_clicked()
     ui->clientSwitch->setProperty("isOpen", !ui->clientSwitch->property("isOpen").toBool());
     ui->serverGroup->setEnabled(!ui->clientSwitch->property("isOpen").toBool());
     ui->clientInfo->setEnabled(!ui->clientSwitch->property("isOpen").toBool());
-    ui->videoCaptureGroup->setEnabled(!ui->clientSwitch->property("isOpen").toBool());
+    ui->videoCapturePanel->setEnabled(!ui->clientSwitch->property("isOpen").toBool());
     if (!ui->clientSwitch->property("isOpen").toBool()) {
         ui->remoteInfo->append(tr("Close connect"));
         client.disConnectServer();
