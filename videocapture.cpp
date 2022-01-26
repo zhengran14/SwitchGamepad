@@ -128,7 +128,7 @@ QStringList VideoCapture::GetSupportedResolutions(int index, QString &defaultNam
     _camera.unload();
     _camera.deleteLater();
     if (list.empty()) {
-        list << "default_640x260" << "default_1280x720" << "default_1920x1080";
+        list << "" << "default_640x260" << "default_1280x720" << "default_1920x1080";
         defaultName = "default_1280x720";
     }
     return list;
@@ -149,7 +149,7 @@ QStringList VideoCapture::GetSupportedFrameRateRanges(int index, QString &defaul
     _camera.unload();
     _camera.deleteLater();
     if (list.empty()) {
-        list << "default_10~10" << "default_15~15" << "default_25~25" << "default_30~30" << "default_50~50" << "default_60~60";
+        list << "" << "default_10~10" << "default_15~15" << "default_25~25" << "default_30~30" << "default_50~50" << "default_60~60";
         defaultName = "default_30~30";
     }
     return list;
