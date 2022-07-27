@@ -20,6 +20,7 @@
 ScriptEngineEvaluation::ScriptEngineEvaluation(QObject *parent) : QObject(parent)
 {
     qRegisterMetaType<cv::Point>("cv::Point");
+    QJSEngine::setObjectOwnership(this, QJSEngine::CppOwnership);
     scriptEngine.globalObject().setProperty("gp", scriptEngine.newQObject(this));
 //    engine.evaluate("g_sp.open('asd', 123);");
 //    QScriptValue sriptValue = scriptEngine.newFunction(sleep);
@@ -40,6 +41,7 @@ void ScriptEngineEvaluation::evaluate(QString script)
     QJSValue result = scriptEngine.evaluate(script);
     if (scriptEngine.hasError()) {
         QJSValue error = scriptEngine.catchError();
+        // need to adapt
         int a = 0;
 //        emit hasException(tr("Uncaught exception at line ") + QString::number(line) + tr(": ") + result.toString());
     }
