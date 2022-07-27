@@ -20,7 +20,7 @@
 ScriptEngineEvaluation::ScriptEngineEvaluation(QObject *parent) : QObject(parent)
 {
     qRegisterMetaType<cv::Point>("cv::Point");
-    scriptEngine.globalObject().setProperty("gp", scriptEngine.newQObject(this, QScriptEngine::QtOwnership));
+    scriptEngine.globalObject().setProperty("gp", scriptEngine.newQObject(this));
 //    engine.evaluate("g_sp.open('asd', 123);");
 //    QScriptValue sriptValue = scriptEngine.newFunction(sleep);
 //    scriptEngine.globalObject().setProperty("myAdd", sriptValue);
@@ -37,11 +37,11 @@ void ScriptEngineEvaluation::evaluate(QString script)
     stop();
     needStop = false;
     abortscriptEngineEvaluation();
-    scriptEngine.clearExceptions();
-    QScriptValue result = scriptEngine.evaluate(script);
-    if (scriptEngine.hasUncaughtException()) {
-        int line = scriptEngine.uncaughtExceptionLineNumber();
-        emit hasException(tr("Uncaught exception at line ") + QString::number(line) + tr(": ") + result.toString());
+    QJSValue result = scriptEngine.evaluate(script);
+    if (scriptEngine.hasError()) {
+        QJSValue error = scriptEngine.catchError();
+        int a = 0;
+//        emit hasException(tr("Uncaught exception at line ") + QString::number(line) + tr(": ") + result.toString());
     }
     emit finished();
 }
@@ -767,5 +767,5 @@ void ScriptEngineEvaluation::messageBoxReturn(bool result)
 void ScriptEngineEvaluation::abortscriptEngineEvaluation()
 {
     emit sendData("RELEASE");
-    scriptEngine.abortEvaluation();
+    scriptEngine.setInterrupted(true);
 }

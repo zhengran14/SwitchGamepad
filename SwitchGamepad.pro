@@ -73,7 +73,7 @@ unix {
     LIBS += -L/usr/lib/aarch64-linux-gnu -llept
 }
 
-QT       += core gui serialport script multimedia multimediawidgets network
+QT       += core gui serialport qml multimedia multimediawidgets network
 
 contains(DEFINES,USE_QTAV) {
     QT += av avwidgets

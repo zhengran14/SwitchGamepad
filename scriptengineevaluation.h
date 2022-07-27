@@ -2,7 +2,7 @@
 #define SCRIPTENGINEEVALUATION_H
 
 #include <QObject>
-#include <QScriptEngine>
+#include <QJSEngine>
 #include "opencv2/core/types.hpp"
 
 class ScriptEngineEvaluation : public QObject
@@ -42,7 +42,7 @@ public slots:
     void cameraCaptured(QImage *videoFrame);
 
 private:
-    QScriptEngine scriptEngine;
+    QJSEngine scriptEngine;
     bool needStop = false;
     QImage *videoFrame = Q_NULLPTR;
     bool messageBoxResult = false;
