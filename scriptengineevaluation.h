@@ -9,6 +9,7 @@ class ScriptEngineEvaluation : public QObject
 {
     Q_OBJECT
 public:
+//    Q_INVOKABLE ScriptEngineEvaluation(QObject *parent = nullptr);
     explicit ScriptEngineEvaluation(QObject *parent = nullptr);
     ~ScriptEngineEvaluation();
     Q_INVOKABLE void sleep(float sec);

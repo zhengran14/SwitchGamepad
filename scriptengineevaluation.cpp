@@ -21,6 +21,8 @@ ScriptEngineEvaluation::ScriptEngineEvaluation(QObject *parent) : QObject(parent
 {
     qRegisterMetaType<cv::Point>("cv::Point");
     QJSEngine::setObjectOwnership(this, QJSEngine::CppOwnership);
+//    QJSValue jsMetaObject = scriptEngine.newQMetaObject(&ScriptEngineEvaluation::staticMetaObject);
+//    scriptEngine.globalObject().setProperty("gp", jsMetaObject);
     scriptEngine.globalObject().setProperty("gp", scriptEngine.newQObject(this));
 //    engine.evaluate("g_sp.open('asd', 123);");
 //    QScriptValue sriptValue = scriptEngine.newFunction(sleep);
@@ -37,13 +39,10 @@ void ScriptEngineEvaluation::evaluate(QString script)
 {
     stop();
     needStop = false;
-    abortscriptEngineEvaluation();
+    scriptEngine.setInterrupted(false);
     QJSValue result = scriptEngine.evaluate(script);
-    if (scriptEngine.hasError()) {
-        QJSValue error = scriptEngine.catchError();
-        // need to adapt
-        int a = 0;
-//        emit hasException(tr("Uncaught exception at line ") + QString::number(line) + tr(": ") + result.toString());
+    if (result.isError()) {
+        emit hasException(tr("Uncaught exception at line ") + QString::number(result.property("lineNumber").toInt()) + tr(": ") + result.toString());
     }
     emit finished();
 }
@@ -51,6 +50,7 @@ void ScriptEngineEvaluation::evaluate(QString script)
 void ScriptEngineEvaluation::stop()
 {
     needStop = true;
+    abortscriptEngineEvaluation();
 }
 
 void ScriptEngineEvaluation::cameraCaptured(QImage *videoFrame)
