@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include <QCamera>
-#include <QCameraViewfinder>
-#include <QCameraImageCapture>
+#include <QVideoWidget>
+#include <QImageCapture>
 
 class VideoCapture : public QObject
 {
@@ -12,44 +12,38 @@ class VideoCapture : public QObject
 public:
     enum PixelFormat
     {
-        Format_Invalid,
-        Format_ARGB32,
-        Format_ARGB32_Premultiplied,
-        Format_RGB32,
-        Format_RGB24,
-        Format_RGB565,
-        Format_RGB555,
-        Format_ARGB8565_Premultiplied,
-        Format_BGRA32,
-        Format_BGRA32_Premultiplied,
-        Format_BGR32,
-        Format_BGR24,
-        Format_BGR565,
-        Format_BGR555,
-        Format_BGRA5658_Premultiplied,
-
-        Format_AYUV444,
-        Format_AYUV444_Premultiplied,
-        Format_YUV444,
-        Format_YUV420P,
-        Format_YV12,
-        Format_UYVY,
-        Format_YUYV,
-        Format_NV12,
-        Format_NV21,
-        Format_IMC1,
-        Format_IMC2,
-        Format_IMC3,
-        Format_IMC4,
-        Format_Y8,
-        Format_Y16,
-
-        Format_Jpeg,
-
-        Format_CameraRaw,
-        Format_AdobeDng,
-        Format_ABGR32, // ### Qt 6: reorder
-        Format_YUV422P,
+        Format_Invalid = 0,
+        Format_ARGB8888 = 1,
+        Format_ARGB8888_Premultiplied = 2,
+        Format_XRGB8888 = 3,
+        Format_BGRA8888 = 4,
+        Format_BGRA8888_Premultiplied = 5,
+        Format_ABGR8888 = 7,
+        Format_XBGR8888 = 8,
+        Format_RGBA8888 = 9,
+        Format_BGRX8888 = 6,
+        Format_RGBX8888 = 10,
+        Format_AYUV = 11,
+        Format_AYUV_Premultiplied = 12,
+        Format_YUV420P = 13,
+        Format_YUV422P = 14,
+        Format_YV12 = 15,
+        Format_UYVY = 16,
+        Format_YUYV = 17,
+        Format_NV12 = 18,
+        Format_NV21 = 19,
+        Format_IMC1 = 20,
+        Format_IMC2 = 21,
+        Format_IMC3 = 22,
+        Format_IMC4 = 23,
+        Format_P010 = 26,
+        Format_P016 = 27,
+        Format_Y8 = 24,
+        Format_Y16 = 25,
+        Format_Jpeg = 29,
+        Format_SamplerExternalOES = 28,
+        Format_SamplerRect = 30,
+        Format_YUV420P10 = 31,
 
 #ifndef Q_QDOC
         NPixelFormats,
@@ -68,7 +62,7 @@ public:
     QStringList GetSupportedPixelFormats(int index, QString &defaultName, QString defaultSearch = "");
     void moveViewfinder(QLayout *layout);
     void removeViewfinder();
-    QCameraViewfinder* getViewfinder();
+    QVideoWidget* getViewfinder();
     QImage *capture();
 
 private slots:
@@ -76,9 +70,10 @@ private slots:
 
 private:
     QCamera *camera = Q_NULLPTR;
-    QCameraImageCapture *cameraImageCapture = Q_NULLPTR;
-    QCameraViewfinder viewfinder;
-    QList<QCameraInfo> cameraList;
+    QMediaCaptureSession *mediaCaptureSession = Q_NULLPTR;
+    QImageCapture *imageCapture = Q_NULLPTR;
+    QVideoWidget viewfinder;
+    QList<QCameraDevice> cameraList;
     QMetaEnum metaEnum;
     QImage *videoFrame = Q_NULLPTR;
 
