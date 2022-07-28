@@ -8,15 +8,18 @@
 
 VideoCapture::VideoCapture(QObject *parent)
     : QObject(parent)
-    , viewfinder()
 {
     metaEnum = QMetaEnum::fromType<PixelFormat>();
+//    viewfinder = new QVideoWidget();
 }
 
 VideoCapture::~VideoCapture()
 {
     close();
-    viewfinder.deleteLater();
+    if (viewfinder != Q_NULLPTR) {
+        viewfinder->deleteLater();
+        viewfinder = Q_NULLPTR;
+    }
 }
 
 //void VideoCapture::init(QLayout *layout)
@@ -35,7 +38,7 @@ void VideoCapture::open(int index, QString resolution, QString frameRateRange, Q
     mediaCaptureSession = new QMediaCaptureSession(this->parent());
     mediaCaptureSession->setCamera(camera);
     //设置取景器
-    mediaCaptureSession->setVideoOutput(&viewfinder);
+    mediaCaptureSession->setVideoOutput(viewfinder);
     //设置截图
     imageCapture = new QImageCapture(this->parent());
     mediaCaptureSession->setImageCapture(imageCapture);
@@ -89,6 +92,16 @@ void VideoCapture::close()
     if (imageCapture != Q_NULLPTR) {
         imageCapture->deleteLater();
         imageCapture = Q_NULLPTR;
+    }
+    QWidget *viewfinderParent = Q_NULLPTR;
+    if (viewfinder != Q_NULLPTR) {
+        viewfinderParent = (QWidget*)viewfinder->parent();
+        removeViewfinder();
+        viewfinder->deleteLater();
+    }
+    viewfinder = new QVideoWidget();
+    if (viewfinderParent != Q_NULLPTR) {
+        moveViewfinder(viewfinderParent->layout());
     }
     if (mediaCaptureSession != Q_NULLPTR) {
         mediaCaptureSession->deleteLater();
@@ -167,20 +180,24 @@ QStringList VideoCapture::GetSupportedPixelFormats(int index, QString &defaultNa
 void VideoCapture::moveViewfinder(QLayout *layout)
 {
     removeViewfinder();
-    layout->addWidget(&viewfinder);
+    if (viewfinder != Q_NULLPTR) {
+        layout->addWidget(viewfinder);
+    }
 }
 
 void VideoCapture::removeViewfinder()
 {
-    QWidget *parent = (QWidget*)viewfinder.parent();
-    if (parent != Q_NULLPTR) {
-        parent->layout()->removeWidget(&viewfinder);
+    if (viewfinder != Q_NULLPTR) {
+        QWidget *parent = (QWidget*)viewfinder->parent();
+        if (parent != Q_NULLPTR) {
+            parent->layout()->removeWidget(viewfinder);
+        }
     }
 }
 
-QVideoWidget *VideoCapture::getViewfinder()
+const QVideoWidget *VideoCapture::getViewfinder()
 {
-    return &viewfinder;
+    return viewfinder;
 }
 
 QImage *VideoCapture::capture()

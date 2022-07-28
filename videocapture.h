@@ -62,7 +62,7 @@ public:
     QStringList GetSupportedPixelFormats(int index, QString &defaultName, QString defaultSearch = "");
     void moveViewfinder(QLayout *layout);
     void removeViewfinder();
-    QVideoWidget* getViewfinder();
+    const QVideoWidget* getViewfinder();
     QImage *capture();
 
 private slots:
@@ -72,7 +72,7 @@ private:
     QCamera *camera = Q_NULLPTR;
     QMediaCaptureSession *mediaCaptureSession = Q_NULLPTR;
     QImageCapture *imageCapture = Q_NULLPTR;
-    QVideoWidget viewfinder;
+    QVideoWidget *viewfinder = Q_NULLPTR;
     QList<QCameraDevice> cameraList;
     QMetaEnum metaEnum;
     QImage *videoFrame = Q_NULLPTR;
