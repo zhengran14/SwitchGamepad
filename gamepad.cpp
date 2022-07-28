@@ -807,13 +807,14 @@ void Gamepad::on_videoCaptureRefresh_clicked()
     ui->videoCaptureList->setCurrentText("");
     ui->videoCaptureList->clear();
     QString defaultName = "";
-    ui->videoCaptureList->addItems(videoCapture.refresh("USB Video", defaultName));
+    ui->videoCaptureList->addItems(videoCapture.refreshCamera("USB Video", defaultName));
     if (!defaultName.isEmpty()) {
         ui->videoCaptureList->setCurrentText(defaultName);
     }
     if (ui->videoCaptureList->count() > 0 && ui->videoCaptureList->currentIndex() >= 0) {
         on_videoCaptureList_activated(ui->videoCaptureList->currentIndex());
     }
+    videoCapture.refreshAudio("USB Video", defaultName);
 }
 
 void Gamepad::on_videoCaptureList_activated(int index)

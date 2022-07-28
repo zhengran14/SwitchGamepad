@@ -5,6 +5,9 @@
 #include <QCamera>
 #include <QVideoWidget>
 #include <QImageCapture>
+#include <QAudioDevice>
+#include <QAudioInput>
+#include <QAudioOutput>
 
 class VideoCapture : public QObject
 {
@@ -12,43 +15,40 @@ class VideoCapture : public QObject
 public:
     enum PixelFormat
     {
-        Format_Invalid = 0,
-        Format_ARGB8888 = 1,
-        Format_ARGB8888_Premultiplied = 2,
-        Format_XRGB8888 = 3,
-        Format_BGRA8888 = 4,
-        Format_BGRA8888_Premultiplied = 5,
-        Format_ABGR8888 = 7,
-        Format_XBGR8888 = 8,
-        Format_RGBA8888 = 9,
-        Format_BGRX8888 = 6,
-        Format_RGBX8888 = 10,
-        Format_AYUV = 11,
-        Format_AYUV_Premultiplied = 12,
-        Format_YUV420P = 13,
-        Format_YUV422P = 14,
-        Format_YV12 = 15,
-        Format_UYVY = 16,
-        Format_YUYV = 17,
-        Format_NV12 = 18,
-        Format_NV21 = 19,
-        Format_IMC1 = 20,
-        Format_IMC2 = 21,
-        Format_IMC3 = 22,
-        Format_IMC4 = 23,
-        Format_P010 = 26,
-        Format_P016 = 27,
-        Format_Y8 = 24,
-        Format_Y16 = 25,
-        Format_Jpeg = 29,
-        Format_SamplerExternalOES = 28,
-        Format_SamplerRect = 30,
-        Format_YUV420P10 = 31,
+        Format_Invalid,
+        Format_ARGB8888,
+        Format_ARGB8888_Premultiplied,
+        Format_XRGB8888,
+        Format_BGRA8888,
+        Format_BGRA8888_Premultiplied,
+        Format_BGRX8888,
+        Format_ABGR8888,
+        Format_XBGR8888,
+        Format_RGBA8888,
+        Format_RGBX8888,
 
-#ifndef Q_QDOC
-        NPixelFormats,
-#endif
-        Format_User = 1000
+        Format_AYUV,
+        Format_AYUV_Premultiplied,
+        Format_YUV420P,
+        Format_YUV422P,
+        Format_YV12,
+        Format_UYVY,
+        Format_YUYV,
+        Format_NV12,
+        Format_NV21,
+        Format_IMC1,
+        Format_IMC2,
+        Format_IMC3,
+        Format_IMC4,
+        Format_Y8,
+        Format_Y16,
+
+        Format_P010,
+        Format_P016,
+
+        Format_SamplerExternalOES,
+        Format_Jpeg,
+        Format_SamplerRect,
     };
     Q_ENUM(PixelFormat)
     explicit VideoCapture(QObject *parent);
@@ -56,8 +56,10 @@ public:
 //    void init(QLayout *layout);
     void open(int index, int cameraFormateIndex);
     void close();
-    QStringList refresh(QString defaultSearch, QString &defaultName);
+    QStringList refreshCamera(QString defaultSearch, QString &defaultName);
+    QStringList refreshAudioInput(QString defaultSearch, QString &defaultName);
     QStringList GetCameraFormats(int index, int &defaultIndex, const QStringList &defaultSearch);
+    QStringList GetAudioInputFormats(int index, int &defaultIndex, const QStringList &defaultSearch);
     void moveViewfinder(QLayout *layout);
     void removeViewfinder();
     const QVideoWidget* getViewfinder();
@@ -68,10 +70,13 @@ private slots:
 
 private:
     QCamera *camera = Q_NULLPTR;
+    QAudioInput *audioInput = Q_NULLPTR;
+    QAudioOutput *audioOutput = Q_NULLPTR;
     QMediaCaptureSession *mediaCaptureSession = Q_NULLPTR;
     QImageCapture *imageCapture = Q_NULLPTR;
     QVideoWidget *viewfinder = Q_NULLPTR;
     QList<QCameraDevice> cameraList;
+    QList<QAudioDevice> audioInputList;
     QMetaEnum metaEnum;
     QImage *videoFrame = Q_NULLPTR;
 

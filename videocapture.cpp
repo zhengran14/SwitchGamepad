@@ -34,13 +34,17 @@ void VideoCapture::open(int index, int cameraFormateIndex)
     if (cameraList.count() <= 0 || index < 0 || index >= cameraList.count()) {
         return;
     }
-    camera = new QCamera(cameraList[index], this->parent());  //分配内存空间
+    camera = new QCamera(cameraList[index], this->parent());
+    audioInput = new QAudioInput(audioInputList[0], this->parent());
+    audioOutput = new QAudioOutput(QMediaDevices::defaultAudioOutput(), this->parent());
     QList<QCameraFormat> cameraFormats = cameraList[index].videoFormats();
     if (cameraFormats.length() > 0 && cameraFormateIndex >= 0 && cameraFormateIndex < cameraFormats.length()) {
         camera->setCameraFormat(cameraFormats[cameraFormateIndex]);
     }
     mediaCaptureSession = new QMediaCaptureSession(this->parent());
     mediaCaptureSession->setCamera(camera);
+    mediaCaptureSession->setAudioInput(audioInput);
+    mediaCaptureSession->setAudioOutput(audioOutput);
     //设置取景器
     mediaCaptureSession->setVideoOutput(viewfinder);
     //设置截图
@@ -53,7 +57,7 @@ void VideoCapture::open(int index, int cameraFormateIndex)
         qDebug() << errorString;
     });
 
-    //开启相机
+    //开启
     camera->start();
 }
 
@@ -63,6 +67,14 @@ void VideoCapture::close()
         camera->stop();
         camera->deleteLater();
         camera = Q_NULLPTR;
+    }
+    if (audioInput != Q_NULLPTR) {
+        audioInput->deleteLater();
+        audioInput = Q_NULLPTR;
+    }
+    if (audioOutput != Q_NULLPTR) {
+        audioOutput->deleteLater();
+        audioOutput = Q_NULLPTR;
     }
     if (imageCapture != Q_NULLPTR) {
         imageCapture->deleteLater();
@@ -84,7 +96,7 @@ void VideoCapture::close()
     }
 }
 
-QStringList VideoCapture::refresh(QString defaultSearch, QString &defaultName)
+QStringList VideoCapture::refreshCamera(QString defaultSearch, QString &defaultName)
 {
     defaultName = "";
     cameraList.clear();
@@ -97,6 +109,21 @@ QStringList VideoCapture::refresh(QString defaultSearch, QString &defaultName)
         cameraDes << cameraInfo.description();
     }
     return cameraDes;
+}
+
+QStringList VideoCapture::refreshAudioInput(QString defaultSearch, QString &defaultName)
+{
+    defaultName = "";
+    audioInputList.clear();
+    audioInputList = QMediaDevices::audioInputs();
+    QStringList audioInputDes;
+    for (const QAudioDevice &audioInfo : audioInputList) {
+        if (defaultName.isEmpty() && audioInfo.description().contains(defaultSearch)) {
+            defaultName = audioInfo.description();
+        }
+        audioInputDes << audioInfo.description();
+    }
+    return audioInputDes;
 }
 
 QStringList VideoCapture::GetCameraFormats(int index, int &defaultIndex, const QStringList &defaultSearch)
@@ -124,6 +151,10 @@ QStringList VideoCapture::GetCameraFormats(int index, int &defaultIndex, const Q
         }
     }
     return list;
+}
+
+QStringList VideoCapture::GetAudioInputFormats(int index, int &defaultIndex, const QStringList &defaultSearch)
+{
 }
 
 void VideoCapture::moveViewfinder(QLayout *layout)
