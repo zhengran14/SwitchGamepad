@@ -11,7 +11,11 @@ Player::~Player()
     stop();
 }
 
+#ifdef USE_QTAV
 void Player::play(QString path, QLayout *layout)
+#else
+void Player::play(QString, QLayout *)
+#endif
 {
 #ifdef USE_QTAV
     if (videoOutput != Q_NULLPTR || avPlayer != Q_NULLPTR) {
@@ -42,7 +46,11 @@ void Player::stop()
 #endif
 }
 
+#ifdef USE_QTAV
 void Player::pause(bool pause)
+#else
+void Player::pause(bool)
+#endif
 {
 #ifdef USE_QTAV
     if (avPlayer != Q_NULLPTR) {

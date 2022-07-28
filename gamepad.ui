@@ -55,7 +55,7 @@
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>3</number>
           </property>
           <widget class="QWidget" name="tab">
            <attribute name="title">
@@ -1183,7 +1183,7 @@
                     <widget class="QListWidget" name="scriptList"/>
                    </item>
                    <item>
-                    <widget class="QWidget" name="widget" native="true">
+                    <widget class="QWidget" name="widget_3" native="true">
                      <layout class="QHBoxLayout" name="horizontalLayout_7">
                       <property name="spacing">
                        <number>-1</number>
@@ -1248,7 +1248,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QWidget" name="widget" native="true">
+                    <widget class="QWidget" name="widget_4" native="true">
                      <layout class="QHBoxLayout" name="horizontalLayout_5">
                       <property name="leftMargin">
                        <number>0</number>
@@ -1454,7 +1454,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QWidget" name="widget" native="true">
+                <widget class="QWidget" name="widget_5" native="true">
                  <layout class="QHBoxLayout" name="horizontalLayout_14">
                   <property name="leftMargin">
                    <number>0</number>

@@ -75,7 +75,7 @@ Gamepad::Gamepad(QWidget *parent)
         ui->status->setText(text);
     });
     connect(&scriptEngine, &ScriptEngine::needCaptureCamera, this, &Gamepad::captureCamera);
-    connect(&scriptEngine, &ScriptEngine::cvShow, this, [this](QString sourcePath, QString templatePath, cv::Point point) {
+    connect(&scriptEngine, &ScriptEngine::cvShow, this, [/*this*/](QString sourcePath, QString templatePath, cv::Point point) {
         QImage img1(sourcePath);
         QImage img2(templatePath);
         cv::Mat captureFrame = Utils::QImage2cvMat(img1);
@@ -399,7 +399,7 @@ void Gamepad::on_scriptList_itemClicked(QListWidgetItem *item)
         QMessageBox saveMessageBox(QMessageBox::Warning, tr("Warning"),
                                    tr("Do you want to save the changes you made to \"") + previousScriptListItem->text() + tr("\"?"),
                                    QMessageBox::No | QMessageBox::Save | QMessageBox::Cancel, this);
-        saveMessageBox.setButtonText(QMessageBox::No, tr("Don't Save"));
+        saveMessageBox.addButton(tr("Don't Save"), QMessageBox::NoRole);
         int ret = saveMessageBox.exec();
         if (ret == QMessageBox::Cancel) {
             ui->scriptList->blockSignals(true);
@@ -446,7 +446,7 @@ void Gamepad::on_scriptRefresh_clicked()
         QMessageBox saveMessageBox(QMessageBox::Warning, tr("Warning"),
                                    tr("Do you want to save the changes you made to \"") + ui->scriptList->currentItem()->text() + tr("\"?"),
                                    QMessageBox::No | QMessageBox::Save | QMessageBox::Cancel, this);
-        saveMessageBox.setButtonText(QMessageBox::No, tr("Don't Save"));
+        saveMessageBox.addButton(tr("Don't Save"), QMessageBox::NoRole);
         int ret = saveMessageBox.exec();
         if (ret == QMessageBox::Cancel) {
             return;
@@ -470,7 +470,7 @@ void Gamepad::on_scriptListRefresh_clicked()
         QMessageBox saveMessageBox(QMessageBox::Warning, tr("Warning"),
                                    tr("Do you want to save the changes you made to \"") + ui->scriptList->currentItem()->text() + tr("\"?"),
                                    QMessageBox::No | QMessageBox::Save | QMessageBox::Cancel, this);
-        saveMessageBox.setButtonText(QMessageBox::No, tr("Don't Save"));
+        saveMessageBox.addButton(tr("Don't Save"), QMessageBox::NoRole);
         int ret = saveMessageBox.exec();
         if (ret == QMessageBox::Cancel) {
             return;
@@ -512,7 +512,7 @@ void Gamepad::on_scriptRemove_clicked()
         QMessageBox saveMessageBox(QMessageBox::Warning, tr("Warning"),
                                    tr("Do you want to save the changes you made to \"") + ui->scriptList->currentItem()->text() + tr("\"?"),
                                    QMessageBox::No | QMessageBox::Save | QMessageBox::Cancel, this);
-        saveMessageBox.setButtonText(QMessageBox::No, tr("Don't Save"));
+        saveMessageBox.addButton(tr("Don't Save"), QMessageBox::NoRole);
         int ret = saveMessageBox.exec();
         if (ret == QMessageBox::Cancel) {
             return;
@@ -537,7 +537,7 @@ void Gamepad::on_scriptAdd_clicked()
         QMessageBox saveMessageBox(QMessageBox::Warning, tr("Warning"),
                                    tr("Do you want to save the changes you made to \"") + ui->scriptList->currentItem()->text() + tr("\"?"),
                                    QMessageBox::No | QMessageBox::Save | QMessageBox::Cancel, this);
-        saveMessageBox.setButtonText(QMessageBox::No, tr("Don't Save"));
+        saveMessageBox.addButton(tr("Don't Save"), QMessageBox::NoRole);
         int ret = saveMessageBox.exec();
         if (ret == QMessageBox::Cancel) {
             return;

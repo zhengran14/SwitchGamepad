@@ -226,7 +226,7 @@ void Client::disconnected()
     emit closeConnect("");
 }
 
-void Client::errorOccurred(QAbstractSocket::SocketError socketError)
+void Client::errorOccurred(QAbstractSocket::SocketError /*socketError*/)
 {
     this->disConnectServer();
     this->isConnected = false;

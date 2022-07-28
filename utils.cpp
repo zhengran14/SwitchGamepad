@@ -2,7 +2,6 @@
 #include <QDebug>
 #include "opencv2/imgproc/types_c.h"
 #include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/opencv.hpp"
 
 Utils::Utils(QObject *parent) : QObject(parent)
 {
@@ -75,6 +74,8 @@ cv::Mat Utils::QImage2cvMat(QImage &image, bool clone, bool rb_swap)
     case QImage::Format_Grayscale8:
         mat = cv::Mat(image.height(), image.width(), CV_8UC1, (void *)image.bits(), image.bytesPerLine());
         if(clone)  mat = mat.clone();
+        break;
+    default:
         break;
     }
     return mat;
@@ -184,7 +185,7 @@ double Utils::RGBHistogram(const cv::Mat& mat1, const cv::Mat& mat2)
     std::vector<cv::Mat> sub_image2(3);
     cv::split(image2, sub_image2);
     double sub_data = 0.0;
-    for (int i = 0; i < sub_image1.size(); i++) {
+    for (unsigned long i = 0; i < sub_image1.size(); i++) {
         sub_data += GrayHistogram(sub_image1[i], sub_image2[i]);
         sub_image1[i].release();
         sub_image2[i].release();
