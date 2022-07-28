@@ -792,18 +792,14 @@ void Gamepad::on_videoCaptureSwitch_clicked()
 //        }
         on_miniToolShow_clicked(!ui->miniToolShow->isChecked());
         videoCapture.open(ui->videoCaptureList->currentIndex(),
-                          ui->videoCaptureResolution->currentText(),
-                          ui->videoCaptureFrameRateRange->currentText(),
-                          ui->videoCapturePixelFormat->currentText());
+                          ui->videoCaptureCameraFormat->currentIndex());
         on_miniToolShow_clicked(ui->miniToolShow->isChecked());
     }
     ui->videoCaptureSwitch->setText(ui->videoCaptureSwitch->property("isOpen").toBool() ? tr("Open") : tr("Close"));
     ui->videoCaptureSwitch->setProperty("isOpen", !ui->videoCaptureSwitch->property("isOpen").toBool());
-    ui->videoCaptureFrameRateRange->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
+    ui->videoCaptureCameraFormat->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
     ui->videoCaptureList->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
-    ui->videoCapturePixelFormat->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
     ui->videoCaptureRefresh->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
-    ui->videoCaptureResolution->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
 }
 
 void Gamepad::on_videoCaptureRefresh_clicked()
@@ -822,37 +818,17 @@ void Gamepad::on_videoCaptureRefresh_clicked()
 
 void Gamepad::on_videoCaptureList_activated(int index)
 {
-    ui->videoCaptureFrameRateRange->setCurrentText("");
-    ui->videoCaptureFrameRateRange->clear();
-    QString defaultName = "";
-    ui->videoCaptureFrameRateRange->addItems(videoCapture.GetSupportedFrameRateRanges(index, defaultName, "30"));
-    if (!defaultName.isEmpty()) {
-        ui->videoCaptureFrameRateRange->setCurrentText(defaultName);
+    ui->videoCaptureCameraFormat->setCurrentText("");
+    ui->videoCaptureCameraFormat->clear();
+    int defaultIndex = -1;
+    QStringList defaultSearch;
+    defaultSearch << "1280x720" << "30";
+    ui->videoCaptureCameraFormat->addItems(videoCapture.GetCameraFormats(index, defaultIndex, defaultSearch));
+    if (defaultIndex >= 0) {
+        ui->videoCaptureCameraFormat->setCurrentIndex(defaultIndex);
     }
-    else if (ui->videoCaptureFrameRateRange->count() > 0) {
-        ui->videoCaptureFrameRateRange->setCurrentIndex(ui->videoCaptureFrameRateRange->count() - 1);
-    }
-
-    ui->videoCapturePixelFormat->setCurrentText("");
-    ui->videoCapturePixelFormat->clear();
-    defaultName = "";
-    ui->videoCapturePixelFormat->addItems(videoCapture.GetSupportedPixelFormats(index, defaultName));
-    if (!defaultName.isEmpty()) {
-        ui->videoCapturePixelFormat->setCurrentText(defaultName);
-    }
-    else if (ui->videoCapturePixelFormat->count() > 0) {
-        ui->videoCapturePixelFormat->setCurrentIndex(ui->videoCapturePixelFormat->count() - 1);
-    }
-
-    ui->videoCaptureResolution->setCurrentText("");
-    ui->videoCaptureResolution->clear();
-    defaultName = "";
-    ui->videoCaptureResolution->addItems(videoCapture.GetSupportedResolutions(index, defaultName, "1280x720"));
-    if (!defaultName.isEmpty()) {
-        ui->videoCaptureResolution->setCurrentText(defaultName);
-    }
-    else if (ui->videoCaptureResolution->count() > 0) {
-        ui->videoCaptureResolution->setCurrentIndex(ui->videoCaptureResolution->count() - 1);
+    else if (ui->videoCaptureCameraFormat->count() > 0) {
+        ui->videoCaptureCameraFormat->setCurrentIndex(ui->videoCaptureCameraFormat->count() - 1);
     }
 }
 

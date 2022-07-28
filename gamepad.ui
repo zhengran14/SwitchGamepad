@@ -208,13 +208,7 @@
                    <widget class="QComboBox" name="videoCaptureList"/>
                   </item>
                   <item>
-                   <widget class="QComboBox" name="videoCaptureResolution"/>
-                  </item>
-                  <item>
-                   <widget class="QComboBox" name="videoCaptureFrameRateRange"/>
-                  </item>
-                  <item>
-                   <widget class="QComboBox" name="videoCapturePixelFormat"/>
+                   <widget class="QComboBox" name="videoCaptureCameraFormat"/>
                   </item>
                   <item>
                    <widget class="QPushButton" name="videoCaptureRefresh">

@@ -54,12 +54,10 @@ public:
     explicit VideoCapture(QObject *parent);
     ~VideoCapture();
 //    void init(QLayout *layout);
-    void open(int index, QString resolution, QString frameRateRange, QString pixelFormat);
+    void open(int index, int cameraFormateIndex);
     void close();
     QStringList refresh(QString defaultSearch, QString &defaultName);
-    QStringList GetSupportedResolutions(int index, QString &defaultName, QString defaultSearch = "");
-    QStringList GetSupportedFrameRateRanges(int index, QString &defaultName, QString defaultSearch = "");
-    QStringList GetSupportedPixelFormats(int index, QString &defaultName, QString defaultSearch = "");
+    QStringList GetCameraFormats(int index, int &defaultIndex, const QStringList &defaultSearch);
     void moveViewfinder(QLayout *layout);
     void removeViewfinder();
     const QVideoWidget* getViewfinder();
