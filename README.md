@@ -65,7 +65,7 @@ Wait for
 > ```
 > DEFINES += TESSERACT_V5
 > ```
-1. Install Qt.
+1. Install Qt6.
 2. Need to build and install QtAV by yourself: https://github.com/wang-bin/QtAV (Ignore if disale QtAV).
 3. Install ffmpeg. (Ignore if disale QtAV. No need for Windows, you can use brew for macOS)
 4. Install opencv. (You can unzip and use 'opencv_win32.7z' for Windows, for macOS can install by brew)

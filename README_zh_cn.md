@@ -63,7 +63,7 @@ $ make
 > ```
 > DEFINES += TESSERACT_V5
 > ```
-1. 安装Qt。
+1. 安装Qt6。
 2. 需要自行编译并安装QtAV：https://github.com/wang-bin/QtAV （未开启QtAV请忽略）。
 3. 安装ffmpeg。（未开启QtAV请忽略；Windows不需要，macOS可通过brew安装）
 4. 安装opencv。（Windows可以直接解压使用‘opencv_win32.7z’，macOS可通过brew安装）
