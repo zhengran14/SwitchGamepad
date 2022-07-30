@@ -792,7 +792,10 @@ void Gamepad::on_videoCaptureSwitch_clicked()
 //        }
         on_miniToolShow_clicked(!ui->miniToolShow->isChecked());
         videoCapture.open(ui->videoCaptureList->currentIndex(),
-                          ui->videoCaptureCameraFormat->currentIndex());
+                          ui->videoCaptureCameraFormat->currentIndex(),
+                          ui->audioCaptureList->currentIndex());
+        videoCapture.setAudioInputVolume(ui->audioCaptureVolume->value());
+        videoCapture.setAudioInputMute(ui->audioCaptureMute->isChecked());
         on_miniToolShow_clicked(ui->miniToolShow->isChecked());
     }
     ui->videoCaptureSwitch->setText(ui->videoCaptureSwitch->property("isOpen").toBool() ? tr("Open") : tr("Close"));
@@ -800,6 +803,8 @@ void Gamepad::on_videoCaptureSwitch_clicked()
     ui->videoCaptureCameraFormat->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
     ui->videoCaptureList->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
     ui->videoCaptureRefresh->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
+    ui->audioCaptureList->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
+    ui->audioCaptureRefresh->setEnabled(!ui->videoCaptureSwitch->property("isOpen").toBool());
 }
 
 void Gamepad::on_videoCaptureRefresh_clicked()
@@ -814,7 +819,14 @@ void Gamepad::on_videoCaptureRefresh_clicked()
     if (ui->videoCaptureList->count() > 0 && ui->videoCaptureList->currentIndex() >= 0) {
         on_videoCaptureList_activated(ui->videoCaptureList->currentIndex());
     }
-    videoCapture.refreshAudio("USB Video", defaultName);
+
+    ui->audioCaptureList->setCurrentText("");
+    ui->audioCaptureList->clear();
+    defaultName = "";
+    ui->audioCaptureList->addItems(videoCapture.refreshAudioInput("USB Digital Audio", defaultName));
+    if (!defaultName.isEmpty()) {
+        ui->audioCaptureList->setCurrentText(defaultName);
+    }
 }
 
 void Gamepad::on_videoCaptureList_activated(int index)
@@ -1023,3 +1035,16 @@ void Gamepad::on_hideVideoCapture_clicked(bool checked)
     ui->videoCaptureFrame->setVisible(!checked);
     miniTool.GetVideoCaptionFrameLayout()->parentWidget()->setVisible(!checked);
 }
+
+
+void Gamepad::on_audioCaptureVolume_valueChanged(int value)
+{
+    videoCapture.setAudioInputVolume(value);
+}
+
+
+void Gamepad::on_audioCaptureMute_clicked(bool checked)
+{
+    videoCapture.setAudioInputMute(checked);
+}
+

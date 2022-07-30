@@ -54,16 +54,17 @@ public:
     explicit VideoCapture(QObject *parent);
     ~VideoCapture();
 //    void init(QLayout *layout);
-    void open(int index, int cameraFormateIndex);
+    void open(int videoIndex, int cameraFormateIndex, int audioInputIndex);
     void close();
     QStringList refreshCamera(QString defaultSearch, QString &defaultName);
     QStringList refreshAudioInput(QString defaultSearch, QString &defaultName);
     QStringList GetCameraFormats(int index, int &defaultIndex, const QStringList &defaultSearch);
-    QStringList GetAudioInputFormats(int index, int &defaultIndex, const QStringList &defaultSearch);
     void moveViewfinder(QLayout *layout);
     void removeViewfinder();
     const QVideoWidget* getViewfinder();
     QImage *capture();
+    void setAudioInputVolume(int volume);
+    void setAudioInputMute(bool mute);
 
 private slots:
     void imageAvailable(int id, const QVideoFrame &frame);
@@ -79,6 +80,8 @@ private:
     QList<QAudioDevice> audioInputList;
     QMetaEnum metaEnum;
     QImage *videoFrame = Q_NULLPTR;
+    int audioInputVolume = 100;
+    bool audioInputMute = false;
 
 signals:
 

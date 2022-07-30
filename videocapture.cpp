@@ -28,23 +28,28 @@ VideoCapture::~VideoCapture()
 ////    layout->addWidget(viewfinder);
 //}
 
-void VideoCapture::open(int index, int cameraFormateIndex)
+void VideoCapture::open(int index, int cameraFormateIndex, int audioInputIndex)
 {
     close();
     if (cameraList.count() <= 0 || index < 0 || index >= cameraList.count()) {
         return;
     }
     camera = new QCamera(cameraList[index], this->parent());
-    audioInput = new QAudioInput(audioInputList[0], this->parent());
-    audioOutput = new QAudioOutput(QMediaDevices::defaultAudioOutput(), this->parent());
     QList<QCameraFormat> cameraFormats = cameraList[index].videoFormats();
     if (cameraFormats.length() > 0 && cameraFormateIndex >= 0 && cameraFormateIndex < cameraFormats.length()) {
         camera->setCameraFormat(cameraFormats[cameraFormateIndex]);
     }
     mediaCaptureSession = new QMediaCaptureSession(this->parent());
     mediaCaptureSession->setCamera(camera);
-    mediaCaptureSession->setAudioInput(audioInput);
-    mediaCaptureSession->setAudioOutput(audioOutput);
+    //设置声音输入输出
+    if (audioInputList.count() > 0 && audioInputIndex >= 0 && audioInputIndex < audioInputList.count()) {
+        audioInput = new QAudioInput(audioInputList[audioInputIndex], this->parent());
+        audioOutput = new QAudioOutput(QMediaDevices::defaultAudioOutput(), this->parent());
+        mediaCaptureSession->setAudioInput(audioInput);
+        audioInput->setVolume(audioInputVolume / 100.0);
+        audioInput->setMuted(audioInputMute);
+        mediaCaptureSession->setAudioOutput(audioOutput);
+    }
     //设置取景器
     mediaCaptureSession->setVideoOutput(viewfinder);
     //设置截图
@@ -153,10 +158,6 @@ QStringList VideoCapture::GetCameraFormats(int index, int &defaultIndex, const Q
     return list;
 }
 
-QStringList VideoCapture::GetAudioInputFormats(int index, int &defaultIndex, const QStringList &defaultSearch)
-{
-}
-
 void VideoCapture::moveViewfinder(QLayout *layout)
 {
     removeViewfinder();
@@ -192,6 +193,22 @@ QImage *VideoCapture::capture()
         return videoFrame;
     }
     return Q_NULLPTR;
+}
+
+void VideoCapture::setAudioInputVolume(int volume)
+{
+    audioInputVolume = volume;
+    if (audioInput != Q_NULLPTR) {
+        audioInput->setVolume(audioInputVolume / 100.0);
+    }
+}
+
+void VideoCapture::setAudioInputMute(bool mute)
+{
+    audioInputMute = mute;
+    if (audioInput != Q_NULLPTR) {
+        audioInput->setMuted(audioInputMute);
+    }
 }
 
 void VideoCapture::imageAvailable(int /*id*/, const QVideoFrame &frame)

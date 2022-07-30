@@ -70,6 +70,8 @@ private slots:
     void on_remoteInfoClear_clicked();
     void captureCamera();
     void on_hideVideoCapture_clicked(bool checked);
+    void on_audioCaptureVolume_valueChanged(int value);
+    void on_audioCaptureMute_clicked(bool checked);
 
 private:
     Ui::Gamepad *ui;
