@@ -6,6 +6,7 @@
 #include "setting.h"
 #include <QDesktopServices>
 #include <QFileDialog>
+#include <QTimer>
 #include "opencv2/core/core.hpp"
 #include "opencv2/opencv.hpp"
 
@@ -1032,8 +1033,13 @@ void Gamepad::captureCamera()
 
 void Gamepad::on_hideVideoCapture_clicked(bool checked)
 {
-    ui->videoCaptureFrame->setVisible(!checked);
-    miniTool.GetVideoCaptionFrameLayout()->parentWidget()->setVisible(!checked);
+//    ui->videoCaptureFrame->setVisible(!checked);
+//    miniTool.GetVideoCaptionFrameLayout()->parentWidget()->setVisible(!checked);
+    ui->hideVideoCapture->setEnabled(false);
+    videoCapture.stopViewfinder(checked);
+    QTimer::singleShot(1 * 1000, this, [this]() {
+        ui->hideVideoCapture->setEnabled(true);
+    });
 }
 
 

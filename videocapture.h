@@ -65,6 +65,7 @@ public:
     QImage *capture();
     void setAudioInputVolume(int volume);
     void setAudioInputMute(bool mute);
+    void stopViewfinder(bool b);
 
 private slots:
     void imageAvailable(int id, const QVideoFrame &frame);
@@ -82,6 +83,7 @@ private:
     QImage *videoFrame = Q_NULLPTR;
     int audioInputVolume = 100;
     bool audioInputMute = false;
+    void renewViewFinder();
 
 signals:
 

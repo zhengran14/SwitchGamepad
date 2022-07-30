@@ -85,16 +85,7 @@ void VideoCapture::close()
         imageCapture->deleteLater();
         imageCapture = Q_NULLPTR;
     }
-    QWidget *viewfinderParent = Q_NULLPTR;
-    if (viewfinder != Q_NULLPTR) {
-        viewfinderParent = (QWidget*)viewfinder->parent();
-        removeViewfinder();
-        viewfinder->deleteLater();
-    }
-    viewfinder = new QVideoWidget();
-    if (viewfinderParent != Q_NULLPTR) {
-        moveViewfinder(viewfinderParent->layout());
-    }
+    renewViewFinder();
     if (mediaCaptureSession != Q_NULLPTR) {
         mediaCaptureSession->deleteLater();
         mediaCaptureSession = Q_NULLPTR;
@@ -211,6 +202,20 @@ void VideoCapture::setAudioInputMute(bool mute)
     }
 }
 
+void VideoCapture::stopViewfinder(bool b)
+{
+    if (mediaCaptureSession != Q_NULLPTR && viewfinder != Q_NULLPTR) {
+        if (b) {
+            mediaCaptureSession->setVideoOutput(Q_NULLPTR);
+            viewfinder->hide();
+        } else {
+            renewViewFinder();
+            mediaCaptureSession->setVideoOutput(viewfinder);
+            viewfinder->show();
+        }
+    }
+}
+
 void VideoCapture::imageAvailable(int /*id*/, const QVideoFrame &frame)
 {
 //    frame.image().save("123.jpg");
@@ -219,4 +224,18 @@ void VideoCapture::imageAvailable(int /*id*/, const QVideoFrame &frame)
         videoFrame = Q_NULLPTR;
     }
     videoFrame = new QImage(frame.toImage());
+}
+
+void VideoCapture::renewViewFinder()
+{
+    QWidget *viewfinderParent = Q_NULLPTR;
+    if (viewfinder != Q_NULLPTR) {
+        viewfinderParent = (QWidget*)viewfinder->parent();
+        removeViewfinder();
+        viewfinder->deleteLater();
+    }
+    viewfinder = new QVideoWidget();
+    if (viewfinderParent != Q_NULLPTR) {
+        moveViewfinder(viewfinderParent->layout());
+    }
 }
