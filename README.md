@@ -76,7 +76,19 @@ Wait for
    $ git clone https://github.com/zhengran14/SwitchGamepad.git
    ```
 8. Open project by QtCreator.
-9. Edit .pro, replace the path of ffmpeg (Ignore if disale QtAV), qtav (Ignore if disale QtAV), opencv, leptonica and tesseract to your own. (Replace the part of your system)
+9. Add Build Environment to project (Add the part of your system version), like follow. Replace the path of ffmpeg (Ignore if disale QtAV), qtav (Ignore if disale QtAV), opencv, leptonica and tesseract to your own.
+    ```
+    # macOS:
+    QT_PATH_FFMPEG=/usr/local/Cellar/ffmpeg/4.4_2
+    QT_PATH_LEPTONICA=/usr/local/Cellar/leptonica/1.82.0
+    QT_PATH_OPENCV=/usr/local/Cellar/opencv/4.5.5_3
+    QT_PATH_QTAV_LIB=/Users/xxx/Documents/develop/QtAV/bin/lib_osx_x86_64_llvm
+    QT_PATH_TESSERACT=/usr/local/Cellar/tesseract/5.2.0
+
+    # win:
+    QT_PATH_OPENCV=C:/Project/opencv
+    QT_PATH_QTAV_LIB=C:/Qt/5.15.2/msvc2019/lib
+    ```
 10. Build and run the project.
 11. If you need to run .exe or .app you build directly，please use deployqt to add dependent libraries.
     > For macOS, if show

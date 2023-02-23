@@ -74,7 +74,19 @@ $ make
    $ git clone https://github.com/zhengran14/SwitchGamepad.git
    ```
 8. 用QtCreator打开工程。
-9. 修改pro文件，将ffmpeg（未开启QtAV请忽略）、qtav（未开启QtAV请忽略）、opencv、leptonica、tesseract的路径修改为自己的路径。（只需要修改对应的系统就行）
+9. 在工程中添加对应的编译环境变量（只需添加自己对应的系统），示例如下。将ffmpeg（未开启QtAV请忽略）、qtav（未开启QtAV请忽略）、opencv、leptonica、tesseract的路径修改为自己的路径。
+    ```
+    # macOS:
+    QT_PATH_FFMPEG=/usr/local/Cellar/ffmpeg/4.4_2
+    QT_PATH_LEPTONICA=/usr/local/Cellar/leptonica/1.82.0
+    QT_PATH_OPENCV=/usr/local/Cellar/opencv/4.5.5_3
+    QT_PATH_QTAV_LIB=/Users/xxx/Documents/develop/QtAV/bin/lib_osx_x86_64_llvm
+    QT_PATH_TESSERACT=/usr/local/Cellar/tesseract/5.2.0
+
+    # win:
+    QT_PATH_OPENCV=C:/Project/opencv
+    QT_PATH_QTAV_LIB=C:/Qt/5.15.2/msvc2019/lib
+    ```
 10. 编译工程并运行。
 11. 如果需要直接运行编译出来的.exe或者.app，需要使用deployqt来增加运行库。
     > 在macOS下，如运行提示：

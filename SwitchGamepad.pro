@@ -2,9 +2,13 @@
 DEFINES += TESSERACT_V5
 
 mac {
+    T_PATH_OPENCV = $$system_path($$[QT_PATH_OPENCV])
+    T_PATH_TESSERACT = $$system_path($$[QT_PATH_TESSERACT])
+    T_PATH_LEPTONICA = $$system_path($$[QT_PATH_LEPTONICA])
+
     contains(DEFINES,USE_QTAV) {
-        T_PATH_QTAV_LIB = /Users/rabbit/Documents/develop/QtAV/bin/lib_osx_x86_64_llvm
-        T_PATH_FFMPEG = /usr/local/Cellar/ffmpeg/4.4_2
+        T_PATH_QTAV_LIB = $$system_path($$[QT_PATH_QTAV_LIB])
+        T_PATH_FFMPEG = $$system_path($$[QT_PATH_FFMPEG])
 
         LIBS += -F$${T_PATH_QTAV_LIB}
         LIBS += -framework QtAV
@@ -22,40 +26,51 @@ mac {
     else {
     }
 
-    INCLUDEPATH += /usr/local/Cellar/opencv/4.5.4_3/include/opencv4/opencv2
-    INCLUDEPATH += /usr/local/Cellar/opencv/4.5.4_3/include/opencv4
-    INCLUDEPATH += /usr/local/Cellar/opencv/4.5.4_3/include
-    LIBS += -L/usr/local/Cellar/opencv/4.5.4_3/lib \
+    INCLUDEPATH += $${T_PATH_OPENCV}/include/opencv4/opencv2
+    INCLUDEPATH += $${T_PATH_OPENCV}/include/opencv4
+    INCLUDEPATH += $${T_PATH_OPENCV}/include
+    LIBS += -L$${T_PATH_OPENCV}/lib \
      -lopencv_core \
      -lopencv_highgui \
      -lopencv_imgproc \
      -lopencv_imgcodecs \
      -lopencv_videoio \
 
-    INCLUDEPATH += /usr/local/Cellar/tesseract/5.0.1/include
-    LIBS += -L/usr/local/Cellar/tesseract/5.0.1/lib -ltesseract
+    INCLUDEPATH += $${T_PATH_TESSERACT}/include
+    LIBS += -L$${T_PATH_TESSERACT}/lib -ltesseract
 
-    INCLUDEPATH += /usr/local/Cellar/leptonica/1.82.0/include
-    LIBS += -L/usr/local/Cellar/leptonica/1.82.0/lib -llept
+    INCLUDEPATH += $${T_PATH_LEPTONICA}/include
+    LIBS += -L$${T_PATH_LEPTONICA}/lib -llept
 }
 win32 {
-    LIBS += C:/Qt/5.15.2/msvc2019/lib/Qt5AV.lib
-    LIBS += C:/Qt/5.15.2/msvc2019/lib/Qt5AVWidgets.lib
-
-    CONFIG (debug, debug|release) {
-        INCLUDEPATH += C:/Project/opencv/Debug/include
-        LIBS += C:/Project/opencv/Debug/lib/opencv_core400d.lib
-        LIBS += C:/Project/opencv/Debug/lib/opencv_highgui400d.lib
-        LIBS += C:/Project/opencv/Debug/lib/opencv_imgcodecs400d.lib
-        LIBS += C:/Project/opencv/Debug/lib/opencv_imgproc400d.lib
-        LIBS += C:/Project/opencv/Debug/lib/opencv_videoio400d.lib
+    contains(DEFINES,USE_QTAV) {
+        T_PATH_QTAV_LIB = $$system_path($$[T_PATH_QTAV_LIB])
+        LIBS += $${T_PATH_QTAV_LIB}/Qt5AV.lib
+        LIBS += $${T_PATH_QTAV_LIB}/Qt5AVWidgets.lib
     }
     else {
-        INCLUDEPATH += C:/Project/opencv/Release/include
-        LIBS += C:/Project/opencv/Release/lib/opencv_world420.lib
+    }
+
+    T_PATH_OPENCV = $$system_path($$[QT_PATH_OPENCV])
+    CONFIG (debug, debug|release) {
+        INCLUDEPATH += $${T_PATH_OPENCV}/Debug/include
+        LIBS += $${T_PATH_OPENCV}/Debug/lib/opencv_core400d.lib
+        LIBS += $${T_PATH_OPENCV}/Debug/lib/opencv_highgui400d.lib
+        LIBS += $${T_PATH_OPENCV}/Debug/lib/opencv_imgcodecs400d.lib
+        LIBS += $${T_PATH_OPENCV}/Debug/lib/opencv_imgproc400d.lib
+        LIBS += $${T_PATH_OPENCV}/Debug/lib/opencv_videoio400d.lib
+    }
+    else {
+        INCLUDEPATH += $${T_PATH_OPENCV}/Release/include
+        LIBS += $${T_PATH_OPENCV}/Release/lib/opencv_world420.lib
     }
 }
 unix {
+    contains(DEFINES,USE_QTAV) {
+    }
+    else {
+    }
+
     INCLUDEPATH += /usr/include/opencv4/opencv2
     INCLUDEPATH += /usr/include/opencv4
     INCLUDEPATH += /usr/include
