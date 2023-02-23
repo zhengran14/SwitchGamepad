@@ -5,7 +5,7 @@ SwitchGamepad可以直接用电脑，控制你的ns。并且拥有图形化界�
 为了实现控制ns，需要将单片机刷成模拟手柄的固件。
 
 # 已知BUG
-- 停止脚本时候，需要释放按键。
+- ~~停止脚本时候，需要释放按键。~~
 
 # 可能会开发
 - 语言切换（中文）
@@ -20,7 +20,7 @@ SwitchGamepad可以直接用电脑，控制你的ns。并且拥有图形化界�
 - 支持捕捉游戏画面，并且支持图片查找功能。
 - 支持客户端/服务端模式(把你ns放家里，在外面就可以控制)。
 - 小窗口模式。
-- 跨平台开发（支持Windows、macOS，没有试过Linux，但是理论上支持）。
+- 跨平台开发（支持Windows、macOS，Linux、x86、arm）。
 - 支持iOS, iOS端地址：https://github.com/zhengran14/SwitchGamepad-iOS.
 
 # 0. 准备

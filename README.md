@@ -7,7 +7,7 @@ SwitchGamepad can communicate with microcomputer such as Arduino to control Nint
 The microcomputer need to write binaries to simulate ns gamepad.
 
 # Known BUG
-- When stop script, need to release button.
+- ~~When stop script, need to release button.~~
 
 # Maybe to develop
 - Language switch (Chinese)
@@ -22,7 +22,7 @@ The microcomputer need to write binaries to simulate ns gamepad.
 - Capture game screen and judge something by pic search.
 - Client/Server mode (Put your ns at home and control it outside).
 - Mini tool mode.
-- Cross-platform, run anywhere (macOS or Windows, not try on Linux).
+- Cross-platform, run anywhere (macOS, Windows, Linux, x86, arm).
 - Supprot iOS, iOS client: https://github.com/zhengran14/SwitchGamepad-iOS.
 
 # 0. Prepare
