@@ -2,13 +2,13 @@
 DEFINES += TESSERACT_V5
 
 mac {
-    T_PATH_OPENCV = $$system_path($${QT_PATH_OPENCV})
-    T_PATH_TESSERACT = $$system_path($${QT_PATH_TESSERACT})
-    T_PATH_LEPTONICA = $$system_path($${QT_PATH_LEPTONICA})
+    T_PATH_OPENCV = $$system_path(${QT_PATH_OPENCV})
+    T_PATH_TESSERACT = $$system_path(${QT_PATH_TESSERACT})
+    T_PATH_LEPTONICA = $$system_path(${QT_PATH_LEPTONICA})
 
     contains(DEFINES,USE_QTAV) {
-        T_PATH_QTAV_LIB = $$system_path($${QT_PATH_QTAV_LIB})
-        T_PATH_FFMPEG = $$system_path($${QT_PATH_FFMPEG})
+        T_PATH_QTAV_LIB = $$system_path(${QT_PATH_QTAV_LIB})
+        T_PATH_FFMPEG = $$system_path(${QT_PATH_FFMPEG})
 
         LIBS += -F$${T_PATH_QTAV_LIB}
         LIBS += -framework QtAV
@@ -44,14 +44,14 @@ mac {
 }
 win32 {
     contains(DEFINES,USE_QTAV) {
-        T_PATH_QTAV_LIB = $$system_path($${T_PATH_QTAV_LIB})
+        T_PATH_QTAV_LIB = $$system_path(${QT_PATH_QTAV_LIB})
         LIBS += $${T_PATH_QTAV_LIB}/Qt5AV.lib
         LIBS += $${T_PATH_QTAV_LIB}/Qt5AVWidgets.lib
     }
     else {
     }
 
-    T_PATH_OPENCV = $$system_path($${QT_PATH_OPENCV})
+    T_PATH_OPENCV = $$system_path(${QT_PATH_OPENCV})
     CONFIG (debug, debug|release) {
         INCLUDEPATH += $${T_PATH_OPENCV}/Debug/include
         LIBS += $${T_PATH_OPENCV}/Debug/lib/opencv_core400d.lib
