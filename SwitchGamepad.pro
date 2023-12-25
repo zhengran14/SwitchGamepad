@@ -65,7 +65,7 @@ win32 {
         LIBS += $${T_PATH_OPENCV}/Release/lib/opencv_world420.lib
     }
 }
-unix {
+unix:!macx {
     contains(DEFINES,USE_QTAV) {
     }
     else {
