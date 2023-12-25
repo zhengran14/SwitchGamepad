@@ -9,6 +9,7 @@
 #include <QTimer>
 #include "opencv2/core/core.hpp"
 #include "opencv2/opencv.hpp"
+#include <QPermission>
 
 Gamepad::Gamepad(QWidget *parent)
     : QMainWindow(parent)
@@ -251,6 +252,31 @@ Gamepad::Gamepad(QWidget *parent)
         connect(ui->plusBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
         connect(ui->lcBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
         connect(ui->rcBtn, &GamepadBtn::sendData, this, &Gamepad::on_gamepadBtn_sendData);
+    }
+
+    // camera
+    QCameraPermission cameraPermission;
+    switch (qApp->checkPermission(cameraPermission)) {
+    case Qt::PermissionStatus::Undetermined:
+        qApp->requestPermission(cameraPermission, [](const QPermission &){});
+        break;
+    case Qt::PermissionStatus::Denied:
+        qWarning("Camera permission is not granted!");
+        break;
+    case Qt::PermissionStatus::Granted:
+        break;
+    }
+    // microphone
+    QMicrophonePermission microphonePermission;
+    switch (qApp->checkPermission(microphonePermission)) {
+    case Qt::PermissionStatus::Undetermined:
+        qApp->requestPermission(microphonePermission, [](const QPermission &){});
+        break;
+    case Qt::PermissionStatus::Denied:
+        qWarning("Microphone permission is not granted!");
+        break;
+    case Qt::PermissionStatus::Granted:
+        break;
     }
 }
 
