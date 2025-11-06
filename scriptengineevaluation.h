@@ -36,6 +36,7 @@ public:
     Q_INVOKABLE int compareTest(QString imgPath1, QString imgPath2, int method);
     Q_INVOKABLE int compare(QString imgPath1, int offsetX, int offsetY, int offsetWidth, int offsetHeight, int method = 1);
     void messageBoxReturn(bool result);
+    Q_INVOKABLE void bark(QString url, QStringList devices, QString level, QString title, QString content);
 
 public slots:
     void evaluate(QString script);

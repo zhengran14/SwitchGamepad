@@ -16,6 +16,14 @@
 #endif
 #include <leptonica/allheaders.h>
 #include "setting.h"
+#include <QSslSocket>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QUrl>
 
 ScriptEngineEvaluation::ScriptEngineEvaluation(QObject *parent) : QObject(parent)
 {
@@ -524,77 +532,66 @@ void ScriptEngineEvaluation::statusText(QString text)
 
 void ScriptEngineEvaluation::mail(QString username, QString password, QString receiver, QString subject, QString content)
 {
+    QSslSocket socket;
+    socket.connectToHostEncrypted("smtp.qq.com", 465);
+    if (!socket.waitForEncrypted(5000)) {
+        qDebug() << "SSL handshake failed:" << socket.errorString();
+        return;
+    }
 
-    QTcpSocket clientsocket;
-//    QByteArray username = "@qq.com";
-//    QByteArray password = "";
-//    QByteArray recvaddr = "@qq.com";
-    QByteArray mailfrom = "mail from:<";
-    QByteArray rcptto = "rcpt to:<";
-    QByteArray prefrom = "from:";
-    QByteArray preto = "to:";
-    QByteArray presubject ="subject:";
-//    QString subject = "test from qt";                //主题
-//    QString content = "test from qt";                //发送内容
-    QByteArray recvdata;            //接收到的数据
-    QByteArray usernametmp = username.toUtf8();
-    QByteArray recvaddrtmp = receiver.toUtf8();
-    clientsocket.connectToHost("smtp.qq.com", 25, QTcpSocket::ReadWrite);
-    clientsocket.waitForConnected(1000);
-    clientsocket.waitForReadyRead(1000);
-    recvdata = clientsocket.readAll();
-//    qDebug() << recvdata;
-    clientsocket.write("HELO smtp.qq.com\r\n");
-    clientsocket.waitForReadyRead(1000);
-    recvdata = clientsocket.readAll();
-//    qDebug() << recvdata;
-    clientsocket.write("AUTH LOGIN\r\n");
-    clientsocket.waitForReadyRead(1000);
-    recvdata = clientsocket.readAll();
-//    qDebug() << recvdata;
-//    qDebug() << "username:" << username;
-    clientsocket.write(username.toUtf8().toBase64().append("\r\n"));
-    clientsocket.waitForReadyRead(1000);
-    recvdata = clientsocket.readAll();
-//    qDebug() << recvdata;
-//    qDebug() << "password:" << password;
-    clientsocket.write(password.toUtf8().toBase64().append("\r\n"));
-    clientsocket.waitForReadyRead(1000);
-    recvdata = clientsocket.readAll();
-//    qDebug() << recvdata;
-    clientsocket.write(mailfrom.append(usernametmp.append(">\r\n")));
-    clientsocket.waitForReadyRead(1000);
-    recvdata = clientsocket.readAll();
-//    qDebug() << recvdata;
-    //发送邮箱
-    //qDebug() << "mail from:"<<mailfrom.append(usernametmp.append(">\r\n"));
-    clientsocket.write(rcptto.append(recvaddrtmp.append(">\r\n")));
-    clientsocket.waitForReadyRead(1000);
-    recvdata = clientsocket.readAll();
-//    qDebug() << recvdata;
-    //接收邮箱
-    //qDebug() << "rcp to:"<<rcptto.append(recvaddrtmp.append(">\r\n"));
-    //data表示开始传输数据
-    clientsocket.write("data\r\n");
-    clientsocket.waitForReadyRead(1000);
-    recvdata = clientsocket.readAll();
-//    qDebug() << recvdata;
-    usernametmp = username.toUtf8();
-    recvaddrtmp = receiver.toUtf8();
-    clientsocket.write(prefrom.append(usernametmp.append("\r\n")));
-    clientsocket.write(preto.append(recvaddrtmp.append("\r\n")));
-    clientsocket.write(presubject.append(subject.toLocal8Bit().append("\r\n")));
-    clientsocket.write("\r\n");
-    clientsocket.write(content.toLocal8Bit().append("\r\n"));
-    clientsocket.write(".\r\n");
-    clientsocket.waitForReadyRead(1000);
-    recvdata = clientsocket.readAll();
-//    qDebug() << recvdata;
-    clientsocket.write("quit\r\n");
-    clientsocket.waitForReadyRead(1000);
-    recvdata = clientsocket.readAll();
-//    qDebug() << recvdata;
-    clientsocket.deleteLater();
+    QByteArray recvData;
+
+    auto readResponse = [&]() -> QByteArray {
+        if (socket.waitForReadyRead(5000)) {
+            QByteArray data = socket.readAll();
+            qDebug() << data;
+            return data;
+        }
+        return QByteArray();
+    };
+
+    // 1. EHLO
+    socket.write("EHLO smtp.qq.com\r\n");
+    readResponse();
+
+    // 2. AUTH LOGIN
+    socket.write("AUTH LOGIN\r\n");
+    readResponse();
+
+    // 3. 用户名 (Base64)
+    socket.write(username.toUtf8().toBase64() + "\r\n");
+    readResponse();
+
+    // 4. 授权码 (Base64)
+    socket.write(password.toUtf8().toBase64() + "\r\n");
+    readResponse();
+
+    // 5. MAIL FROM
+    socket.write("MAIL FROM:<" + username.toUtf8() + ">\r\n");
+    readResponse();
+
+    // 6. RCPT TO
+    socket.write("RCPT TO:<" + receiver.toUtf8() + ">\r\n");
+    readResponse();
+
+    // 7. DATA
+    socket.write("DATA\r\n");
+    readResponse();
+
+    // 8. 邮件头 + 内容
+    socket.write("From: " + username.toUtf8() + "\r\n");
+    socket.write("To: " + receiver.toUtf8() + "\r\n");
+    socket.write("Subject: " + subject.toUtf8() + "\r\n");
+    socket.write("\r\n"); // 空行分隔头和正文
+    socket.write(content.toUtf8() + "\r\n");
+    socket.write(".\r\n"); // 结束 DATA
+    readResponse();
+
+    // 9. QUIT
+    socket.write("QUIT\r\n");
+    readResponse();
+
+    socket.disconnectFromHost();
 }
 
 QString ScriptEngineEvaluation::getCaptureString(int offsetX, int offsetY, int offsetWidth, int offsetHeight, QString tessdata)
@@ -770,4 +767,43 @@ void ScriptEngineEvaluation::abortscriptEngineEvaluation()
 {
     emit sendData("RELEASE");
     scriptEngine.setInterrupted(true);
+}
+
+void ScriptEngineEvaluation::bark(QString url, QStringList devices, QString level, QString title, QString content)
+{
+    QJsonObject json;
+    json["title"] = title;
+    json["body"] = content;
+    json["level"] = level;
+
+    // 构建 device_keys 数组
+    QJsonArray deviceArray;
+    for (const QString &dev : devices) {
+        deviceArray.append(dev);
+    }
+    json["device_keys"] = deviceArray;
+
+    // 转为 QByteArray
+    QJsonDocument doc(json);
+    QByteArray data = doc.toJson(QJsonDocument::Compact);
+
+    // 网络请求
+    QNetworkRequest request{ QUrl(url) };
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+
+    // 发送 POST 请求
+    QNetworkReply *reply = manager->post(request, data);
+
+    // 异步处理响应
+    connect(reply, &QNetworkReply::finished, this, [reply]() {
+        if (reply->error() != QNetworkReply::NoError) {
+            qDebug() << "Bark push failed:" << reply->errorString();
+        } else {
+            QByteArray response = reply->readAll();
+            qDebug() << "Bark push success:" << response;
+        }
+        reply->deleteLater();
+    });
 }
