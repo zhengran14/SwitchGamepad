@@ -56,7 +56,7 @@ QImage Utils::cvMat2QImage(const cv::Mat& mat, bool clone, bool rb_swap)
 cv::Mat Utils::QImage2cvMat(QImage &image, bool clone, bool rb_swap)
 {
     cv::Mat mat;
-    //qDebug() << image.format();
+    qInfo() << image.format();
     switch(image.format())
     {
     case QImage::Format_ARGB32:
@@ -75,7 +75,25 @@ cv::Mat Utils::QImage2cvMat(QImage &image, bool clone, bool rb_swap)
         mat = cv::Mat(image.height(), image.width(), CV_8UC1, (void *)image.bits(), image.bytesPerLine());
         if(clone)  mat = mat.clone();
         break;
+    case QImage::Format_RGBX8888:
+        mat = cv::Mat(image.height(), image.width(), CV_8UC4,
+                      (void*)image.constBits(), image.bytesPerLine());
+        if (clone) mat = mat.clone();
+        // RGBX8888 → RGBA → 再转 BGR
+        cv::cvtColor(mat, mat, cv::COLOR_RGBA2BGR);
+        break;
+
+    case QImage::Format_BGR888:
+        mat = cv::Mat(image.height(), image.width(), CV_8UC3,
+                      (void*)image.constBits(), image.bytesPerLine());
+        if (clone) mat = mat.clone();
+        // BGR888 就不需要 swap，因为已经是 BGR
+        break;
     default:
+        mat = cv::Mat(image.height(), image.width(), CV_8UC4,
+                      (void*)image.constBits(), image.bytesPerLine());
+        if (clone) mat = mat.clone();
+        cv::cvtColor(mat, mat, cv::COLOR_BGRA2BGR); // 保证输出是 BGR
         break;
     }
     return mat;
