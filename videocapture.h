@@ -8,6 +8,7 @@
 #include <QAudioDevice>
 #include <QAudioInput>
 #include <QAudioOutput>
+#include <QMetaEnum>
 
 class VideoCapture : public QObject
 {

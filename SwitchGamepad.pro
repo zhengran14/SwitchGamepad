@@ -34,13 +34,19 @@ mac {
      -lopencv_highgui \
      -lopencv_imgproc \
      -lopencv_imgcodecs \
-     -lopencv_videoio \
+     -lopencv_videoio
+    QMAKE_RPATHDIR += /opt/homebrew/opt/opencv/lib
 
     INCLUDEPATH += $${T_PATH_TESSERACT}/include
     LIBS += -L$${T_PATH_TESSERACT}/lib -ltesseract
+    QMAKE_RPATHDIR += /opt/homebrew/opt/tesseract/lib
 
     INCLUDEPATH += $${T_PATH_LEPTONICA}/include
-    LIBS += -L$${T_PATH_LEPTONICA}/lib -llept
+    LIBS += -L$${T_PATH_LEPTONICA}/lib -lleptonica
+    QMAKE_RPATHDIR += /opt/homebrew/opt/leptonica/lib
+
+    LIBS += -L/opt/homebrew/lib -lsharpyuv
+    QMAKE_RPATHDIR += /opt/homebrew/lib
 }
 win32 {
     contains(DEFINES,USE_QTAV) {

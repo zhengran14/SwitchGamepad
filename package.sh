@@ -1,39 +1,26 @@
-/Users/rabbit/Qt/5.15.2/clang_64/bin/macdeployqt /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app
+APP_PATH=/Users/rabbit/Downloads/dev/SwitchGamepad/build-SwitchGamepad-Qt_6_9_3_for_macOS-Release
+QT_PATH=/Users/rabbit/Qt/6.9.3
 
-install_name_tool -change "/Users/rabbit/Qt/5.15.2/clang_64/lib/QtOpenGL.framework/Versions/5/QtOpenGL" "@rpath/QtOpenGL.framework/Versions/5/QtOpenGL" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/QtAVWidgets.framework/Versions/1/QtAVWidgets
-install_name_tool -change "/Users/rabbit/Qt/5.15.2/clang_64/lib/QtWidgets.framework/Versions/5/QtWidgets" "@rpath/QtWidgets.framework/Versions/5/QtWidgets" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/QtAVWidgets.framework/Versions/1/QtAVWidgets
-install_name_tool -change "/Users/rabbit/Qt/5.15.2/clang_64/lib/QtGui.framework/Versions/5/QtGui" "@rpath/QtGui.framework/Versions/5/QtGui" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/QtAVWidgets.framework/Versions/1/QtAVWidgets
-install_name_tool -change "/Users/rabbit/Qt/5.15.2/clang_64/lib/QtCore.framework/Versions/5/QtCore" "@rpath/QtCore.framework/Versions/5/QtCore" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/QtAVWidgets.framework/Versions/1/QtAVWidgets
-install_name_tool -change "/Users/rabbit/Qt/5.15.2/clang_64/lib/QtGui.framework/Versions/5/QtGui" "@rpath/QtGui.framework/Versions/5/QtGui" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/QtAV.framework/Versions/1/QtAV
-install_name_tool -change "/Users/rabbit/Qt/5.15.2/clang_64/lib/QtCore.framework/Versions/5/QtCore" "@rpath/QtCore.framework/Versions/5/QtCore" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/QtAV.framework/Versions/1/QtAV
+brew unlink qt
+brew unlink qt6
 
+$QT_PATH/macos/bin/macdeployqt $APP_PATH/SwitchGamepad.app
 
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libavutil.56.dylib" "@executable_path/../Frameworks/libavutil.56.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libswresample.3.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libavfilter.7.dylib" "@executable_path/../Frameworks/libavfilter.7.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavdevice.58.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libswscale.5.dylib" "@executable_path/../Frameworks/libswscale.5.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavdevice.58.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libpostproc.55.dylib" "@executable_path/../Frameworks/libpostproc.55.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavdevice.58.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libavformat.58.dylib" "@executable_path/../Frameworks/libavformat.58.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavdevice.58.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libavcodec.58.dylib" "@executable_path/../Frameworks/libavcodec.58.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavdevice.58.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libswresample.3.dylib" "@executable_path/../Frameworks/libswresample.3.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavdevice.58.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libavresample.4.dylib" "@executable_path/../Frameworks/libavresample.4.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavdevice.58.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libavutil.56.dylib" "@executable_path/../Frameworks/libavutil.56.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavdevice.58.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libswscale.5.dylib" "@executable_path/../Frameworks/libswscale.5.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavfilter.7.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libpostproc.55.dylib" "@executable_path/../Frameworks/libpostproc.55.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavfilter.7.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libavformat.58.dylib" "@executable_path/../Frameworks/libavformat.58.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavfilter.7.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libavcodec.58.dylib" "@executable_path/../Frameworks/libavcodec.58.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavfilter.7.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libswresample.3.dylib" "@executable_path/../Frameworks/libswresample.3.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavfilter.7.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libavresample.4.dylib" "@executable_path/../Frameworks/libavresample.4.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavfilter.7.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libavutil.56.dylib" "@executable_path/../Frameworks/libavutil.56.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavfilter.7.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libavutil.56.dylib" "@executable_path/../Frameworks/libavutil.56.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libswscale.5.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libavutil.56.dylib" "@executable_path/../Frameworks/libavutil.56.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libpostproc.55.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libavcodec.58.dylib" "@executable_path/../Frameworks/libavcodec.58.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavformat.58.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libswresample.3.dylib" "@executable_path/../Frameworks/libswresample.3.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavformat.58.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libavutil.56.dylib" "@executable_path/../Frameworks/libavutil.56.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavformat.58.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libswresample.3.dylib" "@executable_path/../Frameworks/libswresample.3.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavcodec.58.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libavutil.56.dylib" "@executable_path/../Frameworks/libavutil.56.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavcodec.58.dylib
-install_name_tool -change "/usr/local/Cellar/nettle/3.6/lib/libnettle.8.dylib" "@executable_path/../Frameworks/libnettle.8.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libhogweed.6.dylib
-install_name_tool -change "/usr/local/Cellar/ffmpeg/4.3.1_4/lib/libavutil.56.dylib" "@executable_path/../Frameworks/libavutil.56.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libavresample.4.dylib
+cp /opt/homebrew/opt/gcc/lib/gcc/14/libgcc_s.1.1.dylib \
+    $APP_PATH/SwitchGamepad.app/Contents/Frameworks/
+cp /opt/homebrew/opt/gcc/lib/gcc/14/libgfortran.5.dylib \
+    $APP_PATH/SwitchGamepad.app/Contents/Frameworks/
+install_name_tool -id @rpath/libgcc_s.1.1.dylib \
+    $APP_PATH/SwitchGamepad.app/Contents/Frameworks/libgcc_s.1.1.dylib
+install_name_tool -id @rpath/libgfortran.5.dylib \
+    $APP_PATH/SwitchGamepad.app/Contents/Frameworks/libgfortran.5.dylib
+install_name_tool -change libgcc_s.1.1.dylib @rpath/libgcc_s.1.1.dylib \
+    $APP_PATH/SwitchGamepad.app/Contents/Frameworks/libgfortran.5.dylib
 
-install_name_tool -change "/usr/local/Cellar/libxcb/1.14_1/lib/libxcb.1.dylib" "@executable_path/../Frameworks/libxcb.1.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libxcb-shm.0.dylib
-install_name_tool -change "/usr/local/Cellar/libxcb/1.14_1/lib/libxcb.1.dylib" "@executable_path/../Frameworks/libxcb.1.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libxcb-shape.0.dylib
-install_name_tool -change "/usr/local/Cellar/libxcb/1.14_1/lib/libxcb.1.dylib" "@executable_path/../Frameworks/libxcb.1.dylib" /Users/rabbit/Documents/develop/SwitchGamepad/build-SwitchGamepad-Desktop_Qt_5_15_2_clang_64bit-Release/SwitchGamepad.app/Contents/Frameworks/libxcb-xfixes.0.dylib
+$QT_PATH/macos/bin/macdeployqt $APP_PATH/SwitchGamepad.app -no-plugins
+
+xattr -cr $APP_PATH/SwitchGamepad.app
+codesign --force --deep --sign - $APP_PATH/SwitchGamepad.app
+
+brew link qt
+brew link qt6
